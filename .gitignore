@@ -1,6 +1,8 @@
 # Node.js
 node_modules/
 
+**/Pods/*
+
 # Compiled files
 *.log
 *.pem
