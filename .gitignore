@@ -1,0 +1,45 @@
+# Node.js
+node_modules/
+
+# Compiled files
+*.log
+*.pem
+*.pid
+*.seed
+*.suo
+*.swp
+*.tar.gz
+*.zip
+*.gz
+*.tgz
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.hdb
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# User-specific files
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Desktop.ini
+Thumbs.db
+node_modules/
