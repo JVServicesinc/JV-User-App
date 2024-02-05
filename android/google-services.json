@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "554523297647",
+    "project_id": "jeveuxuser",
+    "storage_bucket": "jeveuxuser.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554523297647:android:1475047a96adfeebcf8a9a",
+        "android_client_info": {
+          "package_name": "com.user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4maXIuzL2Sn_dQGzzLxuooeC45Z1M5io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

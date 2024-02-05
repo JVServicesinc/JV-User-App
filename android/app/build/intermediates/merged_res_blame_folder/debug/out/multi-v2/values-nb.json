@@ -4,23 +4,6 @@
             "outputFile": "com.user.app-mergeDebugResources-103:/values-nb/values-nb.xml",
             "map": [
                 {
-                    "source": "/Users/akhil/Downloads/drive-download-20240117T151234Z-001/JeveuxUser-development-notification/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values-nb/values-nb.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,111,166,219,274,316,378,427,484,531,577",
-                        "endColumns": "55,54,52,54,41,61,48,56,46,45,52",
-                        "endOffsets": "106,161,214,269,311,373,422,479,526,572,625"
-                    },
-                    "to": {
-                        "startLines": "33,71,72,84,85,103,104,105,146,408,410",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "2943,7003,7058,8072,8127,9403,9465,9514,12649,36694,36815",
-                        "endColumns": "55,54,52,54,41,61,48,56,46,45,52",
-                        "endOffsets": "2994,7053,7106,8122,8164,9460,9509,9566,12691,36735,36863"
-                    }
-                },
-                {
                     "source": "/Users/akhil/.gradle/caches/transforms-3/369725a317c3f97761d8dc6f657bf039/transformed/material-1.8.0/res/values-nb/values-nb.xml",
                     "from": {
                         "startLines": "2,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67",
@@ -190,6 +173,23 @@
                         "startOffsets": "14247,15046,15181,15243,15328,15609,16139,16331,16579,16903,17253,17547",
                         "endColumns": "77,56,61,84,61,69,58,75,71,65,59,68",
                         "endOffsets": "14320,15098,15238,15323,15385,15674,16193,16402,16646,16964,17308,17611"
+                    }
+                },
+                {
+                    "source": "/Users/akhil/Documents/JVUser/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values-nb/values-nb.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,111,166,219,274,316,378,427,484,531,577",
+                        "endColumns": "55,54,52,54,41,61,48,56,46,45,52",
+                        "endOffsets": "106,161,214,269,311,373,422,479,526,572,625"
+                    },
+                    "to": {
+                        "startLines": "33,71,72,84,85,103,104,105,146,408,410",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "2943,7003,7058,8072,8127,9403,9465,9514,12649,36694,36815",
+                        "endColumns": "55,54,52,54,41,61,48,56,46,45,52",
+                        "endOffsets": "2994,7053,7106,8122,8164,9460,9509,9566,12691,36735,36863"
                     }
                 },
                 {

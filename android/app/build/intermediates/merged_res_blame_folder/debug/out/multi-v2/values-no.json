@@ -4,7 +4,7 @@
             "outputFile": "com.user.app-mergeDebugResources-103:/values-no/values-no.xml",
             "map": [
                 {
-                    "source": "/Users/akhil/Downloads/drive-download-20240117T151234Z-001/JeveuxUser-development-notification/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values-no/values-no.xml",
+                    "source": "/Users/akhil/Documents/JVUser/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values-no/values-no.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4",

@@ -4,6 +4,23 @@
             "outputFile": "com.user.app-mergeDebugResources-103:/values-sv/values-sv.xml",
             "map": [
                 {
+                    "source": "/Users/akhil/Documents/JVUser/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values-sv/values-sv.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,111,171,227,286,330,391,439,499,551,597",
+                        "endColumns": "55,59,55,58,43,60,47,59,51,45,56",
+                        "endOffsets": "106,166,222,281,325,386,434,494,546,592,649"
+                    },
+                    "to": {
+                        "startLines": "33,71,72,84,85,103,104,105,146,408,410",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "2989,7093,7153,8169,8228,9494,9555,9603,12792,37057,37177",
+                        "endColumns": "55,59,55,58,43,60,47,59,51,45,56",
+                        "endOffsets": "3040,7148,7204,8223,8267,9550,9598,9658,12839,37098,37229"
+                    }
+                },
+                {
                     "source": "/Users/akhil/.gradle/caches/transforms-3/809c87392b564b9fe2b0d33155c75af6/transformed/jetified-ui-release/res/values-sv/values-sv.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
@@ -207,23 +224,6 @@
                         "startOffsets": "4787,4894,5051,5178,5288,5429,5554,5677,5929,6077,6185,6347,6475,6629,6785,6851,6914",
                         "endColumns": "106,156,126,109,140,124,122,103,147,107,161,127,153,155,65,62,78",
                         "endOffsets": "4889,5046,5173,5283,5424,5549,5672,5776,6072,6180,6342,6470,6624,6780,6846,6909,6988"
-                    }
-                },
-                {
-                    "source": "/Users/akhil/Downloads/drive-download-20240117T151234Z-001/JeveuxUser-development-notification/node_modules/react-native-date-picker/android/build/intermediates/packaged_res/debug/values-sv/values-sv.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,111,171,227,286,330,391,439,499,551,597",
-                        "endColumns": "55,59,55,58,43,60,47,59,51,45,56",
-                        "endOffsets": "106,166,222,281,325,386,434,494,546,592,649"
-                    },
-                    "to": {
-                        "startLines": "33,71,72,84,85,103,104,105,146,408,410",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "2989,7093,7153,8169,8228,9494,9555,9603,12792,37057,37177",
-                        "endColumns": "55,59,55,58,43,60,47,59,51,45,56",
-                        "endOffsets": "3040,7148,7204,8223,8267,9550,9598,9658,12839,37098,37229"
                     }
                 },
                 {
