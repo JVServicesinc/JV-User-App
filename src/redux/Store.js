@@ -1,24 +1,24 @@
-import {configureStore} from '@reduxjs/toolkit';
-import createSagaMiddleware from 'redux-saga';
-import AuthReducer from './reducer/AuthReducer';
-import UserReducer from './reducer/UserReducer';
-import ProductReducer from './reducer/ProductReducer';
-import {logger} from 'redux-logger';
-import RootSaga from './reduxSaga/RootSaga';
-import ServiceReducer from './reducer/ServiceReducer';
-import {persistStore, persistReducer} from 'redux-persist';
-import {globalSlice} from './reducer/GlobalSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import LanguageReducer from './reducer/LanguageReducer';
+import { configureStore } from "@reduxjs/toolkit";
+import createSagaMiddleware from "redux-saga";
+import AuthReducer from "./reducer/AuthReducer";
+import UserReducer from "./reducer/UserReducer";
+import ProductReducer from "./reducer/ProductReducer";
+import { logger } from "redux-logger";
+import RootSaga from "./reduxSaga/RootSaga";
+import ServiceReducer from "./reducer/ServiceReducer";
+import { persistStore, persistReducer } from "redux-persist";
+import { globalSlice } from "./reducer/GlobalSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import LanguageReducer from "./reducer/LanguageReducer";
 
 const globalPersistConfig = {
-  key: 'root',
+  key: "root",
   storage: AsyncStorage,
-  whitelist: ['isWarningShown'],
+  whitelist: ["isWarningShown"],
 };
 
 let sagaMiddleware = createSagaMiddleware();
-const middleware = [sagaMiddleware, logger];
+const middleware = [sagaMiddleware]; //[sagaMiddleware, logger]; // When you need logger, just add logger.
 
 const Store = configureStore({
   reducer: {

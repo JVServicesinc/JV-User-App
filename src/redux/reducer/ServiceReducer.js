@@ -1,15 +1,16 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  status: '',
+  status: "",
   isLoading: true,
+  isCategoryLoading: true,
   getAllServiceCateRes: {},
   getServiceCategoryRes: {},
   getServiceSubCategoryRes: {},
   getAllServicesRes: {},
   getServiceDetails: {},
   addCart: {},
-  cartId: '',
+  cartId: "",
   addToCart: {},
   getCartItemsRes: {},
   removeCartItemRes: {},
@@ -18,19 +19,24 @@ const initialState = {
 };
 
 const ProductSlice = createSlice({
-  name: 'Service',
+  name: "Service",
   initialState,
   reducers: {
     /* Get All Service Category */
     getAllServiceCateRequest(state, action) {
+      // console.log("getAllServiceCateRequest --- ", action.type);
+      state.isCategoryLoading = true;
       state.status = action.type;
       state.getAllServiceCateRes = {};
     },
     getAllServiceCateSuccess(state, action) {
+      // console.log("getAllServiceCateSuccess --- ", action.type);
+      state.isCategoryLoading = false;
       state.getAllServiceCateRes = action.payload;
       state.status = action.type;
     },
     getAllServiceCateFailure(state, action) {
+      state.isCategoryLoading = false;
       state.error = action.error;
       state.status = action.type;
     },

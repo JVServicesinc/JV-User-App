@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   Image,
   StyleSheet,
   Platform,
-} from 'react-native';
+} from "react-native";
 
 export default Preview = ({
   style,
@@ -20,10 +20,11 @@ export default Preview = ({
   return (
     <TouchableOpacity
       style={[styles.videoContainer]}
-      onPress={() => onPress(item)}>
+      onPress={() => onPress(item)}
+    >
       <View style={[styles.imageContainer, styles.shadow]}>
         <Image
-          style={[styles.videoPreview, active ? {} : {height: 140}]}
+          style={[styles.videoPreview, active ? {} : { height: 140 }]}
           source={item[imageKey]} //{uri: item[imageKey]}
         />
       </View>
@@ -36,16 +37,16 @@ const styles = StyleSheet.create({
   videoContainer: {
     width: 275,
     // paddingVertical: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 20,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   videoPreview: {
     width: 275,
     height: 145,
     borderRadius: 10,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   desc: {
     fontSize: 14,
@@ -54,16 +55,17 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   shadow: {
     ...Platform.select({
       ios: {
-        shadowColor: 'black',
-        shadowOffset: {width: 0, height: 1},
+        shadowColor: "black",
+        shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1,
         shadowRadius: 5,
+        backgroundColor: "white",
       },
       android: {
         elevation: 5,

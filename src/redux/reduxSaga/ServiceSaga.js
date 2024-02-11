@@ -1,5 +1,5 @@
-import {call, put, select, takeLatest} from 'redux-saga/effects';
-import {getApi, postApi} from '../../utils/helpers/ApiRequest';
+import { call, put, select, takeLatest } from "redux-saga/effects";
+import { getApi, postApi } from "../../utils/helpers/ApiRequest";
 import {
   addCartService,
 
@@ -14,7 +14,7 @@ import {
   /* Get All Service Category */
   getAllServiceCateFailure,
   getAllServiceCateSuccess,
-  
+
   /* Get all Wishlist Service*/
   getAllServiceWishlistFailure,
   getAllServiceWishlistSuccess,
@@ -44,25 +44,26 @@ import {
   /* Remove Cart Items */
   removeCartItemsFailure,
   removeCartItemsSuccess,
-} from '../reducer/ServiceReducer';
-import showErrorAlert from '../../utils/helpers/Toast';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import constants from '../../utils/helpers/constants';
+} from "../reducer/ServiceReducer";
+import showErrorAlert from "../../utils/helpers/Toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import constants from "../../utils/helpers/constants";
 
-let getItem = state => state.AuthReducer;
+let getItem = (state) => state.AuthReducer;
 
 /* Get All Service Category */
 export function* getAllServiceCateSaga() {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
     accesstoken: item.token,
   };
   try {
-    let response = yield call(getApi, 'services', header);
+    let response = yield call(getApi, "services", header);
 
     if (response?.status == 200) {
+      // console.log("Cate Responses -- ", JSON.stringify(response?.data?.data));
       yield put(getAllServiceCateSuccess(response?.data?.data));
     } else {
       yield put(getAllServiceCateFailure(response?.data));
@@ -77,8 +78,8 @@ export function* getAllServiceCateSaga() {
 export function* getServiceCategorySaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
     accesstoken: item.token,
   };
 
@@ -86,7 +87,7 @@ export function* getServiceCategorySaga(action) {
     let response = yield call(
       getApi,
       `services/${action?.payload}/categories`,
-      header,
+      header
     );
 
     if (response?.status == 200) {
@@ -105,14 +106,15 @@ export function* getServiceCategorySaga(action) {
 export function* getServiceSubCategorySaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
   };
+  console.log("GetServiceSubCategorySaga -- ", action?.payload);
   try {
     let response = yield call(
       getApi,
       `services/${action.payload?.cateId}/categories/${action.payload?.serId}/subcategories`, // `services/2/categories/58/subcategories`,
-      header,
+      header
     );
     if (response?.status == 200) {
       yield put(getServiceSubCategorySuccess(response?.data));
@@ -130,15 +132,15 @@ export function* getServiceSubCategorySaga(action) {
 export function* getAllServicesSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
     accesstoken: item.token,
   };
   try {
     let response = yield call(
       getApi,
       `services/${action?.payload?.cateId}/subcategories/${action?.payload?.serId}/services`,
-      header,
+      header
     );
     if (response?.status == 200) {
       yield put(getAllServicesSuccess(response?.data?.data));
@@ -156,8 +158,8 @@ export function* getAllServicesSaga(action) {
 export function* getServiceDetailsSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
     accesstoken: item.token,
   };
   try {
@@ -179,8 +181,8 @@ export function* getServiceDetailsSaga(action) {
 export function* addToCartServiceSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
     accesstoken: item.token,
   };
   try {
@@ -188,16 +190,16 @@ export function* addToCartServiceSaga(action) {
       postApi,
       `cart/auth/add`,
       action?.payload,
-      header,
+      header
     );
 
     if (response?.status == 200) {
       yield put(addToCartServiceSuccess(response?.data?.data));
-      yield put(getCartItemsRequest({id: response?.data?.data?.cart_id}));
+      yield put(getCartItemsRequest({ id: response?.data?.data?.cart_id }));
       yield call(
         AsyncStorage.setItem,
         constants.CART_ID,
-        response?.data?.data?.cart_id,
+        response?.data?.data?.cart_id
       );
       yield put(getCartId(response?.data?.data?.cart_id));
       showErrorAlert(response.data.message);
@@ -205,7 +207,7 @@ export function* addToCartServiceSaga(action) {
       yield put(addToCartServiceFailure(response?.data));
     }
   } catch (error) {
-    console.log('error -- ', error);
+    console.log("error -- ", error);
     yield put(addToCartServiceFailure(error));
     // showErrorAlert(error?.response?.data?.response.status.msg);
   }
@@ -215,8 +217,8 @@ export function* addToCartServiceSaga(action) {
 export function* getCartItemsSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
     accesstoken: item.token,
   };
 
@@ -224,7 +226,7 @@ export function* getCartItemsSaga(action) {
     let response = yield call(
       getApi,
       `cart?cart_id=${action?.payload?.id}`,
-      header,
+      header
     );
 
     if (response?.status == 200) {
@@ -243,8 +245,8 @@ export function* getCartItemsSaga(action) {
 export function* removeCartItemsSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
     accesstoken: item.token,
   };
   try {
@@ -252,18 +254,18 @@ export function* removeCartItemsSaga(action) {
       postApi,
       `cart/${action?.payload?.cart_id}/items/${action?.payload?.service_id}/remove`,
       action?.payload,
-      header,
+      header
     );
 
     if (response?.status == 200) {
       yield put(removeCartItemsSuccess(response?.data));
-      yield put(getCartItemsRequest({id: action?.payload?.cart_id}));
+      yield put(getCartItemsRequest({ id: action?.payload?.cart_id }));
       showErrorAlert(response.data.message);
     } else {
       yield put(removeCartItemsFailure(response?.data));
     }
   } catch (error) {
-    console.log('error -- ', error);
+    console.log("error -- ", error);
     yield put(removeCartItemsFailure(error));
     // showErrorAlert(error?.response?.data?.response.status.msg);
   }
@@ -273,8 +275,8 @@ export function* removeCartItemsSaga(action) {
 export function* addServiceWishlistSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
     accesstoken: item.token,
   };
   try {
@@ -288,7 +290,7 @@ export function* addServiceWishlistSaga(action) {
       yield put(addServiceWishlistFailure(response?.data));
     }
   } catch (error) {
-    console.log('error -- ', error);
+    console.log("error -- ", error);
     yield put(addServiceWishlistFailure(error));
     // showErrorAlert(error?.response?.data?.response.status.msg);
   }
@@ -298,8 +300,8 @@ export function* addServiceWishlistSaga(action) {
 export function* getAllServiceWishlistSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
     accesstoken: item.token,
   };
 
@@ -319,45 +321,45 @@ export function* getAllServiceWishlistSaga(action) {
 
 const watchFunction = [
   (function* () {
-    yield takeLatest('Service/getAllServiceCateRequest', getAllServiceCateSaga);
+    yield takeLatest("Service/getAllServiceCateRequest", getAllServiceCateSaga);
   })(),
   (function* () {
     yield takeLatest(
-      'Service/getServiceCategoryRequest',
-      getServiceCategorySaga,
+      "Service/getServiceCategoryRequest",
+      getServiceCategorySaga
     );
   })(),
   (function* () {
     yield takeLatest(
-      'Service/getServiceSubCategoryRequest',
-      getServiceSubCategorySaga,
+      "Service/getServiceSubCategoryRequest",
+      getServiceSubCategorySaga
     );
   })(),
   (function* () {
-    yield takeLatest('Service/getAllServicesRequest', getAllServicesSaga);
+    yield takeLatest("Service/getAllServicesRequest", getAllServicesSaga);
   })(),
   (function* () {
-    yield takeLatest('Service/getServiceDetailsRequest', getServiceDetailsSaga);
+    yield takeLatest("Service/getServiceDetailsRequest", getServiceDetailsSaga);
   })(),
   (function* () {
-    yield takeLatest('Service/addToCartServiceRequest', addToCartServiceSaga);
+    yield takeLatest("Service/addToCartServiceRequest", addToCartServiceSaga);
   })(),
   (function* () {
-    yield takeLatest('Service/getCartItemsRequest', getCartItemsSaga);
+    yield takeLatest("Service/getCartItemsRequest", getCartItemsSaga);
   })(),
   (function* () {
-    yield takeLatest('Service/removeCartItemsRequest', removeCartItemsSaga);
+    yield takeLatest("Service/removeCartItemsRequest", removeCartItemsSaga);
   })(),
   (function* () {
     yield takeLatest(
-      'Service/addServiceWishlistRequest',
-      addServiceWishlistSaga,
+      "Service/addServiceWishlistRequest",
+      addServiceWishlistSaga
     );
   })(),
   (function* () {
     yield takeLatest(
-      'Service/getAllServiceWishlistRequest',
-      getAllServiceWishlistSaga,
+      "Service/getAllServiceWishlistRequest",
+      getAllServiceWishlistSaga
     );
   })(),
 ];
