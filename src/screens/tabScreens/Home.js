@@ -31,11 +31,7 @@ import { getUserInfoRequest } from "../../redux/reducer/UserReducer";
 import showErrorAlert, { ShowToast } from "../../utils/helpers/Toast";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import _ from "lodash";
-import {
-  getAllServiceCateRequest,
-  getAllServiceWishlistRequest,
-  getCartItemsRequest,
-} from "../../redux/reducer/ServiceReducer";
+import { getAllServiceCateRequest, getAllServiceWishlistRequest, getCartItemsRequest } from "../../redux/reducer/ServiceReducer";
 import Modal from "react-native-modal";
 import { useTranslation } from "react-i18next";
 import LottieView from "lottie-react-native";
@@ -51,9 +47,7 @@ const Home = () => {
   const { t, i18n } = useTranslation();
 
   const dispatch = useDispatch();
-  const { isWarningShown, cartData } = useSelector(
-    (state) => state.GlobalReducer
-  );
+  const { isWarningShown, cartData } = useSelector((state) => state.GlobalReducer);
 
   const { token } = useSelector((state) => state.AuthReducer);
   const UserReducer = useSelector((state) => state.UserReducer);
@@ -181,12 +175,7 @@ const Home = () => {
 
   const CardItem = useCallback(({ item, index, containerStyle, onPress }) => {
     return (
-      <Animatable.View
-        animation={"fadeInRight"}
-        duration={800}
-        delay={index * 300}
-        style={[containerStyle]}
-      >
+      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={[containerStyle]}>
         <TouchableOpacity style={styles.card} onPress={onPress}>
           <Image source={item?.icon} style={styles.card_icon} />
           <Text style={styles.card_text}>{item?.title}</Text>
@@ -198,12 +187,7 @@ const Home = () => {
   function CategoryList({ title, data }) {
     return (
       <>
-        <View
-          style={[
-            styles.titlecon,
-            { marginTop: 0, paddingHorizontal: normalize(18) },
-          ]}
-        >
+        <View style={[styles.titlecon, { marginTop: 0, paddingHorizontal: normalize(18) }]}>
           <Text style={styles.roboto17}>{title}</Text>
           <TouchableOpacity>
             <Image source={Icons.ViewAll} style={styles.allicon} />
@@ -245,28 +229,14 @@ const Home = () => {
             paddingStart: normalize(18),
           }}
           renderItem={({ item, index }) => {
-            return (
-              <CardItem
-                item={item}
-                index={index}
-                containerStyle={{ marginRight: normalize(14) }}
-                onPress={onPress}
-              />
-            );
+            return <CardItem item={item} index={index} containerStyle={{ marginRight: normalize(14) }} onPress={onPress} />;
           }}
         />
       </>
     );
   }
 
-  function SingleHRList({
-    onPress,
-    title,
-    data,
-    subtitle,
-    style,
-    titleBottom = false,
-  }) {
+  function SingleHRList({ onPress, title, data, subtitle, style, titleBottom = false }) {
     return (
       <>
         <View style={[styles.titlecon, style]}>
@@ -287,15 +257,9 @@ const Home = () => {
           contentContainerStyle={{ paddingStart: normalize(18) }}
           renderItem={({ item, index }) => {
             return (
-              <Animatable.View
-                animation={"fadeInRight"}
-                duration={800}
-                delay={index * 300}
-              >
+              <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
                 <TouchableOpacity style={styles.card1}>
-                  {!titleBottom && (
-                    <Text style={styles.card_text1}>{item.title}</Text>
-                  )}
+                  {!titleBottom && <Text style={styles.card_text1}>{item.title}</Text>}
                   <Image
                     source={item?.icon}
                     style={{
@@ -346,11 +310,7 @@ const Home = () => {
           contentContainerStyle={{ paddingStart: normalize(18) }}
           renderItem={({ item, index }) => {
             return (
-              <Animatable.View
-                animation={"fadeInRight"}
-                duration={800}
-                delay={index * 300}
-              >
+              <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
                 <TouchableOpacity
                   style={[
                     styles.card1,
@@ -396,12 +356,8 @@ const Home = () => {
                         width: normalize(16),
                       }}
                     />
-                    <Text style={styles.card_text1}>
-                      {" " + item.rate + " "}
-                    </Text>
-                    <Text
-                      style={styles.card_text1}
-                    >{`(${item.total_rate})`}</Text>
+                    <Text style={styles.card_text1}>{" " + item.rate + " "}</Text>
+                    <Text style={styles.card_text1}>{`(${item.total_rate})`}</Text>
                   </View>
 
                   <TouchableOpacity
@@ -484,23 +440,9 @@ const Home = () => {
             marginTop={normalize(8)}
             justifyContent="space-between"
           >
-            <SkeletonPlaceholder.Item
-              width={!num ? 105 : 170}
-              height={!num ? 105 : 170}
-              borderRadius={8}
-            />
-            <SkeletonPlaceholder.Item
-              width={!num ? 105 : 170}
-              height={!num ? 105 : 170}
-              borderRadius={8}
-            />
-            {!num ? (
-              <SkeletonPlaceholder.Item
-                width={105}
-                height={105}
-                borderRadius={8}
-              />
-            ) : null}
+            <SkeletonPlaceholder.Item width={!num ? 105 : 170} height={!num ? 105 : 170} borderRadius={8} />
+            <SkeletonPlaceholder.Item width={!num ? 105 : 170} height={!num ? 105 : 170} borderRadius={8} />
+            {!num ? <SkeletonPlaceholder.Item width={105} height={105} borderRadius={8} /> : null}
           </SkeletonPlaceholder.Item>
         </SkeletonPlaceholder>
       </>
@@ -575,14 +517,7 @@ const Home = () => {
             paddingStart: normalize(18),
           }}
           renderItem={({ item, index }) => {
-            return (
-              <CItem
-                id={serviceId}
-                item={item}
-                index={index}
-                containerStyle={{ marginRight: normalize(14) }}
-              />
-            );
+            return <CItem id={serviceId} item={item} index={index} containerStyle={{ marginRight: normalize(14) }} />;
           }}
         />
       </>
@@ -593,12 +528,7 @@ const Home = () => {
     let isValidImage = true;
 
     return (
-      <Animatable.View
-        animation={"fadeInRight"}
-        duration={800}
-        delay={index * 300}
-        style={[containerStyle]}
-      >
+      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={[containerStyle]}>
         <TouchableOpacity
           style={styles.card}
           onPress={() => {
@@ -610,10 +540,7 @@ const Home = () => {
             });
           }}
         >
-          <Image
-            source={isValidImage ? { uri: item?.image_url } : Icons.Applogo}
-            style={styles.card_icon}
-          />
+          <Image source={isValidImage ? { uri: item?.image_url } : Icons.Applogo} style={styles.card_icon} />
           <Text style={styles.card_text}>{item?.name}</Text>
         </TouchableOpacity>
       </Animatable.View>
@@ -652,24 +579,15 @@ const Home = () => {
                 paddingHorizontal: normalize(18),
               }}
             >
-              <SkeletonPlaceholder
-                borderRadius={4}
-                enabled={UserReducer.status == "User/getUserInfoRequest"}
-              >
+              <SkeletonPlaceholder borderRadius={4} enabled={UserReducer.status == "User/getUserInfoRequest"}>
                 <View style={{ ...styles.container, marginTop: normalize(24) }}>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Image
-                      source={
-                        userInfo?.user_profile_image
-                          ? { uri: userInfo?.user_profile_image }
-                          : Images.Avatar
-                      }
+                      source={userInfo?.user_profile_image ? { uri: userInfo?.user_profile_image } : Images.Avatar}
                       style={styles.img}
                     />
                     <View>
-                      <Text style={styles.text14}>
-                        Hi, {firstName ? firstName : ""}
-                      </Text>
+                      <Text style={styles.text14}>Hi, {firstName ? firstName : ""}</Text>
                       <TouchableOpacity
                         onPress={() => {
                           setIsVisible(true);
@@ -680,10 +598,7 @@ const Home = () => {
                           margin: isLoading ? normalize(2) : 0,
                         }}
                       >
-                        <Image
-                          source={Icons.Location}
-                          style={styles.location}
-                        />
+                        <Image source={Icons.Location} style={styles.location} />
                         <Text
                           numberOfLines={1}
                           style={{
@@ -692,9 +607,7 @@ const Home = () => {
                             marginLeft: normalize(2),
                           }}
                         >
-                          {!_.isEmpty(UserReducer?.currentPosition)
-                            ? UserReducer?.currentPosition?.address
-                            : "Please Select your location"}
+                          {!_.isEmpty(UserReducer?.currentPosition) ? UserReducer?.currentPosition?.address : "Please Select your location"}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -770,10 +683,6 @@ const Home = () => {
                     renderItem={renderItem}
                   />
                 )}
-
-                {/* {[1, 2, 3, 4].map((item, index) => {
-                  return <LoadingSkeleton key={index} />;
-                })} */}
               </View>
             ))
             // {/* {ServiceReducer.status === "Service/getAllServiceCateRequest" ? (
@@ -911,16 +820,11 @@ const Home = () => {
           <View style={styles.nc}>
             <Image source={Icons.user1} style={styles.nci} />
             <View>
-              <Text style={styles.ntitle}>
-                Jim is on his way for AC Service
-              </Text>
+              <Text style={styles.ntitle}>Jim is on his way for AC Service</Text>
               <Text style={styles.ntd}>Arriving in 12 mins</Text>
             </View>
 
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ServiceDayInside")}
-              style={styles.nt}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("ServiceDayInside")} style={styles.nt}>
               <Image source={Icons.right_arrow} style={styles.nra} />
             </TouchableOpacity>
           </View>
@@ -942,12 +846,7 @@ const Home = () => {
           height="86%"
         />
       </SafeAreaView>
-      <Modal
-        isVisible={!isWarningShown}
-        animationIn="bounceInUp"
-        animationInTiming={1000}
-        backdropColor="rgba(255,255,255,0.8)"
-      >
+      <Modal isVisible={!isWarningShown} animationIn="bounceInUp" animationInTiming={1000} backdropColor="rgba(255,255,255,0.8)">
         <View
           style={{
             height: "100%",
@@ -973,20 +872,13 @@ const Home = () => {
               borderRadius: 30,
             }}
           >
-            <LottieView
-              source={Icons.Warning}
-              style={{ height: 80, width: 80 }}
-              autoPlay={true}
-            />
+            <LottieView source={Icons.Warning} style={{ height: 80, width: 80 }} autoPlay={true} />
             <Text style={styles.warningTitleText}>{t("warning.title")}</Text>
             <Text style={styles.warningHeaderText}>{t("warning.header")}</Text>
             <Text style={styles.warningBodyText}>{t("warning.body")}</Text>
 
             {warningCount === 0 ? (
-              <Text
-                style={styles.warningButtonText}
-                onPress={() => dispatch(setWarningShownStatus(true))}
-              >
+              <Text style={styles.warningButtonText} onPress={() => dispatch(setWarningShownStatus(true))}>
                 {t("close")}
               </Text>
             ) : (

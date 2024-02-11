@@ -1,14 +1,14 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 // import constants from '../../utils/helpers/constants';
 // import {getData} from '../LocalStore';
 
 const initialState = {
-  status: '',
+  status: "",
   isLanguageSelected: null,
 };
 
 const LanguageSlice = createSlice({
-  name: 'Language',
+  name: "Language",
   initialState,
   reducers: {
     /* onStart */
