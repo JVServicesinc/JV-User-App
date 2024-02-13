@@ -90,6 +90,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('jeveux-user.keystore')
+            storePassword 'android'
+            keyAlias 'jv-user'
+            keyPassword 'android'
+        }
     }
     buildTypes {
         debug {
@@ -101,6 +107,7 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
 }
