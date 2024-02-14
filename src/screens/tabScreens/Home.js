@@ -31,7 +31,12 @@ import { getUserInfoRequest } from "../../redux/reducer/UserReducer";
 import showErrorAlert, { ShowToast } from "../../utils/helpers/Toast";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import _ from "lodash";
-import { getAllServiceCateRequest, getAllServiceWishlistRequest, getCartItemsRequest } from "../../redux/reducer/ServiceReducer";
+import {
+  getAllServiceCateRequest,
+  getAllServiceWishlistRequest,
+  getBannersRequest,
+  getCartItemsRequest,
+} from "../../redux/reducer/ServiceReducer";
 import Modal from "react-native-modal";
 import { useTranslation } from "react-i18next";
 import LottieView from "lottie-react-native";
@@ -88,7 +93,8 @@ const Home = () => {
       .then(() => {
         dispatch(getUserInfoRequest());
         dispatch(getAllServiceCateRequest());
-        dispatch(getAllServiceWishlistRequest());
+        dispatch(getBannersRequest());
+        // dispatch(getAllServiceWishlistRequest());
       })
       .catch((err) => {
         showErrorAlert("Please Connect To Internet");
@@ -391,22 +397,27 @@ const Home = () => {
 
   const cards = [
     {
+      id: 0,
       image: Images.Banner,
       desc: "",
     },
     {
+      id: 1,
       image: Images.Banner,
       desc: "",
     },
     {
+      id: 2,
       image: Images.Banner,
       desc: "",
     },
     {
+      id: 3,
       image: Images.Banner,
       desc: "",
     },
     {
+      id: 4,
       image: Images.Banner,
       desc: "",
     },
@@ -424,8 +435,8 @@ const Home = () => {
             marginTop={normalize(8)}
             justifyContent="space-between"
           >
-            <SkeletonPlaceholder.Item width={200} height={20} />
-            <SkeletonPlaceholder.Item width={30} height={20} />
+            <SkeletonPlaceholder.Item width={200} height={27.5} />
+            <SkeletonPlaceholder.Item width={30} height={27.5} />
           </SkeletonPlaceholder.Item>
         </SkeletonPlaceholder>
 
@@ -459,9 +470,9 @@ const Home = () => {
           }}
           horizontal
         >
-          {[1, 2, 3].map(({ item, index }) => {
+          {[1, 2, 3].map(({ _, index }) => {
             return (
-              <SkeletonPlaceholder borderRadius={8}>
+              <SkeletonPlaceholder key={index} borderRadius={8}>
                 <View
                   style={{
                     width: normalize(250),
@@ -477,14 +488,6 @@ const Home = () => {
       </>
     );
   }
-
-  useEffect(() => {
-    // if (UserReducer.status == 'User/getUserInfoSuccess') {
-    //   setTimeout(() => {
-    //     setIsLoading(false);
-    //   }, 2000);
-    // }
-  }, []);
 
   // --------------------------------------------------------------------------------
   const keyExtractor = useCallback((item, index) => index.toString(), []);
@@ -528,7 +531,7 @@ const Home = () => {
     let isValidImage = true;
 
     return (
-      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={[containerStyle]}>
+      <Animatable.View animation={"fadeInRight"} duration={400} delay={index * 50} style={[containerStyle]}>
         <TouchableOpacity
           style={styles.card}
           onPress={() => {
@@ -549,16 +552,20 @@ const Home = () => {
 
   // --------------------------------------------------------------------------------
   const renderItem = useCallback(({ item, index }) => {
-    return (
-      <SHList
-        title={`${item?.name} services`}
-        data={item?.jv_service_categories}
-        item={item}
-        style={{
-          paddingHorizontal: normalize(18),
-        }}
-      />
-    );
+    if (index === 0 || index === 1 || index === 2) {
+      return (
+        <SHList
+          title={`${item?.name} Services`}
+          data={item?.jv_service_categories}
+          item={item}
+          style={{
+            paddingHorizontal: normalize(18),
+          }}
+        />
+      );
+    } else {
+      return null;
+    }
   }, []);
 
   return (
@@ -660,8 +667,7 @@ const Home = () => {
             </View>
           }
           ListFooterComponent={
-            (console.log("Status --- ", ServiceReducer.isCategoryLoading),
-            (
+            <>
               <View
                 style={{
                   backgroundColor: "white",
@@ -671,7 +677,7 @@ const Home = () => {
               >
                 {ServiceReducer.isCategoryLoading ? (
                   <>
-                    {[1, 2, 3, 4].map((item, index) => {
+                    {[1, 2, 3].map((item, index) => {
                       return <LoadingSkeleton key={index} />;
                     })}
                   </>
@@ -684,47 +690,31 @@ const Home = () => {
                   />
                 )}
               </View>
-            ))
-            // {/* {ServiceReducer.status === "Service/getAllServiceCateRequest" ? (
-            //   <>
-            // {[1, 2, 3].map((item, index) => {
-            //   return <LoadingSkeleton key={index} />;
-            // })}
-            //   </>
-            // ) : (
-            //   <FlatList
-            //     data={ServiceReducer?.getAllServiceCateRes}
-            //     keyExtractor={keyExtractor}
-            //     showsVerticalScrollIndicator={false}
-            //     renderItem={renderItem}
-            //   />
-            // )} */}
 
-            // {/* {!isLoading ? (
-            //   <LoadingSliderSkeleton />
-            // ) : (
-            //   <FlatListSlider
-            //     data={cards}
-            //     width={275}
-            //     timer={4000}
-            //     component={<Preview />}
-            //     onPress={(item) => {}}
-            //     indicatorActiveWidth={40}
-            //     contentContainerStyle={{
-            //       marginBottom: 20,
-            //       marginTop: 20,
-            //       paddingHorizontal: 22,
-            //     }}
-            //   />
-            // )} */}
+              {ServiceReducer.isBannersLoading ? (
+                <LoadingSliderSkeleton />
+              ) : (
+                <FlatListSlider
+                  data={ServiceReducer.getBannersList}
+                  imageKey={"image_url"}
+                  width={275}
+                  timer={4000}
+                  onPress={(item) => {}}
+                  indicatorActiveWidth={40}
+                  contentContainerStyle={{
+                    marginBottom: 20,
+                    marginTop: 20,
+                    paddingHorizontal: 22,
+                  }}
+                />
+              )}
 
-            // {/* {!isLoading ? (
+              {/* {!isLoading ? (
             //   <LoadingSkeleton />
             // ) : (
             //   <CategoryList data={Categories} title={"Categories"} />
             // )} */}
-
-            // {/* {!isLoading ? (
+              {/* {!isLoading ? (
             //   <LoadingSliderSkeleton />
             // ) : (
             //   <FlatListSlider
@@ -741,8 +731,7 @@ const Home = () => {
             //     }}
             //   />
             // )} */}
-
-            // {/* {!isLoading ? (
+              {/* {!isLoading ? (
             //   <LoadingSkeleton />
             // ) : (
             //   <SingleHList
@@ -757,8 +746,7 @@ const Home = () => {
             //     }}
             //   />
             // )} */}
-
-            // {/* {!isLoading ? (
+              {/* {!isLoading ? (
             //   <LoadingSkeleton num={2} />
             // ) : (
             //   <SingleHMList
@@ -770,8 +758,7 @@ const Home = () => {
             //     }}
             //   />
             // )} */}
-
-            // {/* {!isLoading ? (
+              {/* {!isLoading ? (
             //   <LoadingSkeleton num={2} />
             // ) : (
             //   <SingleHRList
@@ -781,8 +768,7 @@ const Home = () => {
             //     onPress={() => navigation.navigate("")}
             //   />
             // )} */}
-
-            // {/* {!isLoading ? (
+              {/* {!isLoading ? (
             //   <LoadingSkeleton num={2} />
             // ) : (
             //   <SingleHRList
@@ -792,8 +778,7 @@ const Home = () => {
             //     style={{ paddingHorizontal: normalize(18) }}
             //   />
             // )} */}
-
-            // {/* {!isLoading ? (
+              {/* {!isLoading ? (
             //   <LoadingSkeleton num={2} />
             // ) : (
             //   <SingleHRList
@@ -803,17 +788,7 @@ const Home = () => {
             //     style={{ paddingHorizontal: normalize(18) }}
             //   />
             // )} */}
-
-            // {/* {!isLoading ? (
-            //   <LoadingSkeleton num={2} />
-            // ) : (
-            //   <SingleHRList
-            //     title={"Massage for men"}
-            //     subtitle={"Curated massages by top therapists."}
-            //     data={Massage}
-            //     style={{ paddingHorizontal: normalize(18) }}
-            //   />
-            // )} */}
+            </>
           }
         />
         {isNotify && (

@@ -15,6 +15,10 @@ import {
   getAllServiceCateFailure,
   getAllServiceCateSuccess,
 
+  /* Get Banners Category */
+  getBannersFailure,
+  getBannersSuccess,
+
   /* Get all Wishlist Service*/
   getAllServiceWishlistFailure,
   getAllServiceWishlistSuccess,
@@ -74,6 +78,29 @@ export function* getAllServiceCateSaga() {
   }
 }
 
+/* Get All Service Category */
+export function* getBannersSaga() {
+  const item = yield select(getItem);
+  let header = {
+    Accept: "application/json",
+    contenttype: "application/json",
+    accesstoken: item.token,
+  };
+  try {
+    let response = yield call(getApi, "banners", header);
+
+    if (response?.status == 200) {
+      console.log("Banners Responses -- ", JSON.stringify(response?.data?.data));
+      yield put(getBannersSuccess(response?.data?.data));
+    } else {
+      yield put(getBannersFailure(response?.data));
+    }
+  } catch (error) {
+    yield put(getBannersFailure(error));
+    // showErrorAlert(error?.response?.data?.message);
+  }
+}
+
 /* Get Service Category */
 export function* getServiceCategorySaga(action) {
   const item = yield select(getItem);
@@ -84,11 +111,7 @@ export function* getServiceCategorySaga(action) {
   };
 
   try {
-    let response = yield call(
-      getApi,
-      `services/${action?.payload}/categories`,
-      header
-    );
+    let response = yield call(getApi, `services/${action?.payload}/categories`, header);
 
     if (response?.status == 200) {
       yield put(getServiceCategorySuccess(response?.data));
@@ -137,11 +160,7 @@ export function* getAllServicesSaga(action) {
     accesstoken: item.token,
   };
   try {
-    let response = yield call(
-      getApi,
-      `services/${action?.payload?.cateId}/subcategories/${action?.payload?.serId}/services`,
-      header
-    );
+    let response = yield call(getApi, `services/${action?.payload?.cateId}/subcategories/${action?.payload?.serId}/services`, header);
     if (response?.status == 200) {
       yield put(getAllServicesSuccess(response?.data?.data));
       //   showErrorAlert(response.data.message);
@@ -186,21 +205,12 @@ export function* addToCartServiceSaga(action) {
     accesstoken: item.token,
   };
   try {
-    let response = yield call(
-      postApi,
-      `cart/auth/add`,
-      action?.payload,
-      header
-    );
+    let response = yield call(postApi, `cart/auth/add`, action?.payload, header);
 
     if (response?.status == 200) {
       yield put(addToCartServiceSuccess(response?.data?.data));
       yield put(getCartItemsRequest({ id: response?.data?.data?.cart_id }));
-      yield call(
-        AsyncStorage.setItem,
-        constants.CART_ID,
-        response?.data?.data?.cart_id
-      );
+      yield call(AsyncStorage.setItem, constants.CART_ID, response?.data?.data?.cart_id);
       yield put(getCartId(response?.data?.data?.cart_id));
       showErrorAlert(response.data.message);
     } else {
@@ -223,11 +233,7 @@ export function* getCartItemsSaga(action) {
   };
 
   try {
-    let response = yield call(
-      getApi,
-      `cart?cart_id=${action?.payload?.id}`,
-      header
-    );
+    let response = yield call(getApi, `cart?cart_id=${action?.payload?.id}`, header);
 
     if (response?.status == 200) {
       yield put(getCartItemsSuccess(response?.data?.data));
@@ -324,16 +330,13 @@ const watchFunction = [
     yield takeLatest("Service/getAllServiceCateRequest", getAllServiceCateSaga);
   })(),
   (function* () {
-    yield takeLatest(
-      "Service/getServiceCategoryRequest",
-      getServiceCategorySaga
-    );
+    yield takeLatest("Service/getBannersRequest", getBannersSaga);
   })(),
   (function* () {
-    yield takeLatest(
-      "Service/getServiceSubCategoryRequest",
-      getServiceSubCategorySaga
-    );
+    yield takeLatest("Service/getServiceCategoryRequest", getServiceCategorySaga);
+  })(),
+  (function* () {
+    yield takeLatest("Service/getServiceSubCategoryRequest", getServiceSubCategorySaga);
   })(),
   (function* () {
     yield takeLatest("Service/getAllServicesRequest", getAllServicesSaga);
@@ -351,16 +354,10 @@ const watchFunction = [
     yield takeLatest("Service/removeCartItemsRequest", removeCartItemsSaga);
   })(),
   (function* () {
-    yield takeLatest(
-      "Service/addServiceWishlistRequest",
-      addServiceWishlistSaga
-    );
+    yield takeLatest("Service/addServiceWishlistRequest", addServiceWishlistSaga);
   })(),
   (function* () {
-    yield takeLatest(
-      "Service/getAllServiceWishlistRequest",
-      getAllServiceWishlistSaga
-    );
+    yield takeLatest("Service/getAllServiceWishlistRequest", getAllServiceWishlistSaga);
   })(),
 ];
 

@@ -1,13 +1,5 @@
 import React, { Component, PureComponent, createRef } from "react";
-import {
-  FlatList,
-  View,
-  StyleSheet,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-  Dimensions,
-} from "react-native";
+import { FlatList, View, StyleSheet, LayoutAnimation, Platform, UIManager, Dimensions } from "react-native";
 import Indicator from "./Indicator";
 import ChildItem from "./ChildItem";
 
@@ -56,8 +48,7 @@ export default class FlatListSlider extends PureComponent {
   }
 
   componentDidUpdate(prevprops) {
-    if (prevprops.data !== this.props.data)
-      this.setState({ data: this.props.data });
+    if (prevprops.data !== this.props.data) this.setState({ data: this.props.data });
   }
 
   componentWillUnmount() {
@@ -85,6 +76,7 @@ export default class FlatListSlider extends PureComponent {
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) =>
             React.cloneElement(this.props.component, {
+              key: index,
               style: { width: this.props.width },
               item: item,
               imageKey: this.props.imageKey,
@@ -95,9 +87,7 @@ export default class FlatListSlider extends PureComponent {
               height: this.props.height,
             })
           }
-          ItemSeparatorComponent={() => (
-            <View style={{ width: this.props.separatorWidth }} />
-          )}
+          ItemSeparatorComponent={() => <View style={{ width: this.props.separatorWidth }} />}
           keyExtractor={(item, index) => item.toString() + index}
           onViewableItemsChanged={this.onViewableItemsChanged}
           viewabilityConfig={this.viewabilityConfig}
@@ -116,10 +106,7 @@ export default class FlatListSlider extends PureComponent {
             itemCount={this.props.data.length}
             currentIndex={this.state.index % this.props.data.length}
             indicatorStyle={this.props.indicatorStyle}
-            indicatorContainerStyle={[
-              styles.indicatorContainerStyle,
-              this.props.indicatorContainerStyle,
-            ]}
+            indicatorContainerStyle={[styles.indicatorContainerStyle, this.props.indicatorContainerStyle]}
             indicatorActiveColor={this.props.indicatorActiveColor}
             indicatorInActiveColor={this.props.indicatorInActiveColor}
             indicatorActiveWidth={this.props.indicatorActiveWidth}
@@ -133,10 +120,7 @@ export default class FlatListSlider extends PureComponent {
   onViewableItemsChanged = ({ viewableItems, changed }) => {
     if (viewableItems.length > 0) {
       let currentIndex = viewableItems[0].index;
-      if (
-        currentIndex % this.props.data.length === this.props.data.length - 1 &&
-        this.props.loop
-      ) {
+      if (currentIndex % this.props.data.length === this.props.data.length - 1 && this.props.loop) {
         this.setState({
           index: currentIndex,
           data: [...this.state.data, ...this.props.data],
@@ -171,10 +155,7 @@ export default class FlatListSlider extends PureComponent {
   };
 
   startAutoPlay = () => {
-    this.sliderTimer = setInterval(
-      this.changeSliderListIndex,
-      this.props.timer
-    );
+    this.sliderTimer = setInterval(this.changeSliderListIndex, this.props.timer);
   };
 
   stopAutoPlay = () => {

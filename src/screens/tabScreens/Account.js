@@ -1,13 +1,4 @@
-import {
-  FlatList,
-  Image,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "../../themes/Colors";
 import { Images } from "../../themes/Images";
@@ -129,14 +120,7 @@ const Account = () => {
                 alignItems: "center",
               }}
             >
-              <Image
-                source={
-                  userInfo?.user_profile_image
-                    ? { uri: userInfo?.user_profile_image }
-                    : Images.Avatar
-                }
-                style={styles.img}
-              />
+              <Image source={userInfo?.user_profile_image ? { uri: userInfo?.user_profile_image } : Images.Avatar} style={styles.img} />
               <View>
                 <Text style={styles.text16}>{userInfo.full_name}</Text>
                 <Text style={styles.text11}>
@@ -144,10 +128,7 @@ const Account = () => {
                 </Text>
               </View>
             </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("EditProfile")}
-              style={styles.editback}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("EditProfile")} style={styles.editback}>
               <Image source={Icons.Editixon} style={styles.edit} />
             </TouchableOpacity>
           </View>
@@ -233,12 +214,7 @@ const Account = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => {
             return (
-              <Animatable.View
-                animation={"fadeInLeft"}
-                duration={800}
-                delay={index * 100}
-                style={styles.card}
-              >
+              <Animatable.View animation={"fadeInLeft"} duration={400} delay={index * 50} style={styles.card}>
                 <TouchableOpacity
                   onPress={() => {
                     if (item?.navigate) {
@@ -303,11 +279,7 @@ const Account = () => {
                     source={Icons.RightAngle}
                     style={{
                       ...styles.angle,
-                      display:
-                        item?.title == "Delete Account" ||
-                        item?.title == "Logout"
-                          ? "none"
-                          : "flex",
+                      display: item?.title == "Delete Account" || item?.title == "Logout" ? "none" : "flex",
                     }}
                   />
                 </TouchableOpacity>
@@ -316,11 +288,7 @@ const Account = () => {
           }}
         />
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Support")}
-          activeOpacity={0.8}
-          style={styles.touchHelp}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("Support")} activeOpacity={0.8} style={styles.touchHelp}>
           <Image source={Icons.help} style={styles.helpImg} />
           <Text style={styles.helpTitle}>{t("Help")}</Text>
         </TouchableOpacity>
@@ -328,17 +296,10 @@ const Account = () => {
         <Picker
           children={
             <View style={styles.options}>
-              <Text style={styles.title1}>
-                Confirm{" "}
-                {isOptionsVisible.type == "logout"
-                  ? " Logout ?"
-                  : " Delete Account ?"}
-              </Text>
+              <Text style={styles.title1}>Confirm {isOptionsVisible.type == "logout" ? " Logout ?" : " Delete Account ?"}</Text>
               <Text style={styles.title2}>
                 Are you sure you want to
-                {isOptionsVisible.type == "logout"
-                  ? " logout?"
-                  : " delete account ?"}
+                {isOptionsVisible.type == "logout" ? " logout?" : " delete account ?"}
               </Text>
               <TouchableOpacity
                 onPress={() => {
@@ -347,10 +308,7 @@ const Account = () => {
                     type: "",
                   });
                   setTimeout(async () => {
-                    if (
-                      !_.isEmpty(userInfo) &&
-                      isOptionsVisible.type !== "logout"
-                    ) {
+                    if (!_.isEmpty(userInfo) && isOptionsVisible.type !== "logout") {
                       let fromdata = new FormData();
                       fromdata.append("email", userInfo?.email);
                       deleteAccount(fromdata);
@@ -363,11 +321,7 @@ const Account = () => {
                 }}
                 style={styles.touch2}
               >
-                <Text style={styles.btnTitle}>
-                  {isOptionsVisible.type == "logout"
-                    ? "LogOut"
-                    : "Delete Account"}
-                </Text>
+                <Text style={styles.btnTitle}>{isOptionsVisible.type == "logout" ? "LogOut" : "Delete Account"}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>

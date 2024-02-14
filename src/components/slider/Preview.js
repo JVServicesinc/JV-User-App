@@ -1,27 +1,9 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  Platform,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet, Platform } from "react-native";
 
-export default Preview = ({
-  style,
-  item,
-  imageKey,
-  onPress,
-  index,
-  active,
-  local,
-}) => {
+export default Preview = ({ style, item, imageKey, onPress, index, active, local }) => {
   return (
-    <TouchableOpacity
-      style={[styles.videoContainer]}
-      onPress={() => onPress(item)}
-    >
+    <TouchableOpacity style={[styles.videoContainer]} onPress={() => onPress(item)}>
       <View style={[styles.imageContainer, styles.shadow]}>
         <Image
           style={[styles.videoPreview, active ? {} : { height: 140 }]}

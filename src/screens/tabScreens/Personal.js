@@ -10,96 +10,92 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
-import {Colors} from '../../themes/Colors';
-import {Images} from '../../themes/Images';
-import normalize from '../../utils/helpers/normalize';
-import {Icons} from '../../themes/Icons';
-import {StatusBar} from 'react-native';
-import {useState} from 'react';
-import {Fonts} from '../../themes/Fonts';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import * as Animatable from 'react-native-animatable';
-import FlatListSlider from '../../components/slider/FlatListSlider';
-import Preview from '../../components/slider/Preview';
-import Picker from '../../components/Picker';
-import SelectALocation from '../all/SelectALocation';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {getAllServiceCateRequest} from '../../redux/reducer/ServiceReducer';
-import showErrorAlert from '../../utils/helpers/Toast';
-import isInternetConnected from '../../utils/helpers/NetInfo';
-import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
+} from "react-native";
+import React, { useCallback, useEffect } from "react";
+import { Colors } from "../../themes/Colors";
+import { Images } from "../../themes/Images";
+import normalize from "../../utils/helpers/normalize";
+import { Icons } from "../../themes/Icons";
+import { StatusBar } from "react-native";
+import { useState } from "react";
+import { Fonts } from "../../themes/Fonts";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import * as Animatable from "react-native-animatable";
+import FlatListSlider from "../../components/slider/FlatListSlider";
+import Preview from "../../components/slider/Preview";
+import Picker from "../../components/Picker";
+import SelectALocation from "../all/SelectALocation";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { getAllServiceCateRequest } from "../../redux/reducer/ServiceReducer";
+import showErrorAlert from "../../utils/helpers/Toast";
+import isInternetConnected from "../../utils/helpers/NetInfo";
+import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 
 const Personal = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const UserReducer = useSelector(state => state.UserReducer);
-  const ServiceReducer = useSelector(state => state.ServiceReducer);
-  const [searchQuery, setSearchQuery] = useState('');
+  const UserReducer = useSelector((state) => state.UserReducer);
+  const ServiceReducer = useSelector((state) => state.ServiceReducer);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
 
   const Categories = [
-    {icon: Icons.Women_salon, title: 'Women salon'},
-    {icon: Icons.Mens_salon, title: `Men's salon`},
-    {icon: Icons.spa_women, title: 'Spa for women'},
-    {icon: Icons.message_men, title: 'Massage for men'},
-    {icon: Icons.advanced_facials, title: `Advanced Facials`},
-    {icon: Icons.nail_studio, title: 'Nail studio'},
+    { icon: Icons.Women_salon, title: "Women salon" },
+    { icon: Icons.Mens_salon, title: `Men's salon` },
+    { icon: Icons.spa_women, title: "Spa for women" },
+    { icon: Icons.message_men, title: "Massage for men" },
+    { icon: Icons.advanced_facials, title: `Advanced Facials` },
+    { icon: Icons.nail_studio, title: "Nail studio" },
   ];
 
   const Salon = [
-    {icon: Images.haircut, title: `Haircut`},
-    {icon: Images.hair_color, title: 'Hair color'},
-    {icon: Images.hair_color, title: 'Hair color'},
+    { icon: Images.haircut, title: `Haircut` },
+    { icon: Images.hair_color, title: "Hair color" },
+    { icon: Images.hair_color, title: "Hair color" },
   ];
 
   const Massage = [
-    {icon: Images.streess_relief, title: `Stress relief`},
-    {icon: Images.pain_rellef, title: 'Pain rellef'},
-    {icon: Images.hair_color, title: 'Relaxation'},
+    { icon: Images.streess_relief, title: `Stress relief` },
+    { icon: Images.pain_rellef, title: "Pain rellef" },
+    { icon: Images.hair_color, title: "Relaxation" },
   ];
 
   const SalonForWoman = [
-    {icon: Images.waxing, title: 'Waxing'},
-    {icon: Images.facial, title: 'Facial & Cleanup '},
-    {icon: Images.facial, title: 'Facial'},
+    { icon: Images.waxing, title: "Waxing" },
+    { icon: Images.facial, title: "Facial & Cleanup " },
+    { icon: Images.facial, title: "Facial" },
   ];
 
   const MostBookedServices = [
     {
       icon: Images.instance_cleaning,
-      title: 'Blowdry: In Curl/ Out Curl',
+      title: "Blowdry: In Curl/ Out Curl",
       rate: 4.73,
-      total_rate: '427.9k',
-      price: '58.00',
+      total_rate: "427.9k",
+      price: "58.00",
     },
     {
       icon: Images.g1,
-      title: 'Straight & Smootn',
+      title: "Straight & Smootn",
       rate: 4.73,
-      total_rate: '427.9k',
-      price: '58.00',
+      total_rate: "427.9k",
+      price: "58.00",
     },
     {
       icon: Images.g1,
-      title: 'Straight & Smootn',
+      title: "Straight & Smootn",
       rate: 4.73,
-      total_rate: '427.9k',
-      price: '58.00',
+      total_rate: "427.9k",
+      price: "58.00",
     },
   ];
 
-  const CardItem = useCallback(({item, index, containerStyle}) => {
+  const CardItem = useCallback(({ item, index, containerStyle }) => {
     return (
-      <Animatable.View
-        animation={'fadeInRight'}
-        duration={800}
-        delay={index * 300}
-        style={containerStyle}>
+      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={containerStyle}>
         <TouchableOpacity style={styles.card}>
           <Image source={item?.icon} style={styles.card_icon} />
           <Text style={styles.card_text}>{item?.title}</Text>
@@ -108,15 +104,10 @@ const Personal = () => {
     );
   }, []);
 
-  function CategoryList({title, data, style}) {
+  function CategoryList({ title, data, style }) {
     return (
       <>
-        <View
-          style={[
-            styles.titlecon,
-            {marginTop: 0, paddingHorizontal: normalize(18)},
-            style,
-          ]}>
+        <View style={[styles.titlecon, { marginTop: 0, paddingHorizontal: normalize(18) }, style]}>
           <Text style={styles.roboto17}>{title}</Text>
           <TouchableOpacity>
             <Image source={Icons.ViewAll} style={styles.allicon} />
@@ -126,12 +117,12 @@ const Personal = () => {
         <FlatList
           data={data}
           columnWrapperStyle={{
-            justifyContent: 'space-between',
+            justifyContent: "space-between",
             marginTop: normalize(12),
             paddingHorizontal: normalize(18),
           }}
           numColumns={3}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return <CardItem item={item} index={index} />;
           }}
         />
@@ -139,14 +130,7 @@ const Personal = () => {
     );
   }
 
-  function SingleHRList({
-    onPress,
-    title,
-    data,
-    subtitle,
-    style,
-    titleBottom = false,
-  }) {
+  function SingleHRList({ onPress, title, data, subtitle, style, titleBottom = false }) {
     return (
       <>
         <View style={[styles.titlecon, style]}>
@@ -164,25 +148,20 @@ const Personal = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{paddingStart: normalize(18)}}
-          renderItem={({item, index}) => {
+          contentContainerStyle={{ paddingStart: normalize(18) }}
+          renderItem={({ item, index }) => {
             return (
-              <Animatable.View
-                animation={'fadeInRight'}
-                duration={800}
-                delay={index * 300}>
+              <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
                 <TouchableOpacity style={styles.card1}>
-                  {!titleBottom && (
-                    <Text style={styles.card_text1}>{item.title}</Text>
-                  )}
+                  {!titleBottom && <Text style={styles.card_text1}>{item.title}</Text>}
                   <Image
                     source={item?.icon}
                     style={{
                       height: normalize(80),
-                      width: '100%',
+                      width: "100%",
                       marginTop: normalize(5),
                       borderRadius: normalize(6),
-                      resizeMode: 'contain',
+                      resizeMode: "contain",
                     }}
                   />
                   {titleBottom && (
@@ -190,10 +169,11 @@ const Personal = () => {
                       style={[
                         styles.card_text1,
                         {
-                          textAlign: 'center',
+                          textAlign: "center",
                           marginTop: normalize(5),
                         },
-                      ]}>
+                      ]}
+                    >
                       {item.title}
                     </Text>
                   )}
@@ -206,7 +186,7 @@ const Personal = () => {
     );
   }
 
-  function SingleHMList({title, subtitle, data, style}) {
+  function SingleHMList({ title, subtitle, data, style }) {
     return (
       <>
         <View style={[styles.titlecon, style]}>
@@ -224,77 +204,76 @@ const Personal = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{paddingStart: normalize(18)}}
-          renderItem={({item, index}) => {
+          contentContainerStyle={{ paddingStart: normalize(18) }}
+          renderItem={({ item, index }) => {
             return (
-              <Animatable.View
-                animation={'fadeInRight'}
-                duration={800}
-                delay={index * 300}>
+              <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
                 <TouchableOpacity
                   style={[
                     styles.card1,
                     {
                       height: normalize(185),
                     },
-                  ]}>
+                  ]}
+                >
                   <Image
                     source={item?.icon}
                     style={{
                       height: normalize(80),
-                      width: '100%',
+                      width: "100%",
                       marginTop: normalize(5),
                       borderRadius: normalize(6),
-                      resizeMode: 'contain',
+                      resizeMode: "contain",
                     }}
                   />
                   <Text
                     style={[
                       styles.card_text1,
                       {
-                        textAlign: 'center',
+                        textAlign: "center",
                         marginTop: normalize(5),
                       },
-                    ]}>
+                    ]}
+                  >
                     {item.title}
                   </Text>
 
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignSelf: 'center',
+                      flexDirection: "row",
+                      alignSelf: "center",
                       marginTop: normalize(3),
-                    }}>
+                    }}
+                  >
                     <Image
                       source={Icons.rate_star}
                       style={{
-                        resizeMode: 'contain',
+                        resizeMode: "contain",
                         height: normalize(16),
                         width: normalize(16),
                       }}
                     />
-                    <Text style={styles.card_text1}>
-                      {' ' + item.rate + ' '}
-                    </Text>
-                    <Text
-                      style={styles.card_text1}>{`(${item.total_rate})`}</Text>
+                    <Text style={styles.card_text1}>{" " + item.rate + " "}</Text>
+                    <Text style={styles.card_text1}>{`(${item.total_rate})`}</Text>
                   </View>
 
                   <TouchableOpacity
                     style={{
-                      backgroundColor: 'white',
+                      backgroundColor: "white",
                       height: normalize(26),
-                      justifyContent: 'center',
+                      justifyContent: "center",
                       borderRadius: normalize(10),
                       marginTop: normalize(5),
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.card_text1,
                         {
-                          textAlign: 'center',
+                          textAlign: "center",
                         },
-                      ]}>
+                      ]}
+                    >
                       ${item.price}
                     </Text>
                   </TouchableOpacity>
@@ -310,37 +289,38 @@ const Personal = () => {
   const cards = [
     {
       image: Images.Banner,
-      desc: '',
+      desc: "",
     },
     {
       image: Images.Banner,
-      desc: '',
+      desc: "",
     },
     {
       image: Images.Banner,
-      desc: '',
+      desc: "",
     },
     {
       image: Images.Banner,
-      desc: '',
+      desc: "",
     },
     {
       image: Images.Banner,
-      desc: '',
+      desc: "",
     },
   ];
 
-  function LoadingSkeleton({num}) {
+  function LoadingSkeleton({ num }) {
     return (
       <>
         <SkeletonPlaceholder borderRadius={4}>
           <SkeletonPlaceholder.Item
-            width={'90%'}
+            width={"90%"}
             alignSelf="center"
             flexDirection="row"
             alignItems="center"
             marginTop={normalize(8)}
-            justifyContent="space-between">
+            justifyContent="space-between"
+          >
             <SkeletonPlaceholder.Item width={200} height={20} />
             <SkeletonPlaceholder.Item width={30} height={20} />
           </SkeletonPlaceholder.Item>
@@ -350,29 +330,16 @@ const Personal = () => {
 
         <SkeletonPlaceholder borderRadius={4}>
           <SkeletonPlaceholder.Item
-            width={'90%'}
+            width={"90%"}
             alignSelf="center"
             flexDirection="row"
             alignItems="center"
             marginTop={normalize(8)}
-            justifyContent="space-between">
-            <SkeletonPlaceholder.Item
-              width={!num ? 105 : 170}
-              height={!num ? 105 : 170}
-              borderRadius={8}
-            />
-            <SkeletonPlaceholder.Item
-              width={!num ? 105 : 170}
-              height={!num ? 105 : 170}
-              borderRadius={8}
-            />
-            {!num ? (
-              <SkeletonPlaceholder.Item
-                width={105}
-                height={105}
-                borderRadius={8}
-              />
-            ) : null}
+            justifyContent="space-between"
+          >
+            <SkeletonPlaceholder.Item width={!num ? 105 : 170} height={!num ? 105 : 170} borderRadius={8} />
+            <SkeletonPlaceholder.Item width={!num ? 105 : 170} height={!num ? 105 : 170} borderRadius={8} />
+            {!num ? <SkeletonPlaceholder.Item width={105} height={105} borderRadius={8} /> : null}
           </SkeletonPlaceholder.Item>
         </SkeletonPlaceholder>
       </>
@@ -387,15 +354,16 @@ const Personal = () => {
           style={{
             marginVertical: normalize(15),
           }}
-          horizontal>
-          {[1, 2, 3].map(({item, index}) => {
+          horizontal
+        >
+          {[1, 2, 3].map(({ item, index }) => {
             return (
-              <SkeletonPlaceholder borderRadius={8}>
+              <SkeletonPlaceholder key={index} borderRadius={8}>
                 <View
                   style={{
                     width: normalize(250),
                     height: normalize(90),
-                    backgroundColor: 'red',
+                    backgroundColor: "red",
                     marginLeft: normalize(15),
                   }}
                 />
@@ -407,28 +375,20 @@ const Personal = () => {
     );
   }
 
-  // useEffect(() => {
-  //   if (isFocused) {
-  //     setTimeout(() => {
-  //       setIsLoading(false);
-  //     }, 2000);
-  //   }
-  // }, [isFocused]);
-
   useEffect(() => {
     isInternetConnected()
       .then(() => {
         dispatch(getAllServiceCateRequest());
       })
-      .catch(err => {
-        showErrorAlert('Please Connect To Internet');
+      .catch((err) => {
+        showErrorAlert("Please Connect To Internet");
       });
   }, []);
 
   // --------------------------------------------------------------------------------
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
-  function SHList({title, data, item, style}) {
+  function SHList({ title, data, item, style }) {
     let serviceId = item?.id;
 
     return (
@@ -437,11 +397,12 @@ const Personal = () => {
           <Text style={styles.roboto17}>{title}</Text>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('ViewAllServices', {
+              navigation.navigate("ViewAllServices", {
                 title: title,
                 item: item,
               })
-            }>
+            }
+          >
             <Image source={Icons.ViewAll} style={styles.allicon} />
           </TouchableOpacity>
         </View>
@@ -454,39 +415,29 @@ const Personal = () => {
           contentContainerStyle={{
             paddingStart: normalize(18),
           }}
-          renderItem={({item, index}) => {
-            return (
-              <CItem
-                id={serviceId}
-                item={item}
-                index={index}
-                containerStyle={{marginRight: normalize(14)}}
-              />
-            );
+          renderItem={({ item, index }) => {
+            return <CItem id={serviceId} item={item} index={index} containerStyle={{ marginRight: normalize(14) }} />;
           }}
         />
       </>
     );
   }
 
-  const CItem = useCallback(({id, item, index, containerStyle}) => {
+  const CItem = useCallback(({ id, item, index, containerStyle }) => {
     return (
-      <Animatable.View
-        animation={'fadeInRight'}
-        duration={800}
-        delay={index * 300}
-        style={[containerStyle]}>
+      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={[containerStyle]}>
         <TouchableOpacity
           style={styles.card}
           onPress={() => {
             global.selectedServiceCategory = item;
-            navigation.navigate('ViewServiceCategory', {
+            navigation.navigate("ViewServiceCategory", {
               cateId: id,
               id: item?.id,
               title: item?.name,
             });
-          }}>
-          <Image source={{uri: item?.image_url}} style={styles.card_icon} />
+          }}
+        >
+          <Image source={{ uri: item?.image_url }} style={styles.card_icon} />
           <Text style={styles.card_text}>{item?.name}</Text>
         </TouchableOpacity>
       </Animatable.View>
@@ -494,7 +445,7 @@ const Personal = () => {
   }, []);
 
   // --------------------------------------------------------------------------------
-  const renderItem = useCallback(({item, index}) => {
+  const renderItem = useCallback(({ item, index }) => {
     return (
       <SHList
         title={`${item?.name} services`}
@@ -509,7 +460,7 @@ const Personal = () => {
 
   return (
     <SafeAreaView style={styles.primary}>
-      <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
+      <StatusBar backgroundColor={"#fff"} barStyle={"dark-content"} />
       <FlatList
         contentContainerStyle={{
           paddingBottom: normalize(60),
@@ -519,20 +470,22 @@ const Personal = () => {
         ListHeaderComponent={
           <View
             style={{
-              backgroundColor: 'white',
+              backgroundColor: "white",
               paddingBottom: normalize(5),
               paddingHorizontal: normalize(18),
-            }}>
+            }}
+          >
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: Platform.OS == 'android' ? normalize(12) : 0,
-              }}>
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: Platform.OS == "android" ? normalize(12) : 0,
+              }}
+            >
               <Image
                 source={Icons.growth}
                 style={{
-                  resizeMode: 'contain',
+                  resizeMode: "contain",
                   height: normalize(20),
                   width: normalize(20),
                   marginRight: normalize(10),
@@ -543,14 +496,16 @@ const Personal = () => {
                 style={{
                   fontSize: normalize(14),
                   fontFamily: Fonts.Roboto_Medium,
-                  color: '#202020',
-                }}>
-                Personal{' '}
+                  color: "#202020",
+                }}
+              >
+                Personal{" "}
                 {
                   <Text
                     style={{
-                      color: '#BDBDBD',
-                    }}>
+                      color: "#BDBDBD",
+                    }}
+                  >
                     Groomig
                   </Text>
                 }
@@ -570,15 +525,13 @@ const Personal = () => {
         }
         ListFooterComponent={
           <>
-            {ServiceReducer.status == 'Service/getAllServiceCateRequest' ? (
+            {ServiceReducer.status == "Service/getAllServiceCateRequest" ? (
               <LoadingSkeleton />
             ) : (
               <>
                 {!_.isEmpty(ServiceReducer?.getAllServiceCateRes) ? (
                   <FlatList
-                    data={ServiceReducer?.getAllServiceCateRes?.filter(
-                      item => item?.slug == 'self-care',
-                    )}
+                    data={ServiceReducer?.getAllServiceCateRes?.filter((item) => item?.slug == "self-care")}
                     keyExtractor={keyExtractor}
                     showsVerticalScrollIndicator={false}
                     renderItem={renderItem}
@@ -660,7 +613,7 @@ const Personal = () => {
             onPress={() => {
               setIsVisible(false);
               setTimeout(() => {
-                navigation.navigate('Location');
+                navigation.navigate("Location");
               }, 600);
             }}
           />
@@ -686,19 +639,19 @@ const styles = StyleSheet.create({
     height: normalize(40),
     width: normalize(40),
     borderRadius: normalize(14),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: normalize(12),
   },
   img: {
     height: normalize(32),
     width: normalize(32),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   text14: {
     fontSize: normalize(14),
@@ -715,18 +668,18 @@ const styles = StyleSheet.create({
     height: normalize(40),
     width: normalize(40),
     borderRadius: normalize(14),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   edit: {
     height: normalize(20),
     width: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   location: {
     height: normalize(14),
     width: normalize(14),
-    resizeMode: 'contain',
+    resizeMode: "contain",
     right: normalize(2),
   },
   input: {
@@ -736,13 +689,13 @@ const styles = StyleSheet.create({
   searchicon: {
     height: normalize(20),
     width: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
     marginLeft: normalize(10),
   },
   scontainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: normalize(12),
     borderWidth: 1,
     borderColor: Colors.border,
@@ -760,21 +713,21 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Roboto_Regular,
   },
   titlecon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginTop: normalize(16),
     marginBottom: normalize(12),
   },
   allicon: {
     height: normalize(9),
     width: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   card_icon: {
     height: normalize(40),
     width: normalize(40),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   card_text: {
     fontFamily: Fonts.Roboto_Regular,
@@ -792,8 +745,8 @@ const styles = StyleSheet.create({
     width: normalize(85),
     borderRadius: normalize(15),
     backgroundColor: Colors.gray,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   card1: {
     height: normalize(120),
@@ -805,27 +758,27 @@ const styles = StyleSheet.create({
     paddingVertical: normalize(6),
   },
   containerauto: {
-    width: Dimensions.get('window').width,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: Dimensions.get("window").width,
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: normalize(20),
     marginHorizontal: normalize(18),
   },
   dotContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 10,
   },
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: 'gray',
+    backgroundColor: "gray",
     marginHorizontal: 4,
   },
   activeDot: {
-    backgroundColor: '#161616',
+    backgroundColor: "#161616",
     width: normalize(25),
   },
 });

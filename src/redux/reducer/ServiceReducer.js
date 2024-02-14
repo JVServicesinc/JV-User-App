@@ -4,7 +4,10 @@ const initialState = {
   status: "",
   isLoading: true,
   isCategoryLoading: true,
+  isBannersLoading: true,
+  isServicesLoading: true,
   getAllServiceCateRes: {},
+  getBannersList: [],
   getServiceCategoryRes: {},
   getServiceSubCategoryRes: {},
   getAllServicesRes: {},
@@ -37,6 +40,25 @@ const ProductSlice = createSlice({
     },
     getAllServiceCateFailure(state, action) {
       state.isCategoryLoading = false;
+      state.error = action.error;
+      state.status = action.type;
+    },
+
+    /* Get Banners */
+    getBannersRequest(state, action) {
+      // console.log("getAllServiceCateRequest --- ", action.type);
+      state.isBannersLoading = true;
+      state.status = action.type;
+      state.getBannersList = [];
+    },
+    getBannersSuccess(state, action) {
+      // console.log("getAllServiceCateSuccess --- ", action.type);
+      state.isBannersLoading = false;
+      state.getBannersList = action.payload;
+      state.status = action.type;
+    },
+    getBannersFailure(state, action) {
+      state.isBannersLoading = false;
       state.error = action.error;
       state.status = action.type;
     },
@@ -177,6 +199,11 @@ export const {
   getAllServiceCateRequest,
   getAllServiceCateSuccess,
   getAllServiceCateFailure,
+
+  /* Get Banners */
+  getBannersRequest,
+  getBannersSuccess,
+  getBannersFailure,
 
   /* Get Service Category */
   getServiceCategoryRequest,
