@@ -1,13 +1,6 @@
 import { changeLanguage } from "i18next";
 import React, { useEffect, useState } from "react";
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import normalize from "../../utils/helpers/normalize";
 import constants from "../../utils/helpers/constants";
 import i18n from "../../utils/helpers/i18n.config";
@@ -103,11 +96,7 @@ export const LanguageSelector = () => {
       <SafeAreaView>
         <View style={styles.subContainer}>
           <View style={styles.imageContainer}>
-            <LottieView
-              source={Icons.Language_Prefer}
-              style={styles.lottieStyle}
-              autoPlay={true}
-            />
+            <LottieView source={Icons.Language_Prefer} style={styles.lottieStyle} autoPlay={true} />
             <View style={styles.logoContainer}>
               <Image source={Icons.Applogo} style={styles.logoImage} />
             </View>
@@ -135,9 +124,7 @@ export const LanguageSelector = () => {
                   height: "20%",
                   marginTop: "2%",
                   borderColor: Colors.black,
-                  backgroundColor: selectedLanguage.english
-                    ? Colors.black
-                    : Colors.white,
+                  backgroundColor: selectedLanguage.english ? Colors.black : Colors.white,
                   justifyContent: "center",
                   alignItems: "center",
                   borderWidth: normalize(1),
@@ -151,9 +138,7 @@ export const LanguageSelector = () => {
                   style={{
                     fontSize: normalize(14),
                     fontWeight: "500",
-                    color: selectedLanguage.english
-                      ? Colors.white
-                      : Colors.black,
+                    color: selectedLanguage.english ? Colors.white : Colors.black,
                   }}
                 >
                   English
@@ -165,9 +150,7 @@ export const LanguageSelector = () => {
                   height: "20%",
                   marginTop: "2%",
                   borderColor: Colors.black,
-                  backgroundColor: selectedLanguage.french
-                    ? Colors.black
-                    : Colors.white,
+                  backgroundColor: selectedLanguage.french ? Colors.black : Colors.white,
                   justifyContent: "center",
                   alignItems: "center",
                   borderWidth: normalize(1),
@@ -181,9 +164,7 @@ export const LanguageSelector = () => {
                   style={{
                     fontSize: normalize(14),
                     fontWeight: "500",
-                    color: selectedLanguage.french
-                      ? Colors.white
-                      : Colors.black,
+                    color: selectedLanguage.french ? Colors.white : Colors.black,
                   }}
                 >
                   French
