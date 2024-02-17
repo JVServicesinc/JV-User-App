@@ -692,9 +692,7 @@ const Home = () => {
               </View>
 
               {ServiceReducer.isBannersLoading ? (
-                <>
-                  <LoadingSliderSkeleton />
-                </>
+                <LoadingSliderSkeleton />
               ) : (
                 <FlatListSlider
                   data={ServiceReducer.getBannersList}
