@@ -1,116 +1,101 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
-import {Colors} from '../../themes/Colors';
-import {Images} from '../../themes/Images';
-import normalize from '../../utils/helpers/normalize';
-import {Icons} from '../../themes/Icons';
-import {StatusBar} from 'react-native';
-import {useState} from 'react';
-import {Fonts} from '../../themes/Fonts';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import * as Animatable from 'react-native-animatable';
-import FlatListSlider from '../../components/slider/FlatListSlider';
-import Preview from '../../components/slider/Preview';
-import Picker from '../../components/Picker';
-import SelectALocation from '../all/SelectALocation';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {getAllServiceCateRequest} from '../../redux/reducer/ServiceReducer';
-import showErrorAlert from '../../utils/helpers/Toast';
-import isInternetConnected from '../../utils/helpers/NetInfo';
-import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
+import { Dimensions, FlatList, Image, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect } from "react";
+import { Colors } from "../../themes/Colors";
+import { Images } from "../../themes/Images";
+import normalize from "../../utils/helpers/normalize";
+import { Icons } from "../../themes/Icons";
+import { StatusBar } from "react-native";
+import { useState } from "react";
+import { Fonts } from "../../themes/Fonts";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import * as Animatable from "react-native-animatable";
+import FlatListSlider from "../../components/slider/FlatListSlider";
+import Preview from "../../components/slider/Preview";
+import Picker from "../../components/Picker";
+import SelectALocation from "../all/SelectALocation";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { getAllServiceCateRequest } from "../../redux/reducer/ServiceReducer";
+import showErrorAlert from "../../utils/helpers/Toast";
+import isInternetConnected from "../../utils/helpers/NetInfo";
+import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 
 const DashBoard = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const UserReducer = useSelector(state => state.UserReducer);
-  const ServiceReducer = useSelector(state => state.ServiceReducer);
-  const [searchQuery, setSearchQuery] = useState('');
+  const UserReducer = useSelector((state) => state.UserReducer);
+  const ServiceReducer = useSelector((state) => state.ServiceReducer);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
 
   const Categories = [
-    {icon: Icons.carpenters, title: 'Carpenters'},
-    {icon: Icons.pestControl, title: `Pest Control`},
-    {icon: Icons.ACService, title: 'AC Service'},
-    {icon: Icons.Cleaning, title: 'Cleaning'},
-    {icon: Icons.Electrician, title: `Electrician`},
-    {icon: Icons.homePainting, title: 'Home painting'},
+    { icon: Icons.carpenters, title: "Carpenters" },
+    { icon: Icons.pestControl, title: `Pest Control` },
+    { icon: Icons.ACService, title: "AC Service" },
+    { icon: Icons.Cleaning, title: "Cleaning" },
+    { icon: Icons.Electrician, title: `Electrician` },
+    { icon: Icons.homePainting, title: "Home painting" },
   ];
 
   const QuickHome = [
-    {icon: Images.water_purifire_service, title: `water Purifier Service`},
-    {icon: Images.washing_machine, title: 'Washing Machine'},
-    {icon: Images.washing_machine, title: 'Washing Machine'},
+    { icon: Images.water_purifire_service, title: `water Purifier Service` },
+    { icon: Images.washing_machine, title: "Washing Machine" },
+    { icon: Images.washing_machine, title: "Washing Machine" },
   ];
 
   const MostBookedServices = [
     {
       icon: Images.img3,
-      title: 'Drill & hang (wall decor)',
+      title: "Drill & hang (wall decor)",
       rate: 4.73,
-      total_rate: '427.9k',
-      price: '58.00',
+      total_rate: "427.9k",
+      price: "58.00",
     },
     {
       icon: Images.img4,
-      title: 'Tap repair \n',
+      title: "Tap repair \n",
       rate: 4.73,
-      total_rate: '427.9k',
-      price: '58.00',
+      total_rate: "427.9k",
+      price: "58.00",
     },
     {
       icon: Images.img4,
-      title: 'Tap repair \n',
+      title: "Tap repair \n",
       rate: 4.73,
-      total_rate: '427.9k',
-      price: '58.00',
+      total_rate: "427.9k",
+      price: "58.00",
     },
   ];
 
   const Continuebrowsing = [
     {
       icon: Images.img1,
-      title: 'Anti-rust deep clean AC service',
+      title: "Anti-rust deep clean AC service",
       rate: 4.73,
-      total_rate: '427.9k',
-      price: '58.00',
+      total_rate: "427.9k",
+      price: "58.00",
     },
     {
       icon: Images.img2,
-      title: 'Deep clean AC service (split)',
+      title: "Deep clean AC service (split)",
       rate: 4.73,
-      total_rate: '427.9k',
-      price: '58.00',
+      total_rate: "427.9k",
+      price: "58.00",
     },
     {
       icon: Images.img2,
-      title: 'Deep clean AC service (split)',
+      title: "Deep clean AC service (split)",
       rate: 4.73,
-      total_rate: '427.9k',
-      price: '58.00',
+      total_rate: "427.9k",
+      price: "58.00",
     },
   ];
 
-  const CardItem = useCallback(({item, index, containerStyle}) => {
+  const CardItem = useCallback(({ item, index, containerStyle }) => {
     return (
-      <Animatable.View
-        animation={'fadeInRight'}
-        duration={800}
-        delay={index * 300}
-        style={containerStyle}>
+      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={containerStyle}>
         <TouchableOpacity style={styles.card}>
           <Image source={item?.icon} style={styles.card_icon} />
           <Text style={styles.card_text}>{item?.title}</Text>
@@ -119,15 +104,10 @@ const DashBoard = () => {
     );
   }, []);
 
-  function CategoryList({title, data, style}) {
+  function CategoryList({ title, data, style }) {
     return (
       <>
-        <View
-          style={[
-            styles.titlecon,
-            {marginTop: 0, paddingHorizontal: normalize(18)},
-            style,
-          ]}>
+        <View style={[styles.titlecon, { marginTop: 0, paddingHorizontal: normalize(18) }, style]}>
           <Text style={styles.roboto17}>{title}</Text>
           <TouchableOpacity>
             <Image source={Icons.ViewAll} style={styles.allicon} />
@@ -137,12 +117,12 @@ const DashBoard = () => {
         <FlatList
           data={data}
           columnWrapperStyle={{
-            justifyContent: 'space-between',
+            justifyContent: "space-between",
             marginTop: normalize(12),
             paddingHorizontal: normalize(18),
           }}
           numColumns={3}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return <CardItem item={item} index={index} />;
           }}
         />
@@ -150,14 +130,7 @@ const DashBoard = () => {
     );
   }
 
-  function SingleHRList({
-    onPress,
-    title,
-    data,
-    subtitle,
-    style,
-    titleBottom = false,
-  }) {
+  function SingleHRList({ onPress, title, data, subtitle, style, titleBottom = false }) {
     return (
       <>
         <View style={[styles.titlecon, style]}>
@@ -175,25 +148,20 @@ const DashBoard = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{paddingStart: normalize(18)}}
-          renderItem={({item, index}) => {
+          contentContainerStyle={{ paddingStart: normalize(18) }}
+          renderItem={({ item, index }) => {
             return (
-              <Animatable.View
-                animation={'fadeInRight'}
-                duration={800}
-                delay={index * 300}>
+              <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
                 <TouchableOpacity style={styles.card1}>
-                  {!titleBottom && (
-                    <Text style={styles.card_text1}>{item.title}</Text>
-                  )}
+                  {!titleBottom && <Text style={styles.card_text1}>{item.title}</Text>}
                   <Image
                     source={item?.icon}
                     style={{
                       height: normalize(80),
-                      width: '100%',
+                      width: "100%",
                       marginTop: normalize(5),
                       borderRadius: normalize(6),
-                      resizeMode: 'contain',
+                      resizeMode: "contain",
                     }}
                   />
                   {titleBottom && (
@@ -201,10 +169,11 @@ const DashBoard = () => {
                       style={[
                         styles.card_text1,
                         {
-                          textAlign: 'center',
+                          textAlign: "center",
                           marginTop: normalize(5),
                         },
-                      ]}>
+                      ]}
+                    >
                       {item.title}
                     </Text>
                   )}
@@ -217,7 +186,7 @@ const DashBoard = () => {
     );
   }
 
-  function SingleHMList({title, subtitle, data, style}) {
+  function SingleHMList({ title, subtitle, data, style }) {
     return (
       <>
         <View style={[styles.titlecon, style]}>
@@ -235,77 +204,76 @@ const DashBoard = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{paddingStart: normalize(18)}}
-          renderItem={({item, index}) => {
+          contentContainerStyle={{ paddingStart: normalize(18) }}
+          renderItem={({ item, index }) => {
             return (
-              <Animatable.View
-                animation={'fadeInRight'}
-                duration={800}
-                delay={index * 300}>
+              <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
                 <TouchableOpacity
                   style={[
                     styles.card1,
                     {
                       height: normalize(185),
                     },
-                  ]}>
+                  ]}
+                >
                   <Image
                     source={item?.icon}
                     style={{
                       height: normalize(80),
-                      width: '100%',
+                      width: "100%",
                       marginTop: normalize(5),
                       borderRadius: normalize(6),
-                      resizeMode: 'contain',
+                      resizeMode: "contain",
                     }}
                   />
                   <Text
                     style={[
                       styles.card_text1,
                       {
-                        textAlign: 'center',
+                        textAlign: "center",
                         marginTop: normalize(5),
                       },
-                    ]}>
+                    ]}
+                  >
                     {item.title}
                   </Text>
 
                   <View
                     style={{
-                      flexDirection: 'row',
-                      alignSelf: 'center',
+                      flexDirection: "row",
+                      alignSelf: "center",
                       marginTop: normalize(3),
-                    }}>
+                    }}
+                  >
                     <Image
                       source={Icons.rate_star}
                       style={{
-                        resizeMode: 'contain',
+                        resizeMode: "contain",
                         height: normalize(16),
                         width: normalize(16),
                       }}
                     />
-                    <Text style={styles.card_text1}>
-                      {' ' + item.rate + ' '}
-                    </Text>
-                    <Text
-                      style={styles.card_text1}>{`(${item.total_rate})`}</Text>
+                    <Text style={styles.card_text1}>{" " + item.rate + " "}</Text>
+                    <Text style={styles.card_text1}>{`(${item.total_rate})`}</Text>
                   </View>
 
                   <TouchableOpacity
                     style={{
-                      backgroundColor: 'white',
+                      backgroundColor: "white",
                       height: normalize(26),
-                      justifyContent: 'center',
+                      justifyContent: "center",
                       borderRadius: normalize(10),
                       marginTop: normalize(5),
-                    }}>
+                    }}
+                  >
                     <Text
                       style={[
                         styles.card_text1,
                         {
-                          textAlign: 'center',
+                          textAlign: "center",
                         },
-                      ]}>
+                      ]}
+                    >
                       ${item.price}
                     </Text>
                   </TouchableOpacity>
@@ -318,17 +286,18 @@ const DashBoard = () => {
     );
   }
 
-  function LoadingSkeleton({num}) {
+  function LoadingSkeleton({ num }) {
     return (
       <>
         <SkeletonPlaceholder borderRadius={4}>
           <SkeletonPlaceholder.Item
-            width={'90%'}
+            width={"90%"}
             alignSelf="center"
             flexDirection="row"
             alignItems="center"
             marginTop={normalize(8)}
-            justifyContent="space-between">
+            justifyContent="space-between"
+          >
             <SkeletonPlaceholder.Item width={200} height={20} />
             <SkeletonPlaceholder.Item width={30} height={20} />
           </SkeletonPlaceholder.Item>
@@ -338,29 +307,16 @@ const DashBoard = () => {
 
         <SkeletonPlaceholder borderRadius={4}>
           <SkeletonPlaceholder.Item
-            width={'90%'}
+            width={"90%"}
             alignSelf="center"
             flexDirection="row"
             alignItems="center"
             marginTop={normalize(8)}
-            justifyContent="space-between">
-            <SkeletonPlaceholder.Item
-              width={!num ? 105 : 170}
-              height={!num ? 105 : 170}
-              borderRadius={8}
-            />
-            <SkeletonPlaceholder.Item
-              width={!num ? 105 : 170}
-              height={!num ? 105 : 170}
-              borderRadius={8}
-            />
-            {!num ? (
-              <SkeletonPlaceholder.Item
-                width={105}
-                height={105}
-                borderRadius={8}
-              />
-            ) : null}
+            justifyContent="space-between"
+          >
+            <SkeletonPlaceholder.Item width={!num ? 105 : 170} height={!num ? 105 : 170} borderRadius={8} />
+            <SkeletonPlaceholder.Item width={!num ? 105 : 170} height={!num ? 105 : 170} borderRadius={8} />
+            {!num ? <SkeletonPlaceholder.Item width={105} height={105} borderRadius={8} /> : null}
           </SkeletonPlaceholder.Item>
         </SkeletonPlaceholder>
       </>
@@ -380,15 +336,15 @@ const DashBoard = () => {
       .then(() => {
         dispatch(getAllServiceCateRequest());
       })
-      .catch(err => {
-        showErrorAlert('Please Connect To Internet');
+      .catch((err) => {
+        showErrorAlert("Please Connect To Internet");
       });
   }, []);
 
   // --------------------------------------------------------------------------------
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
-  function SHList({title, data, item, style}) {
+  function SHList({ title, data, item, style }) {
     let serviceId = item?.id;
 
     return (
@@ -397,11 +353,12 @@ const DashBoard = () => {
           <Text style={styles.roboto17}>{title}</Text>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('ViewAllServices', {
+              navigation.navigate("ViewAllServices", {
                 title: title,
                 item: item,
               })
-            }>
+            }
+          >
             <Image source={Icons.ViewAll} style={styles.allicon} />
           </TouchableOpacity>
         </View>
@@ -414,39 +371,29 @@ const DashBoard = () => {
           contentContainerStyle={{
             paddingStart: normalize(18),
           }}
-          renderItem={({item, index}) => {
-            return (
-              <CItem
-                id={serviceId}
-                item={item}
-                index={index}
-                containerStyle={{marginRight: normalize(14)}}
-              />
-            );
+          renderItem={({ item, index }) => {
+            return <CItem id={serviceId} item={item} index={index} containerStyle={{ marginRight: normalize(14) }} />;
           }}
         />
       </>
     );
   }
 
-  const CItem = useCallback(({id, item, index, containerStyle}) => {
+  const CItem = useCallback(({ id, item, index, containerStyle }) => {
     return (
-      <Animatable.View
-        animation={'fadeInRight'}
-        duration={800}
-        delay={index * 300}
-        style={[containerStyle]}>
+      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={[containerStyle]}>
         <TouchableOpacity
           style={styles.card}
           onPress={() => {
             global.selectedServiceCategory = item;
-            navigation.navigate('ViewServiceCategory', {
+            navigation.navigate("ViewServiceCategory", {
               cateId: id,
               id: item?.id,
               title: item?.name,
             });
-          }}>
-          <Image source={{uri: item?.image_url}} style={styles.card_icon} />
+          }}
+        >
+          <Image source={{ uri: item?.image_url }} style={styles.card_icon} />
           <Text style={styles.card_text}>{item?.name}</Text>
         </TouchableOpacity>
       </Animatable.View>
@@ -454,10 +401,10 @@ const DashBoard = () => {
   }, []);
 
   // --------------------------------------------------------------------------------
-  const renderItem = useCallback(({item, index}) => {
+  const renderItem = useCallback(({ item, index }) => {
     return (
       <SHList
-        title={`${item?.name} services`}
+        title={`${item?.name} Services`}
         data={item?.jv_service_categories}
         item={item}
         style={{
@@ -469,7 +416,7 @@ const DashBoard = () => {
 
   return (
     <SafeAreaView style={styles.primary}>
-      <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
+      <StatusBar backgroundColor={"#fff"} barStyle={"dark-content"} />
       <FlatList
         contentContainerStyle={{
           paddingBottom: normalize(60),
@@ -479,20 +426,22 @@ const DashBoard = () => {
         ListHeaderComponent={
           <View
             style={{
-              backgroundColor: 'white',
+              backgroundColor: "white",
               paddingBottom: normalize(5),
               paddingHorizontal: normalize(18),
-            }}>
+            }}
+          >
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: Platform.OS == 'android' ? normalize(12) : 0,
-              }}>
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: Platform.OS == "android" ? normalize(12) : 0,
+              }}
+            >
               <Image
                 source={Icons.home_store}
                 style={{
-                  resizeMode: 'contain',
+                  resizeMode: "contain",
                   height: normalize(20),
                   width: normalize(20),
                   marginRight: normalize(10),
@@ -503,14 +452,16 @@ const DashBoard = () => {
                 style={{
                   fontSize: normalize(14),
                   fontFamily: Fonts.Roboto_Medium,
-                  color: '#202020',
-                }}>
-                Home{' '}
+                  color: "#202020",
+                }}
+              >
+                Home{" "}
                 {
                   <Text
                     style={{
-                      color: '#BDBDBD',
-                    }}>
+                      color: "#BDBDBD",
+                    }}
+                  >
                     Services
                   </Text>
                 }
@@ -520,7 +471,7 @@ const DashBoard = () => {
               <Image source={Icons.Search} style={styles.searchicon} />
               <TextInput
                 style={styles.input}
-                placeholder="Search for services"
+                placeholder="Search for Services"
                 placeholderTextColor="gray"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
@@ -530,21 +481,19 @@ const DashBoard = () => {
         }
         ListFooterComponent={
           <>
-            {ServiceReducer.status == 'Service/getAllServiceCateRequest' ? (
-              <LoadingSkeleton />
-            ) : (
+            {ServiceReducer.isCategoryLoading ? (
               <>
-                {!_.isEmpty(ServiceReducer?.getAllServiceCateRes) ? (
-                  <FlatList
-                    data={ServiceReducer?.getAllServiceCateRes?.filter(
-                      item => item?.slug == 'home-care',
-                    )}
-                    keyExtractor={keyExtractor}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={renderItem}
-                  />
-                ) : null}
+                {[1, 2, 3, 4, 5].map((item, index) => {
+                  return <LoadingSkeleton key={index} />;
+                })}
               </>
+            ) : (
+              <FlatList
+                data={ServiceReducer?.getAllServiceCateRes}
+                keyExtractor={keyExtractor}
+                showsVerticalScrollIndicator={false}
+                renderItem={renderItem}
+              />
             )}
 
             {/* {!isLoading ? (
@@ -592,7 +541,7 @@ const DashBoard = () => {
             onPress={() => {
               setIsVisible(false);
               setTimeout(() => {
-                navigation.navigate('Location');
+                navigation.navigate("Location");
               }, 600);
             }}
           />
@@ -618,19 +567,19 @@ const styles = StyleSheet.create({
     height: normalize(40),
     width: normalize(40),
     borderRadius: normalize(14),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: normalize(12),
   },
   img: {
     height: normalize(32),
     width: normalize(32),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   text14: {
     fontSize: normalize(14),
@@ -647,18 +596,18 @@ const styles = StyleSheet.create({
     height: normalize(40),
     width: normalize(40),
     borderRadius: normalize(14),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   edit: {
     height: normalize(20),
     width: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   location: {
     height: normalize(14),
     width: normalize(14),
-    resizeMode: 'contain',
+    resizeMode: "contain",
     right: normalize(2),
   },
   input: {
@@ -668,13 +617,13 @@ const styles = StyleSheet.create({
   searchicon: {
     height: normalize(20),
     width: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
     marginLeft: normalize(10),
   },
   scontainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: normalize(12),
     borderWidth: 1,
     borderColor: Colors.border,
@@ -692,21 +641,21 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Roboto_Regular,
   },
   titlecon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginTop: normalize(16),
     marginBottom: normalize(12),
   },
   allicon: {
     height: normalize(9),
     width: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   card_icon: {
     height: normalize(40),
     width: normalize(40),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   card_text: {
     fontFamily: Fonts.Roboto_Regular,
@@ -724,8 +673,8 @@ const styles = StyleSheet.create({
     width: normalize(85),
     borderRadius: normalize(15),
     backgroundColor: Colors.gray,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   card1: {
     height: normalize(120),
@@ -737,27 +686,27 @@ const styles = StyleSheet.create({
     paddingVertical: normalize(6),
   },
   containerauto: {
-    width: Dimensions.get('window').width,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: Dimensions.get("window").width,
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: normalize(20),
     marginHorizontal: normalize(18),
   },
   dotContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 10,
   },
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: 'gray',
+    backgroundColor: "gray",
     marginHorizontal: 4,
   },
   activeDot: {
-    backgroundColor: '#161616',
+    backgroundColor: "#161616",
     width: normalize(25),
   },
 });

@@ -1,46 +1,32 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
-import {Colors} from '../../themes/Colors';
-import normalize from '../../utils/helpers/normalize';
-import {Icons} from '../../themes/Icons';
-import {StatusBar} from 'react-native';
-import {useState} from 'react';
-import {Fonts} from '../../themes/Fonts';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import * as Animatable from 'react-native-animatable';
-import Picker from '../../components/Picker';
-import SelectALocation from '../all/SelectALocation';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {useDispatch, useSelector} from 'react-redux';
-import isInternetConnected from '../../utils/helpers/NetInfo';
-import showErrorAlert from '../../utils/helpers/Toast';
-import {
-  getProductCategoryRequest,
-  getTrendingProductRequest,
-} from '../../redux/reducer/ProductReducer';
-import _ from 'lodash';
+import { Dimensions, FlatList, Image, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect } from "react";
+import { Colors } from "../../themes/Colors";
+import normalize from "../../utils/helpers/normalize";
+import { Icons } from "../../themes/Icons";
+import { StatusBar } from "react-native";
+import { useState } from "react";
+import { Fonts } from "../../themes/Fonts";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import * as Animatable from "react-native-animatable";
+import Picker from "../../components/Picker";
+import SelectALocation from "../all/SelectALocation";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { useDispatch, useSelector } from "react-redux";
+import isInternetConnected from "../../utils/helpers/NetInfo";
+import showErrorAlert from "../../utils/helpers/Toast";
+import { getProductCategoryRequest, getTrendingProductRequest } from "../../redux/reducer/ProductReducer";
+import _ from "lodash";
 
 const Stores = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const UserReducer = useSelector(state => state.UserReducer);
-  const ProductReducer = useSelector(state => state.ProductReducer);
+  const UserReducer = useSelector((state) => state.UserReducer);
+  const ProductReducer = useSelector((state) => state.ProductReducer);
 
   useEffect(() => {
     isInternetConnected()
@@ -48,21 +34,21 @@ const Stores = () => {
         dispatch(getProductCategoryRequest());
         dispatch(getTrendingProductRequest());
       })
-      .catch(err => {
-        showErrorAlert('Please Connect To Internet');
+      .catch((err) => {
+        showErrorAlert("Please Connect To Internet");
       });
   }, []);
 
   const Data = [
-    {icon: Icons.door_lock, title: `Long handle with lock`},
-    {icon: Icons.door2, title: 'Ideal SS open curtain'},
-    {icon: Icons.door, title: 'Godrej Door closer'},
+    { icon: Icons.door_lock, title: `Long handle with lock` },
+    { icon: Icons.door2, title: "Ideal SS open curtain" },
+    { icon: Icons.door, title: "Godrej Door closer" },
   ];
 
   const Data2 = [
-    {icon: Icons.shower, title: `Shower head`},
-    {icon: Icons.hunger2, title: 'Hangers & Mirrors'},
-    {icon: Icons.hunger2, title: 'Hangers & Mirrors'},
+    { icon: Icons.shower, title: `Shower head` },
+    { icon: Icons.hunger2, title: "Hangers & Mirrors" },
+    { icon: Icons.hunger2, title: "Hangers & Mirrors" },
   ];
 
   // function SingleHRList({
@@ -144,17 +130,18 @@ const Stores = () => {
   //   );
   // }
 
-  function LoadingSkeleton({num}) {
+  function LoadingSkeleton({ num }) {
     return (
       <>
         <SkeletonPlaceholder borderRadius={4}>
           <SkeletonPlaceholder.Item
-            width={'90%'}
+            width={"90%"}
             alignSelf="center"
             flexDirection="row"
             alignItems="center"
             marginTop={normalize(8)}
-            justifyContent="space-between">
+            justifyContent="space-between"
+          >
             <SkeletonPlaceholder.Item width={200} height={20} />
             <SkeletonPlaceholder.Item width={30} height={20} />
           </SkeletonPlaceholder.Item>
@@ -164,29 +151,16 @@ const Stores = () => {
 
         <SkeletonPlaceholder borderRadius={4}>
           <SkeletonPlaceholder.Item
-            width={'90%'}
+            width={"90%"}
             alignSelf="center"
             flexDirection="row"
             alignItems="center"
             marginTop={normalize(8)}
-            justifyContent="space-between">
-            <SkeletonPlaceholder.Item
-              width={!num ? 105 : 170}
-              height={!num ? 105 : 170}
-              borderRadius={8}
-            />
-            <SkeletonPlaceholder.Item
-              width={!num ? 105 : 170}
-              height={!num ? 105 : 170}
-              borderRadius={8}
-            />
-            {!num ? (
-              <SkeletonPlaceholder.Item
-                width={105}
-                height={105}
-                borderRadius={8}
-              />
-            ) : null}
+            justifyContent="space-between"
+          >
+            <SkeletonPlaceholder.Item width={!num ? 105 : 170} height={!num ? 105 : 170} borderRadius={8} />
+            <SkeletonPlaceholder.Item width={!num ? 105 : 170} height={!num ? 105 : 170} borderRadius={8} />
+            {!num ? <SkeletonPlaceholder.Item width={105} height={105} borderRadius={8} /> : null}
           </SkeletonPlaceholder.Item>
         </SkeletonPlaceholder>
       </>
@@ -196,45 +170,36 @@ const Stores = () => {
   // -----------------------------------------------
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
-  const renderItem = useCallback(({item, index}) => {
+  const renderItem = useCallback(({ item, index }) => {
     return <CardItem item={item} index={index} />;
   }, []);
 
-  const CardItem = useCallback(({item, index, containerStyle}) => {
+  const CardItem = useCallback(({ item, index, containerStyle }) => {
     return (
-      <Animatable.View
-        animation={'fadeInRight'}
-        duration={800}
-        delay={index * 300}
-        style={containerStyle}>
+      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={containerStyle}>
         <TouchableOpacity
           onPress={() => {
             global.selectedStoreCategory = item;
-            navigation.navigate('ViewAllProduct', {
+            navigation.navigate("ViewAllProduct", {
               id: item?.id,
               title: item?.name,
             });
           }}
-          style={styles.card}>
-          <Image source={{uri: item?.image_url}} style={styles.card_icon} />
+          style={styles.card}
+        >
+          <Image source={{ uri: item?.image_url }} style={styles.card_icon} />
           <Text style={styles.card_text}>{item?.name}</Text>
         </TouchableOpacity>
       </Animatable.View>
     );
   }, []);
 
-  function CategoryList({title, data, style}) {
+  function CategoryList({ title, data, style }) {
     return (
       <>
-        <View
-          style={[
-            styles.titlecon,
-            {marginTop: 0, paddingHorizontal: normalize(18)},
-            style,
-          ]}>
+        <View style={[styles.titlecon, { marginTop: 0, paddingHorizontal: normalize(18) }, style]}>
           <Text style={styles.roboto17}>{title}</Text>
-          <TouchableOpacity
-            onPress={() => navigation?.navigate('ViewAllProductCategory')}>
+          <TouchableOpacity onPress={() => navigation?.navigate("ViewAllProductCategory")}>
             <Image source={Icons.ViewAll} style={styles.allicon} />
           </TouchableOpacity>
         </View>
@@ -242,7 +207,7 @@ const Stores = () => {
         <FlatList
           data={data.length > 3 ? data.slice(0, 3) : data}
           columnWrapperStyle={{
-            justifyContent: 'space-between',
+            justifyContent: "space-between",
             marginTop: normalize(12),
             paddingHorizontal: normalize(18),
           }}
@@ -255,34 +220,33 @@ const Stores = () => {
   }
 
   // -----------------------------------------------
-  const renderItem2 = useCallback(({item, index}) => {
+  const renderItem2 = useCallback(({ item, index }) => {
     return (
-      <Animatable.View
-        animation={'fadeInRight'}
-        duration={800}
-        delay={index * 300}>
+      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
         <TouchableOpacity style={styles.card1}>
-          <Image source={{uri: item?.image_url}} style={styles.img1} />
+          <Image source={{ uri: item?.image_url }} style={styles.img1} />
         </TouchableOpacity>
         <Text
           style={[
             styles.card_text1,
             {
-              color: '#090909',
+              color: "#090909",
             },
-          ]}>
+          ]}
+        >
           {item.name}
         </Text>
 
         <Text style={styles.card_text1}>
-          ${item?.sale_price ? item?.sale_price : ' -'}
-          {'   '}
+          ${item?.sale_price ? item?.sale_price : " -"}
+          {"   "}
           {
             <Text
               style={{
-                color: '#CECECE',
-                textDecorationLine: 'line-through',
-              }}>
+                color: "#CECECE",
+                textDecorationLine: "line-through",
+              }}
+            >
               ${item?.price}
             </Text>
           }
@@ -291,7 +255,7 @@ const Stores = () => {
     );
   }, []);
 
-  function SingleHRList({onPress, title, data, subtitle, style}) {
+  function SingleHRList({ onPress, title, data, subtitle, style }) {
     return (
       <>
         <View style={[styles.titlecon, style]}>
@@ -309,7 +273,7 @@ const Stores = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={keyExtractor}
-          contentContainerStyle={{paddingStart: normalize(18)}}
+          contentContainerStyle={{ paddingStart: normalize(18) }}
           renderItem={renderItem2}
         />
       </>
@@ -318,7 +282,7 @@ const Stores = () => {
 
   return (
     <SafeAreaView style={styles.primary}>
-      <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
+      <StatusBar backgroundColor={"#fff"} barStyle={"dark-content"} />
       <FlatList
         contentContainerStyle={{
           paddingBottom: normalize(60),
@@ -328,20 +292,22 @@ const Stores = () => {
         ListHeaderComponent={
           <View
             style={{
-              backgroundColor: 'white',
+              backgroundColor: "white",
               paddingBottom: normalize(5),
               paddingHorizontal: normalize(18),
-            }}>
+            }}
+          >
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: Platform.OS == 'android' ? normalize(12) : 0,
-              }}>
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: Platform.OS == "android" ? normalize(12) : 0,
+              }}
+            >
               <Image
                 source={Icons.home_store}
                 style={{
-                  resizeMode: 'contain',
+                  resizeMode: "contain",
                   height: normalize(20),
                   width: normalize(20),
                   marginRight: normalize(10),
@@ -352,14 +318,16 @@ const Stores = () => {
                 style={{
                   fontSize: normalize(14),
                   fontFamily: Fonts.Roboto_Medium,
-                  color: '#202020',
-                }}>
-                Home{' '}
+                  color: "#202020",
+                }}
+              >
+                Home{" "}
                 {
                   <Text
                     style={{
-                      color: '#BDBDBD',
-                    }}>
+                      color: "#BDBDBD",
+                    }}
+                  >
                     Store
                   </Text>
                 }
@@ -380,14 +348,14 @@ const Stores = () => {
         }
         ListFooterComponent={
           <>
-            {ProductReducer.status == 'Product/getProductCategoryRequest' ? (
+            {ProductReducer.status == "Product/getProductCategoryRequest" ? (
               <LoadingSkeleton />
             ) : (
               <>
                 {!_.isEmpty(ProductReducer?.productCategoryRes) ? (
                   <CategoryList
                     data={ProductReducer?.productCategoryRes}
-                    title={'Categories'}
+                    title={"Categories"}
                     style={{
                       marginTop: normalize(10),
                     }}
@@ -396,16 +364,16 @@ const Stores = () => {
               </>
             )}
 
-            {ProductReducer.status == 'Product/getTrendingProductRequest' ? (
+            {ProductReducer.status == "Product/getTrendingProductRequest" ? (
               <LoadingSkeleton num={2} />
             ) : (
               <>
                 {!_.isEmpty(ProductReducer?.trendingProductRes) ? (
                   <SingleHRList
                     // subtitle={'Door, windows & cabinet accessories'}
-                    title={'Trending'}
+                    title={"Trending"}
                     data={ProductReducer?.trendingProductRes}
-                    style={{paddingHorizontal: normalize(18)}}
+                    style={{ paddingHorizontal: normalize(18) }}
                   />
                 ) : null}
               </>
@@ -430,7 +398,7 @@ const Stores = () => {
             onPress={() => {
               setIsVisible(false);
               setTimeout(() => {
-                navigation.navigate('Location');
+                navigation.navigate("Location");
               }, 600);
             }}
           />
@@ -456,19 +424,19 @@ const styles = StyleSheet.create({
     height: normalize(40),
     width: normalize(40),
     borderRadius: normalize(14),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: normalize(12),
   },
   img: {
     height: normalize(32),
     width: normalize(32),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   text14: {
     fontSize: normalize(14),
@@ -485,18 +453,18 @@ const styles = StyleSheet.create({
     height: normalize(40),
     width: normalize(40),
     borderRadius: normalize(14),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   edit: {
     height: normalize(20),
     width: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   location: {
     height: normalize(14),
     width: normalize(14),
-    resizeMode: 'contain',
+    resizeMode: "contain",
     right: normalize(2),
   },
   input: {
@@ -506,13 +474,13 @@ const styles = StyleSheet.create({
   searchicon: {
     height: normalize(20),
     width: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
     marginLeft: normalize(10),
   },
   scontainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: normalize(12),
     borderWidth: 1,
     borderColor: Colors.border,
@@ -530,21 +498,21 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Roboto_Regular,
   },
   titlecon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginTop: normalize(16),
     marginBottom: normalize(12),
   },
   allicon: {
     height: normalize(9),
     width: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   card_icon: {
     height: normalize(40),
     width: normalize(40),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   card_text: {
     fontFamily: Fonts.Roboto_Regular,
@@ -563,8 +531,8 @@ const styles = StyleSheet.create({
     width: normalize(85),
     borderRadius: normalize(15),
     backgroundColor: Colors.gray,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   card1: {
     width: normalize(145),
@@ -575,34 +543,34 @@ const styles = StyleSheet.create({
     paddingVertical: normalize(10),
   },
   containerauto: {
-    width: Dimensions.get('window').width,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: Dimensions.get("window").width,
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: normalize(20),
     marginHorizontal: normalize(18),
   },
   dotContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 10,
   },
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: 'gray',
+    backgroundColor: "gray",
     marginHorizontal: 4,
   },
   activeDot: {
-    backgroundColor: '#161616',
+    backgroundColor: "#161616",
     width: normalize(25),
   },
   img1: {
     height: normalize(65),
-    width: '100%',
+    width: "100%",
     marginTop: normalize(5),
     borderRadius: normalize(6),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
 });

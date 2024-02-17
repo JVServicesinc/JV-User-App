@@ -625,7 +625,7 @@ const Home = () => {
                     onPress={() => navigate("ServiceSummary")}
                   >
                     <Image source={Icons.Order} style={styles.edit} />
-                    {cartData?.items?.length > 0 ? (
+                    {cartData?.items && cartData?.items?.length > 0 ? (
                       <View
                         style={{
                           height: 20,
@@ -646,7 +646,7 @@ const Home = () => {
                             color: Colors.white,
                           }}
                         >
-                          {/* {cartData?.items?.length || 0}  //App Crashing in this line */}
+                          {cartData?.items?.length}
                         </Text>
                       </View>
                     ) : null}
@@ -692,7 +692,9 @@ const Home = () => {
               </View>
 
               {ServiceReducer.isBannersLoading ? (
-                <LoadingSliderSkeleton />
+                <>
+                  <LoadingSliderSkeleton />
+                </>
               ) : (
                 <FlatListSlider
                   data={ServiceReducer.getBannersList}
