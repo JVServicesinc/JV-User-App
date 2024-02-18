@@ -1,56 +1,35 @@
-import {
-  View,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  Alert,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Colors} from '../../../themes/Colors';
-import normalize from '../../../utils/helpers/normalize';
-import Header from '../../../components/Header';
-import {Icons} from '../../../themes/Icons';
-import {Fonts} from '../../../themes/Fonts';
-import {Images} from '../../../themes/Images';
-import {goBack, navigate, replace} from '../../../utils/helpers/RootNavigation';
-import {
-  PaymentSheet,
-  StripeProvider,
-  useStripe,
-  initStripe,
-} from '@stripe/stripe-react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  confirmPayment,
-  confirmStripePayment,
-  createOrder,
-  createPaymentIntent,
-  getCartData,
-} from '../../../services/Endpoints';
-import {ShowToast} from '../../../utils/helpers/Toast';
-import {setCartData, setIsFetching} from '../../../redux/reducer/GlobalSlice';
-import constants from '../../../utils/helpers/constants';
+import { View, FlatList, TouchableOpacity, Image, Text, SafeAreaView, StatusBar, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Colors } from "../../../themes/Colors";
+import normalize from "../../../utils/helpers/normalize";
+import Header from "../../../components/Header";
+import { Icons } from "../../../themes/Icons";
+import { Fonts } from "../../../themes/Fonts";
+import { Images } from "../../../themes/Images";
+import { goBack, navigate, replace } from "../../../utils/helpers/RootNavigation";
+import { PaymentSheet, StripeProvider, useStripe, initStripe } from "@stripe/stripe-react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { confirmPayment, confirmStripePayment, createOrder, createPaymentIntent, getCartData } from "../../../services/Endpoints";
+import { ShowToast } from "../../../utils/helpers/Toast";
+import { setCartData, setIsFetching } from "../../../redux/reducer/GlobalSlice";
+import constants from "../../../utils/helpers/constants";
 
-const PaymentOption = ({navigation, route}) => {
+const PaymentOption = ({ navigation, route }) => {
   const orderDetails = route?.params?.details;
 
-  console.log(orderDetails?.address?.id, 'Order details ----->');
+  console.log(orderDetails?.address?.id, "Order details ----->");
 
   const [selectIndex, setSelectIndex] = useState(-1);
-  const {cartData} = useSelector(state => state.GlobalReducer);
-  const {initPaymentSheet, presentPaymentSheet, confirmPaymentSheetPayment} =
-    useStripe();
+  const { cartData } = useSelector((state) => state.GlobalReducer);
+  const { initPaymentSheet, presentPaymentSheet, confirmPaymentSheetPayment } = useStripe();
   const dispatch = useDispatch();
   const [intentKey, setIntentKey] = useState();
   const [orderUId, setOrderUId] = useState();
   const DATA = [
     {
-      title: 'Debit & Credit Cards',
+      title: "Debit & Credit Cards",
       image: Icons.card,
-      key: 'cards',
+      key: "cards",
     },
     // {
     //   title: 'Google Pay',
@@ -74,7 +53,40 @@ const PaymentOption = ({navigation, route}) => {
     //   key: 'cash',
     // },
   ];
-  console.log('Cart ID', cartData);
+  // console.log("Cart ID", cartData);
+
+  const handlePayment = async () => {
+    console.log(intentKey);
+    try {
+      if (intentKey) {
+        const paymentSheet = await presentPaymentSheet({
+          clientSecret: intentKey,
+        });
+        if (paymentSheet.error) {
+          console.log(paymentSheet.error);
+          // if(paymentSheet.error.code === 'Canceled'){
+          //   ShowToast('Something went wrong!');
+          // }
+          ShowToast(paymentSheet?.error?.localizedMessage || "Something went wrong!");
+          return;
+        }
+      }
+      dispatch(setIsFetching(true));
+      console.log(orderUId);
+      const data = new FormData();
+      data.append("order_id", orderUId);
+      const orderConfRes = await confirmStripePayment(data);
+      if (orderConfRes?.status == 200) {
+        ShowToast("Order successfully placed!");
+        dispatch(setCartData({}));
+        dispatch(setIsFetching(false));
+        replace("BookingSuccessfull", { orderId: orderUId });
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch(setIsFetching(false));
+    }
+  };
 
   const fetchCart = async () => {
     try {
@@ -98,11 +110,11 @@ const PaymentOption = ({navigation, route}) => {
       let payload = {
         cart_id: cartData?.cart_id,
         customer_address_id: orderDetails?.address?.id,
-        success_url: 'https://example.com/success',
-        cancel_url: 'https://example.com/cancel',
+        success_url: "https://example.com/success",
+        cancel_url: "https://example.com/cancel",
       };
 
-      console.log('Payload---->', payload);
+      // console.log("Payload---->", payload);
 
       for (key in payload) {
         formdata.append(key, payload[key]);
@@ -159,17 +171,19 @@ const PaymentOption = ({navigation, route}) => {
       //   })
       //   .finally(() => dispatch(setIsFetching(false)));
       const orderRes = await createOrder(formdata);
+      console.log("Order Result --- ", orderRes.status, orderRes);
       if (orderRes.status == 200) {
         const orderId = orderRes?.data?.data?.order_id;
         setOrderUId(orderId);
         const res = await createPaymentIntent(orderId);
+        console.log("Payment Intent --- ", res.status);
         if (res.status == 200) {
           const paymentIntent = res?.data?.data?.paymentIntent;
           const ephemeralKey = res?.data?.data?.ephemeralKey;
           setIntentKey(paymentIntent);
           console.log(paymentIntent, ephemeralKey);
           const init = await initPaymentSheet({
-            merchantDisplayName: 'JV',
+            merchantDisplayName: "JV",
             paymentIntentClientSecret: paymentIntent,
             customerEphemeralKeySecret: ephemeralKey,
           });
@@ -181,7 +195,7 @@ const PaymentOption = ({navigation, route}) => {
           // ShowToast("Order Created")
         }
       } else {
-        ShowToast('Something went wrong!');
+        ShowToast("Something went wrong!");
         goBack();
         return;
       }
@@ -195,96 +209,64 @@ const PaymentOption = ({navigation, route}) => {
     initPayment();
   }, []);
 
-  const handlePayment = async () => {
-    console.log(intentKey);
-    try {
-      if (intentKey) {
-        const paymentSheet = await presentPaymentSheet({
-          clientSecret: intentKey,
-        });
-        if (paymentSheet.error) {
-          console.log(paymentSheet.error);
-          // if(paymentSheet.error.code === 'Canceled'){
-          //   ShowToast('Something went wrong!');
-          // }
-          ShowToast(paymentSheet?.error?.localizedMessage || 'Something went wrong!');
-          return;
-        }
-      }
-      dispatch(setIsFetching(true));
-      console.log(orderUId);
-      const data = new FormData();
-      data.append('order_id', orderUId);
-      const orderConfRes = await confirmStripePayment(data);
-      if (orderConfRes?.status == 200) {
-        ShowToast('Order successfully placed!');
-        dispatch(setCartData({}));
-        dispatch(setIsFetching(false));
-        replace('BookingSuccessfull', {orderId: orderUId});
-      }
-    } catch (error) {
-      console.log(error);
-      dispatch(setIsFetching(false));
-    }
-  };
-
   return (
     <SafeAreaView
       style={{
-        backgroundColor: 'white',
+        backgroundColor: "white",
         flex: 1,
-      }}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
+      }}
+    >
+      <StatusBar barStyle={"dark-content"} backgroundColor={Colors.white} />
       <View
         style={{
-          width: '100%',
+          width: "100%",
           paddingHorizontal: normalize(15),
-        }}>
-        <Header
-          title={'Payment Option'}
-          disableRightIcon={true}
-          onPress={() => navigate('ServiceSummary')}
-        />
+        }}
+      >
+        <Header title={"Payment Option"} disableRightIcon={true} onPress={() => navigate("ServiceSummary")} />
       </View>
 
       <View>
         <FlatList
           data={DATA}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <TouchableOpacity
                 onPress={() => setSelectIndex(index)}
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                   marginHorizontal: normalize(15),
                   marginVertical: normalize(10),
-                }}>
+                }}
+              >
                 <TouchableOpacity
                   style={{
                     width: normalize(22),
-                    position: 'absolute',
+                    position: "absolute",
                     left: 0,
-                    height: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
+                    height: "100%",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
                   }}
-                  onPress={() => setSelectIndex(index)}>
+                  onPress={() => setSelectIndex(index)}
+                >
                   <View
                     style={{
-                      borderColor: selectIndex == index ? '#5E17EB' : '#161616',
+                      borderColor: selectIndex == index ? "#5E17EB" : "#161616",
                       borderWidth: normalize(1),
                       height: normalize(14),
                       width: normalize(14),
                       borderRadius: normalize(15),
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     {selectIndex == index && (
                       <View
                         style={{
-                          backgroundColor: '#5E17EB',
+                          backgroundColor: "#5E17EB",
                           height: normalize(8),
                           width: normalize(8),
                           borderRadius: normalize(15),
@@ -296,16 +278,17 @@ const PaymentOption = ({navigation, route}) => {
                 <Text
                   style={{
                     fontFamily: Fonts.Poppins_Regular,
-                    color: '#161616',
+                    color: "#161616",
                     fontSize: normalize(13),
                     marginLeft: normalize(22),
-                  }}>
+                  }}
+                >
                   {item.title}
                 </Text>
                 <Image
                   source={item.image}
                   style={{
-                    resizeMode: 'cover',
+                    resizeMode: "cover",
                     height: normalize(22),
                     width: normalize(26),
                   }}
@@ -361,23 +344,25 @@ const PaymentOption = ({navigation, route}) => {
       <TouchableOpacity
         onPress={handlePayment}
         style={{
-          backgroundColor: selectIndex !== -1 ? 'black' : '#D8D8D8',
+          backgroundColor: selectIndex !== -1 ? "black" : "#D8D8D8",
           height: normalize(42),
-          justifyContent: 'center',
-          alignItems: 'center',
+          justifyContent: "center",
+          alignItems: "center",
           borderRadius: normalize(10),
           marginTop: normalize(16),
-          position: 'absolute',
+          position: "absolute",
           bottom: normalize(40),
-          width: '90%',
-          alignSelf: 'center',
-        }}>
+          width: "90%",
+          alignSelf: "center",
+        }}
+      >
         <Text
           style={{
-            color: selectIndex !== -1 ? 'white' : '#858585',
+            color: selectIndex !== -1 ? "white" : "#858585",
             fontSize: normalize(14),
             fontFamily: Fonts.Poppins_Medium,
-          }}>
+          }}
+        >
           Proceed
         </Text>
       </TouchableOpacity>

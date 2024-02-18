@@ -5,9 +5,13 @@ const initialState = {
   isLoading: true,
   isCategoryLoading: true,
   isBannersLoading: true,
+  isFeaturedLoading: true,
+  isMostBookedLoading: true,
   isServicesLoading: true,
   getAllServiceCateRes: {},
   getBannersList: [],
+  getFeaturedList: {},
+  getMostBookedList: {},
   getServiceCategoryRes: {},
   getServiceSubCategoryRes: {},
   getAllServicesRes: {},
@@ -59,6 +63,42 @@ const ProductSlice = createSlice({
     },
     getBannersFailure(state, action) {
       state.isBannersLoading = false;
+      state.error = action.error;
+      state.status = action.type;
+    },
+
+    /* Get Most Booked Services */
+    getMostBookedServicesRequest(state, action) {
+      state.isMostBookedLoading = true;
+      state.status = action.type;
+      state.getMostBookedList = {};
+    },
+    getMostBookedServicesSuccess(state, action) {
+      // console.log("getAllServiceCateSuccess --- ", action.type);
+      state.isMostBookedLoading = false;
+      state.getMostBookedList = action.payload;
+      state.status = action.type;
+    },
+    getMostBookedServicesFailure(state, action) {
+      state.isMostBookedLoading = false;
+      state.error = action.error;
+      state.status = action.type;
+    },
+
+    /* Get Featured Services */
+    getFeaturedServicesRequest(state, action) {
+      state.isFeaturedLoading = true;
+      state.status = action.type;
+      state.getFeaturedList = [];
+    },
+    getFeaturedServicesSuccess(state, action) {
+      // console.log("getAllServiceCateSuccess --- ", action.type);
+      state.isFeaturedLoading = false;
+      state.getFeaturedList = action.payload;
+      state.status = action.type;
+    },
+    getFeaturedServicesFailure(state, action) {
+      state.isFeaturedLoading = false;
       state.error = action.error;
       state.status = action.type;
     },
@@ -204,6 +244,16 @@ export const {
   getBannersRequest,
   getBannersSuccess,
   getBannersFailure,
+
+  /* Get Featured Services */
+  getFeaturedServicesRequest,
+  getFeaturedServicesSuccess,
+  getFeaturedServicesFailure,
+
+  /* Get Most Booked Services */
+  getMostBookedServicesRequest,
+  getMostBookedServicesSuccess,
+  getMostBookedServicesFailure,
 
   /* Get Service Category */
   getServiceCategoryRequest,

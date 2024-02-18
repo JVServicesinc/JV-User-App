@@ -3,7 +3,7 @@ import constants from "./constants";
 
 export async function getApi(url, header) {
   const api_url = `${constants.BASE_URL}/${url}`;
-  console.log("API URL ---", api_url);
+  // console.log("API URL ---", api_url);
   return await axios.get(api_url, {
     headers: {
       Accept: header.Accept,

@@ -48,6 +48,10 @@ import {
   /* Remove Cart Items */
   removeCartItemsFailure,
   removeCartItemsSuccess,
+  getFeaturedServicesSuccess,
+  getFeaturedServicesFailure,
+  getMostBookedServicesSuccess,
+  getMostBookedServicesFailure,
 } from "../reducer/ServiceReducer";
 import showErrorAlert from "../../utils/helpers/Toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -78,7 +82,7 @@ export function* getAllServiceCateSaga() {
   }
 }
 
-/* Get All Service Category */
+/* Get All Banners / Coupens */
 export function* getBannersSaga() {
   const item = yield select(getItem);
   let header = {
@@ -90,13 +94,56 @@ export function* getBannersSaga() {
     let response = yield call(getApi, "banners", header);
 
     if (response?.status == 200) {
-      console.log("Banners Responses -- ", JSON.stringify(response?.data?.data));
       yield put(getBannersSuccess(response?.data?.data));
     } else {
       yield put(getBannersFailure(response?.data));
     }
   } catch (error) {
     yield put(getBannersFailure(error));
+    // showErrorAlert(error?.response?.data?.message);
+  }
+}
+
+/* Get All Featured Services */
+export function* getFeaturedServicesSaga() {
+  const item = yield select(getItem);
+  let header = {
+    Accept: "application/json",
+    contenttype: "application/json",
+    accesstoken: item.token,
+  };
+  try {
+    let response = yield call(getApi, "featured", header);
+
+    if (response?.status == 200) {
+      yield put(getFeaturedServicesSuccess(response?.data?.data));
+    } else {
+      yield put(getFeaturedServicesFailure(response?.data));
+    }
+  } catch (error) {
+    yield put(getFeaturedServicesFailure(error));
+    // showErrorAlert(error?.response?.data?.message);
+  }
+}
+
+/* Get All Most Booking Services */
+export function* getMostBookingServicesSaga() {
+  const item = yield select(getItem);
+  let header = {
+    Accept: "application/json",
+    contenttype: "application/json",
+    accesstoken: item.token,
+  };
+  try {
+    let response = yield call(getApi, "mostbooked", header);
+
+    if (response?.status == 200) {
+      yield put(getMostBookedServicesSuccess(response?.data?.data));
+    } else {
+      yield put(getMostBookedServicesFailure(response?.data));
+    }
+  } catch (error) {
+    yield put(getMostBookedServicesFailure(error));
     // showErrorAlert(error?.response?.data?.message);
   }
 }
@@ -331,6 +378,12 @@ const watchFunction = [
   })(),
   (function* () {
     yield takeLatest("Service/getBannersRequest", getBannersSaga);
+  })(),
+  (function* () {
+    yield takeLatest("Service/getFeaturedServicesRequest", getFeaturedServicesSaga);
+  })(),
+  (function* () {
+    yield takeLatest("Service/getMostBookedServicesRequest", getMostBookingServicesSaga);
   })(),
   (function* () {
     yield takeLatest("Service/getServiceCategoryRequest", getServiceCategorySaga);

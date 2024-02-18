@@ -36,6 +36,8 @@ import {
   getAllServiceWishlistRequest,
   getBannersRequest,
   getCartItemsRequest,
+  getFeaturedServicesRequest,
+  getMostBookedServicesRequest,
 } from "../../redux/reducer/ServiceReducer";
 import Modal from "react-native-modal";
 import { useTranslation } from "react-i18next";
@@ -94,6 +96,8 @@ const Home = () => {
         dispatch(getUserInfoRequest());
         dispatch(getAllServiceCateRequest());
         dispatch(getBannersRequest());
+        dispatch(getMostBookedServicesRequest());
+        dispatch(getFeaturedServicesRequest());
         // dispatch(getAllServiceWishlistRequest());
       })
       .catch((err) => {
@@ -181,10 +185,10 @@ const Home = () => {
 
   const CardItem = useCallback(({ item, index, containerStyle, onPress }) => {
     return (
-      <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={[containerStyle]}>
+      <Animatable.View animation={"fadeInRight"} duration={400} delay={index * 50} style={[containerStyle]}>
         <TouchableOpacity style={styles.card} onPress={onPress}>
-          <Image source={item?.icon} style={styles.card_icon} />
-          <Text style={styles.card_text}>{item?.title}</Text>
+          <Image source={item?.image_url} style={styles.card_icon} />
+          <Text style={styles.card_text}>{item?.name}</Text>
         </TouchableOpacity>
       </Animatable.View>
     );
@@ -315,6 +319,7 @@ const Home = () => {
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ paddingStart: normalize(18) }}
           renderItem={({ item, index }) => {
+            // console.log("Most Booked Item --- ", item);
             return (
               <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
                 <TouchableOpacity
@@ -326,7 +331,7 @@ const Home = () => {
                   ]}
                 >
                   <Image
-                    source={item?.icon}
+                    source={item?.image_url}
                     style={{
                       height: normalize(80),
                       width: "100%",
@@ -344,7 +349,7 @@ const Home = () => {
                       },
                     ]}
                   >
-                    {item.title}
+                    {item.name}
                   </Text>
 
                   <View
@@ -426,7 +431,7 @@ const Home = () => {
   function LoadingSkeleton({ num }) {
     return (
       <>
-        <SkeletonPlaceholder borderRadius={4}>
+        <SkeletonPlaceholder key={0} borderRadius={4}>
           <SkeletonPlaceholder.Item
             width={"90%"}
             alignSelf="center"
@@ -442,7 +447,7 @@ const Home = () => {
 
         <SkeletonPlaceholder.Item width={5} height={5} />
 
-        <SkeletonPlaceholder borderRadius={4}>
+        <SkeletonPlaceholder key={1} borderRadius={4}>
           <SkeletonPlaceholder.Item
             width={"90%"}
             alignSelf="center"
@@ -552,20 +557,16 @@ const Home = () => {
 
   // --------------------------------------------------------------------------------
   const renderItem = useCallback(({ item, index }) => {
-    if (index === 0 || index === 1 || index === 2) {
-      return (
-        <SHList
-          title={`${item?.name} Services`}
-          data={item?.jv_service_categories}
-          item={item}
-          style={{
-            paddingHorizontal: normalize(18),
-          }}
-        />
-      );
-    } else {
-      return null;
-    }
+    return (
+      <SHList
+        title={`${item?.name}`}
+        data={item?.jv_service_categories}
+        item={item}
+        style={{
+          paddingHorizontal: normalize(18),
+        }}
+      />
+    );
   }, []);
 
   return (
@@ -695,7 +696,7 @@ const Home = () => {
                 <LoadingSliderSkeleton />
               ) : (
                 <FlatListSlider
-                  data={ServiceReducer.getBannersList}
+                  data={ServiceReducer?.getBannersList}
                   imageKey={"image_url"}
                   width={275}
                   timer={4000}
@@ -705,6 +706,35 @@ const Home = () => {
                     marginBottom: 20,
                     marginTop: 20,
                     paddingHorizontal: 22,
+                  }}
+                />
+              )}
+
+              {ServiceReducer.isMostBookedLoading ? (
+                <LoadingSkeleton />
+              ) : (
+                <SingleHMList
+                  title={"Most Booked Services"}
+                  data={ServiceReducer?.getMostBookedList}
+                  style={{
+                    marginTop: normalize(15),
+                    paddingHorizontal: normalize(18),
+                  }}
+                />
+              )}
+
+              {ServiceReducer.isFeaturedLoading ? (
+                <LoadingSkeleton />
+              ) : (
+                <SingleHList
+                  title={"New and Noteworthy"}
+                  data={ServiceReducer?.getFeaturedList}
+                  style={{
+                    marginTop: normalize(5),
+                    paddingHorizontal: normalize(18),
+                  }}
+                  onPress={() => {
+                    navigation.navigate("ServiceDayInside");
                   }}
                 />
               )}
@@ -734,17 +764,17 @@ const Home = () => {
               {/* {!isLoading ? (
             //   <LoadingSkeleton />
             // ) : (
-            //   <SingleHList
-            //     title={"New and Noteworthy"}
-            //     data={Noteworthy}
-            //     style={{
-            //       marginTop: normalize(5),
-            //       paddingHorizontal: normalize(18),
-            //     }}
-            //     onPress={() => {
-            //       navigation.navigate("ServiceDayInside");
-            //     }}
-            //   />
+              // <SingleHList
+              //   title={"New and Noteworthy"}
+              //   data={Noteworthy}
+              //   style={{
+              //     marginTop: normalize(5),
+              //     paddingHorizontal: normalize(18),
+              //   }}
+              //   onPress={() => {
+              //     navigation.navigate("ServiceDayInside");
+              //   }}
+              // />
             // )} */}
               {/* {!isLoading ? (
             //   <LoadingSkeleton num={2} />
