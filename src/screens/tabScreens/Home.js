@@ -187,7 +187,7 @@ const Home = () => {
     return (
       <Animatable.View animation={"fadeInRight"} duration={400} delay={index * 50} style={[containerStyle]}>
         <TouchableOpacity style={styles.card} onPress={onPress}>
-          <Image source={item?.image_url} style={styles.card_icon} />
+          <Image source={{ uri: item?.image_url }} style={styles.card_icon} />
           <Text style={styles.card_text}>{item?.name}</Text>
         </TouchableOpacity>
       </Animatable.View>
@@ -267,11 +267,11 @@ const Home = () => {
           contentContainerStyle={{ paddingStart: normalize(18) }}
           renderItem={({ item, index }) => {
             return (
-              <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
+              <Animatable.View animation={"fadeInRight"} duration={400} delay={index * 50}>
                 <TouchableOpacity style={styles.card1}>
-                  {!titleBottom && <Text style={styles.card_text1}>{item.title}</Text>}
+                  {!titleBottom && <Text style={styles.card_text1}>{item.name}</Text>}
                   <Image
-                    source={item?.icon}
+                    source={{ uri: item?.image_url }}
                     style={{
                       height: normalize(80),
                       width: "100%",
@@ -290,7 +290,7 @@ const Home = () => {
                         },
                       ]}
                     >
-                      {item.title}
+                      {item.name}
                     </Text>
                   )}
                 </TouchableOpacity>
@@ -331,7 +331,7 @@ const Home = () => {
                   ]}
                 >
                   <Image
-                    source={item?.image_url}
+                    source={{ uri: item?.image_url }}
                     style={{
                       height: normalize(80),
                       width: "100%",
@@ -367,8 +367,8 @@ const Home = () => {
                         width: normalize(16),
                       }}
                     />
-                    <Text style={styles.card_text1}>{" " + item.rate + " "}</Text>
-                    <Text style={styles.card_text1}>{`(${item.total_rate})`}</Text>
+                    <Text style={styles.card_text1}>{" " + item.rating + " "}</Text>
+                    <Text style={styles.card_text1}>{`(${item.ratingCount})`}</Text>
                   </View>
 
                   <TouchableOpacity
@@ -431,7 +431,7 @@ const Home = () => {
   function LoadingSkeleton({ num }) {
     return (
       <>
-        <SkeletonPlaceholder key={0} borderRadius={4}>
+        <SkeletonPlaceholder borderRadius={4}>
           <SkeletonPlaceholder.Item
             width={"90%"}
             alignSelf="center"
@@ -447,7 +447,7 @@ const Home = () => {
 
         <SkeletonPlaceholder.Item width={5} height={5} />
 
-        <SkeletonPlaceholder key={1} borderRadius={4}>
+        <SkeletonPlaceholder borderRadius={4}>
           <SkeletonPlaceholder.Item
             width={"90%"}
             alignSelf="center"
@@ -559,7 +559,7 @@ const Home = () => {
   const renderItem = useCallback(({ item, index }) => {
     return (
       <SHList
-        title={`${item?.name}`}
+        title={`${item?.name} Services`}
         data={item?.jv_service_categories}
         item={item}
         style={{

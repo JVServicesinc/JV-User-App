@@ -6,6 +6,7 @@ export default {
   STRIPE_PUBLIC_KEY: "pk_test_51NzkPHSJdxCyQkYTZEBcG7j9k6PhythHzMwV4IIU00B2bsfPWnFUW8v6JOjQ0j5flNSNIn7Is6DKKKlMmFtwM3Ea00mx3AiMF4",
   BASE_URL: "https://jvapis.ez-xpert.ca/api", //'https://api.jvservices.ca/api',
   SOCKET_URL: "http://159.203.18.75:3000/",
+  STRIPE_RETURN_URL: "https://jvapis.ez-xpert.ca/return",
   STARTING: "STARTING",
   // API_KEY: 'AIzaSyAo9cqMY4p9ob2K6cvvw2x7ngEy2QHoKLo',
   ANDROID_API_KEY: "AIzaSyDJzLxbnSawJABJlKpUpopVZGt9Adp08uQ",

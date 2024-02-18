@@ -1,14 +1,5 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  LogBox,
-  TextInput,
-  Alert,
-  PermissionsAndroid,
-  Linking,
-} from "react-native";
-import React, { useEffect, useMemo } from "react";
+import { StyleSheet, Text, View, LogBox, TextInput, Alert, PermissionsAndroid, Linking } from "react-native";
+import React, { useEffect, useMemo, useCallback } from "react";
 import Test from "./src/Test";
 import StackNavigator from "./src/navigators/StackNavigator";
 import Verification from "./src/screens/auth/Verification";
@@ -16,18 +7,8 @@ import Geolocation from "@react-native-community/geolocation";
 import Geocoder from "react-native-geocoding";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserCurrentPosition } from "./src/redux/reducer/UserReducer";
-import {
-  getCartData,
-  getUserData,
-  setDeviceToken,
-} from "./src/services/Endpoints";
-import {
-  globalLogout,
-  setCartData,
-  setCartId,
-  setShowLocationDisabledModal,
-  setUserData,
-} from "./src/redux/reducer/GlobalSlice";
+import { getCartData, getUserData, setDeviceToken } from "./src/services/Endpoints";
+import { globalLogout, setCartData, setCartId, setShowLocationDisabledModal, setUserData } from "./src/redux/reducer/GlobalSlice";
 import { StreamChat } from "stream-chat";
 import C from "./src/utils/helpers/constants";
 import Modal from "react-native-modal";
@@ -38,6 +19,7 @@ import { Fonts } from "./src/themes/Fonts";
 import Loader from "./src/utils/helpers/Loader";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import messaging from "@react-native-firebase/messaging";
+import { useStripe } from "@stripe/stripe-react-native";
 import "intl-pluralrules";
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
@@ -46,28 +28,53 @@ const client = StreamChat.getInstance(C.GETSTREAM_API_KEY);
 const App = () => {
   const { token } = useSelector((state) => state.AuthReducer);
   const { userInfo } = useSelector((state) => state.UserReducer);
-  const { showLocationDisabledModal, isFetching } = useSelector(
-    (state) => state.GlobalReducer
-  );
+  const { showLocationDisabledModal, isFetching } = useSelector((state) => state.GlobalReducer);
 
   const dispatch = useDispatch();
+  const { handleURLCallback } = useStripe();
+
+  const handleDeepLink = useCallback(
+    async (url) => {
+      if (url) {
+        const stripeHandled = await handleURLCallback(url);
+        if (stripeHandled) {
+          console.log("Stripe URL -- ", url);
+          // This was a Stripe URL - you can return or add extra handling here as you see fit
+        } else {
+          console.log("Stripe URL Error -- ", url);
+          // This was NOT a Stripe URL – handle as you normally would
+        }
+      }
+    },
+    [handleURLCallback]
+  );
+
+  useEffect(() => {
+    const getUrlAsync = async () => {
+      const initialUrl = await Linking.getInitialURL();
+      console.log("Initital URL --- ", initialUrl);
+      handleDeepLink(initialUrl);
+    };
+
+    getUrlAsync();
+
+    const deepLinkListener = Linking.addEventListener("url", (event) => {
+      handleDeepLink(event.url);
+    });
+
+    return () => deepLinkListener.remove();
+  }, [handleDeepLink]);
 
   useEffect(() => {
     messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log(
-        "Notification caused app to open from background state:",
-        remoteMessage.notification
-      );
+      console.log("Notification caused app to open from background state:", remoteMessage.notification);
     });
 
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
         if (remoteMessage) {
-          console.log(
-            "Notification caused app to open from quit state:",
-            remoteMessage.notification
-          );
+          console.log("Notification caused app to open from quit state:", remoteMessage.notification);
         }
       });
   }, []);
@@ -128,9 +135,7 @@ const App = () => {
   async function requestUserPermission() {
     try {
       const authStatus = await messaging().requestPermission();
-      const enabled =
-        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+      const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
       console.log("Authorization status:", authStatus);
       if (enabled) {
@@ -156,12 +161,6 @@ const App = () => {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    if (token) {
-      requestUserPermission();
-    }
-  }, [token]);
 
   useEffect(() => {
     if (token) {
@@ -224,6 +223,12 @@ const App = () => {
     if (token && token !== "") fetchUserData();
   }, [token]);
 
+  useEffect(() => {
+    if (token) {
+      requestUserPermission();
+    }
+  }, [token]);
+
   if (Text.defaultProps == null) {
     Text.defaultProps = {};
     Text.defaultProps.allowFontScaling = false;
@@ -269,20 +274,11 @@ const App = () => {
               borderRadius: 30,
             }}
           >
-            <Text style={styles.locationPermissionHeaderText}>
-              Location Permission required!
-            </Text>
-            <LottieView
-              source={Icons.location_permission}
-              style={{ height: 80, width: 80 }}
-              autoPlay={true}
-            />
+            <Text style={styles.locationPermissionHeaderText}>Location Permission required!</Text>
+            <LottieView source={Icons.location_permission} style={{ height: 80, width: 80 }} autoPlay={true} />
             <Text style={styles.locationPermissionBodyText}>
               Please enable location permission in{" "}
-              <Text
-                style={{ textDecorationLine: "underline", color: "blue" }}
-                onPress={() => Linking.openSettings()}
-              >
+              <Text style={{ textDecorationLine: "underline", color: "blue" }} onPress={() => Linking.openSettings()}>
                 Setting{">"}Permission{">"}Location
               </Text>
               .

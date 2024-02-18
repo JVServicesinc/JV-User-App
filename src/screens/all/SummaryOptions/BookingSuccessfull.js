@@ -10,50 +10,51 @@ import {
   StyleSheet,
   Platform,
   Dimensions,
-} from 'react-native';
-import React, {useState} from 'react';
-import {Colors} from '../../../themes/Colors';
-import normalize from '../../../utils/helpers/normalize';
-import {Images} from '../../../themes/Images';
-import {Fonts} from '../../../themes/Fonts';
-import {Icons} from '../../../themes/Icons';
-import Picker from '../../../components/Picker';
-import BookingItemSkeleton from './components/BookingItemSkeleton';
-const {width, height} = Dimensions.get('screen');
-const BookingSuccessfull = ({navigation, route}) => {
+} from "react-native";
+import React, { useState } from "react";
+import { Colors } from "../../../themes/Colors";
+import normalize from "../../../utils/helpers/normalize";
+import { Images } from "../../../themes/Images";
+import { Fonts } from "../../../themes/Fonts";
+import { Icons } from "../../../themes/Icons";
+import Picker from "../../../components/Picker";
+import BookingItemSkeleton from "./components/BookingItemSkeleton";
+const { width, height } = Dimensions.get("screen");
+const BookingSuccessfull = ({ navigation, route }) => {
   const [isVisible1, setIsVisible1] = useState(false);
+  const { cartData, isFetching } = useSelector((state) => state.GlobalReducer);
   const orderId = route?.params?.orderId;
 
-  console.log(orderId);
+  console.log(cartData, "BookingSuccessful");
 
   function BookingDelayed() {
     return (
       <View>
         <Text
           style={{
-            color: '#161616',
+            color: "#161616",
             fontFamily: Fonts.Poppins_SemiBold,
             fontSize: normalize(16),
-            textAlign: 'center',
+            textAlign: "center",
             marginTop: normalize(15),
-          }}>
+          }}
+        >
           Booking Delayed by 20 mins
         </Text>
         <Text
           style={{
-            color: '#161616',
+            color: "#161616",
             fontFamily: Fonts.Poppins_Regular,
             fontSize: normalize(13),
-            textAlign: 'center',
+            textAlign: "center",
             marginVertical: normalize(10),
-          }}>
-          {
-            'Don’t worry our service boy will reach\nto you by 02:30pm as he is running\nlate due to heavy traffic.'
-          }
+          }}
+        >
+          {"Don’t worry our service boy will reach\nto you by 02:30pm as he is running\nlate due to heavy traffic."}
         </Text>
         <View style={styles.card1}>
           <Image source={Icons.testone} style={styles.img1} />
-          <View style={{marginLeft: normalize(16)}}>
+          <View style={{ marginLeft: normalize(16) }}>
             <Text style={styles.heading111}>Diamond Facial</Text>
             <Text style={styles.heading121}>• 2 hrs</Text>
             <Text style={styles.heading121}>• Includes dummy info</Text>
@@ -62,7 +63,7 @@ const BookingSuccessfull = ({navigation, route}) => {
 
         <View style={styles.card1}>
           <Image source={Icons.testtwo} style={styles.img1} />
-          <View style={{marginLeft: normalize(16)}}>
+          <View style={{ marginLeft: normalize(16) }}>
             <Text style={styles.heading111}>Diamond Facial</Text>
             <Text style={styles.heading121}>• 30 min</Text>
             <Text style={styles.heading121}>• Includes dummy info</Text>
@@ -77,27 +78,29 @@ const BookingSuccessfull = ({navigation, route}) => {
       style={{
         flex: 1,
         backgroundColor: Colors.white,
-        alignItems: 'center',
+        alignItems: "center",
         width,
-      }}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
+      }}
+    >
+      <StatusBar barStyle={"dark-content"} backgroundColor={Colors.white} />
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate("Home")}
         style={{
           height: normalize(30),
           width: normalize(30),
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
           right: normalize(15),
-          top: Platform.OS == 'ios' ? normalize(40) : normalize(10),
-        }}>
+          top: Platform.OS == "ios" ? normalize(40) : normalize(10),
+        }}
+      >
         <Image
           style={{
             height: normalize(20),
             width: normalize(18),
-            resizeMode: 'contain',
+            resizeMode: "contain",
           }}
           source={Icons.close}
         />
@@ -117,12 +120,12 @@ const BookingSuccessfull = ({navigation, route}) => {
         {<Text style={{fontFamily: Fonts.Poppins_SemiBold}}>12 Dec.</Text>}
         {' Our service\nprovider will contact you soon.'}
       </Text> */}
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: "center" }}>
         <Image
           style={{
             height: normalize(60),
             width: normalize(60),
-            resizeMode: 'contain',
+            resizeMode: "contain",
             marginTop: normalize(35),
           }}
           source={Icons.smiling}
@@ -133,61 +136,57 @@ const BookingSuccessfull = ({navigation, route}) => {
             fontSize: normalize(16),
             fontFamily: Fonts.Poppins_SemiBold,
             marginTop: normalize(10),
-          }}>
+          }}
+        >
           Booking Successful !
         </Text>
       </View>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         {/* <BookingItemSkeleton /> */}
         <FlatList
-        data={[1, 2, 3, 4, 5,6, 7]}
-        contentContainerStyle={{width:"100%"}}
-        style={{width:"90%"}}
-        
-        renderItem={item => (
-          <View style={styles.card}>
-            <Image source={Icons.testone} style={[styles.img, {width:"25%"}]} />
-            <View style={{width:"70%"}}>
-              <Text style={styles.heading11}>Diamond Facial</Text>
-              <Text style={styles.subtest12}>• 2 hrs</Text>
-              <Text style={styles.subtest12}>• Includes dummy info test description long</Text>
+          data={cartData?.items}
+          contentContainerStyle={{ width: "100%" }}
+          style={{ width: "90%" }}
+          renderItem={(item) => (
+            <View style={styles.card}>
+              <Image source={item.image_url} style={[styles.img, { width: "25%" }]} />
+              <View style={{ width: "70%" }}>
+                <Text style={styles.heading11}>• {item.service_name}</Text>
+                <Text style={styles.subtest12}>• {item.service_duration} hrs</Text>
+                <Text style={styles.subtest12}>• Includes dummy info test description long</Text>
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
       </View>
       <TouchableOpacity
         onPress={() => setIsVisible1(true)}
         style={{
-          backgroundColor: 'black',
+          backgroundColor: "black",
           height: normalize(42),
-          justifyContent: 'center',
-          alignItems: 'center',
+          justifyContent: "center",
+          alignItems: "center",
           borderRadius: normalize(10),
           marginTop: normalize(16),
           // position: 'absolute',
           // bottom: normalize(40),
-          width: '90%',
-          alignSelf: 'center',
-        }}>
+          width: "90%",
+          alignSelf: "center",
+        }}
+      >
         <Text
           style={{
-            color: 'white',
+            color: "white",
             fontSize: normalize(14),
             fontFamily: Fonts.Poppins_Medium,
-          }}>
+          }}
+        >
           View booking
         </Text>
       </TouchableOpacity>
 
       {isVisible1 && (
-        <Picker
-          children={BookingDelayed()}
-          isTabLine={true}
-          isVisible={isVisible1}
-          setIsVisible={setIsVisible1}
-          height={'58%'}
-        />
+        <Picker children={BookingDelayed()} isTabLine={true} isVisible={isVisible1} setIsVisible={setIsVisible1} height={"58%"} />
       )}
     </SafeAreaView>
   );
@@ -201,16 +200,16 @@ const styles = StyleSheet.create({
     borderWidth: normalize(1.5),
     borderColor: Colors.gray,
     borderRadius: normalize(18),
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
     marginVertical: 6,
   },
   img: {
     height: normalize(80),
     width: normalize(90),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   heading11: {
     fontSize: normalize(12),
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
   },
   heading12: {
     fontSize: normalize(11),
-    color: '#757575',
+    color: "#757575",
     fontFamily: Fonts.Poppins_Regular,
   },
   card1: {
@@ -228,16 +227,16 @@ const styles = StyleSheet.create({
     borderWidth: normalize(1.5),
     borderColor: Colors.gray,
     borderRadius: normalize(18),
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: normalize(12),
-    width: '90%',
-    alignSelf: 'center',
+    width: "90%",
+    alignSelf: "center",
   },
   img1: {
     height: normalize(80),
     width: normalize(90),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   heading111: {
     fontSize: normalize(12),
@@ -246,7 +245,7 @@ const styles = StyleSheet.create({
   },
   heading121: {
     fontSize: normalize(11),
-    color: '#757575',
+    color: "#757575",
     fontFamily: Fonts.Poppins_Regular,
   },
 });

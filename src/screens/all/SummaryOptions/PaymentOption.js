@@ -17,7 +17,7 @@ import constants from "../../../utils/helpers/constants";
 const PaymentOption = ({ navigation, route }) => {
   const orderDetails = route?.params?.details;
 
-  console.log(orderDetails?.address?.id, "Order details ----->");
+  // console.log(orderDetails?.address?.id, "Order details ----->");
 
   const [selectIndex, setSelectIndex] = useState(-1);
   const { cartData } = useSelector((state) => state.GlobalReducer);
@@ -170,13 +170,14 @@ const PaymentOption = ({ navigation, route }) => {
       //     console.log(e.response.data.errors, 'error');
       //   })
       //   .finally(() => dispatch(setIsFetching(false)));
+      // console.log("Create Order Form Data --- ", formdata);
       const orderRes = await createOrder(formdata);
-      console.log("Order Result --- ", orderRes.status, orderRes);
+      // console.log("Order Result --- ", orderRes.status, orderRes);
       if (orderRes.status == 200) {
         const orderId = orderRes?.data?.data?.order_id;
         setOrderUId(orderId);
         const res = await createPaymentIntent(orderId);
-        console.log("Payment Intent --- ", res.status);
+        console.log("Payment Intent --- ", res?.data);
         if (res.status == 200) {
           const paymentIntent = res?.data?.data?.paymentIntent;
           const ephemeralKey = res?.data?.data?.ephemeralKey;
@@ -184,12 +185,13 @@ const PaymentOption = ({ navigation, route }) => {
           console.log(paymentIntent, ephemeralKey);
           const init = await initPaymentSheet({
             merchantDisplayName: "JV",
+            returnURL: constants.STRIPE_RETURN_URL,
             paymentIntentClientSecret: paymentIntent,
             customerEphemeralKeySecret: ephemeralKey,
           });
           if (init.error) {
             // ShowToast('Something went wrong!');
-            console.log(init.error);
+            console.log("Payment Intent Error --- ", init.error);
             return;
           }
           // ShowToast("Order Created")

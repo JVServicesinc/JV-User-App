@@ -1,7 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {call, put, select, takeLatest} from 'redux-saga/effects';
-import constants from '../../utils/helpers/constants';
-import _ from 'lodash';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { call, put, select, takeLatest } from "redux-saga/effects";
+import constants from "../../utils/helpers/constants";
+import _ from "lodash";
 import {
   /* Login */
   loginSuccess,
@@ -40,40 +40,37 @@ import {
   checkValidforgotPassFailure,
 
   /* Check Valid Forgot Password */
-} from '../reducer/AuthReducer';
-import showErrorAlert from '../../utils/helpers/Toast';
-import {getApi, postApi} from '../../utils/helpers/ApiRequest';
-import {goBack, navigate} from '../../utils/helpers/RootNavigation';
+} from "../reducer/AuthReducer";
+import showErrorAlert from "../../utils/helpers/Toast";
+import { getApi, postApi } from "../../utils/helpers/ApiRequest";
+import { goBack, navigate } from "../../utils/helpers/RootNavigation";
 
-let getItem = state => state.AuthReducer;
-let token = '';
+let getItem = (state) => state.AuthReducer;
+let token = "";
 
 /* Login */
 export function* loginSaga(action) {
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
   };
   try {
-    let response = yield call(postApi, 'auth/login', action.payload, header);
+    console.log("Login Saga --- ", action.payload);
+    let response = yield call(postApi, "auth/login", action.payload, header);
 
     if (response?.status == 200) {
-      yield call(
-        AsyncStorage.setItem,
-        constants.TOKEN,
-        response?.data?.data?.access_token,
-      );
+      yield call(AsyncStorage.setItem, constants.TOKEN, response?.data?.data?.access_token);
       yield put(
         setUserToken({
           token: response?.data?.data?.access_token,
           user_id: 0,
-        }),
+        })
       );
       yield put(
         loginSuccess({
           data: action.payload,
           token: response?.data?.data?.access_token,
-        }),
+        })
       );
       showErrorAlert(response.data.message);
     } else {
@@ -81,13 +78,13 @@ export function* loginSaga(action) {
       showErrorAlert(response.data.message);
     }
   } catch (error) {
-    console.log('error -- ',error);
+    console.log("error -- ", error);
     yield put(loginFailure(error?.response?.data));
-    if (error?.response?.data?.errors[0] == 'Email is not verified') {
+    if (error?.response?.data?.errors[0] == "Email is not verified") {
       showErrorAlert(error?.response?.data?.errors[0]);
-      navigate('Verification', {
+      navigate("Verification", {
         data: action?.payload,
-        type: '',
+        type: "",
       });
     } else {
       showErrorAlert(error?.response?.data?.errors[0]);
@@ -98,17 +95,12 @@ export function* loginSaga(action) {
 /* Check Email Exits */
 export function* checkEmailExitSaga(action) {
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
   };
 
   try {
-    let response = yield call(
-      postApi,
-      'user/emailExists',
-      action?.payload,
-      header,
-    );
+    let response = yield call(postApi, "user/emailExists", action?.payload, header);
 
     if (response?.status == 200) {
       yield put(checkEmailExitSuccess(response?.data?.response?.dataset));
@@ -116,7 +108,7 @@ export function* checkEmailExitSaga(action) {
       yield put(checkEmailExitFailure(response?.data));
     }
   } catch (error) {
-    console.log('error -- ', error);
+    console.log("error -- ", error);
     yield put(checkEmailExitFailure({}));
     // showErrorAlert(error?.response?.data?.message);
   }
@@ -125,23 +117,18 @@ export function* checkEmailExitSaga(action) {
 /* SignUp */
 export function* signupSaga(action) {
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
   };
   try {
-    let response = yield call(
-      postApi,
-      'auth/user/register',
-      action?.payload,
-      header,
-    );
+    let response = yield call(postApi, "auth/user/register", action?.payload, header);
 
     if (response?.status == 200) {
       yield put(signupSuccess(action?.payload));
-      showErrorAlert('Please verify your email'); //response.data.message
-      navigate('Verification', {
+      showErrorAlert("Please verify your email"); //response.data.message
+      navigate("Verification", {
         data: action?.payload,
-        type: '',
+        type: "",
       });
     } else {
       yield put(signupFailure(response?.data));
@@ -156,16 +143,11 @@ export function* signupSaga(action) {
 /* Otp Verification */
 export function* otpVerifySaga(action) {
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
   };
   try {
-    let response = yield call(
-      postApi,
-      'auth/user/verify-email',
-      action?.payload?.data,
-      header,
-    );
+    let response = yield call(postApi, "auth/user/verify-email", action?.payload?.data, header);
 
     if (response?.status == 200) {
       yield put(otpVerifySuccess(action?.payload));
@@ -173,13 +155,8 @@ export function* otpVerifySaga(action) {
 
       let l = action?.payload?.obj;
       let fromdata = new FormData();
-      fromdata.append(
-        'username',
-        l?.email
-          ? l?.email.toLocaleLowerCase().trim()
-          : l?.username.toLocaleLowerCase().trim(),
-      );
-      fromdata.append('password', l?.password);
+      fromdata.append("username", l?.email ? l?.email.toLocaleLowerCase().trim() : l?.username.toLocaleLowerCase().trim());
+      fromdata.append("password", l?.password);
 
       yield put(loginRequest(fromdata));
     } else {
@@ -195,16 +172,11 @@ export function* otpVerifySaga(action) {
 /* Resend otp */
 export function* resendOtpSaga(action) {
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
   };
   try {
-    let response = yield call(
-      postApi,
-      'auth/user/resend-email-otp',
-      action?.payload,
-      header,
-    );
+    let response = yield call(postApi, "auth/user/resend-email-otp", action?.payload, header);
 
     if (response?.status == 200) {
       yield put(resendOtpSuccess(action?.payload));
@@ -228,39 +200,34 @@ export function* logoutSaga() {
       setUserToken({
         token: null,
         user_id: null,
-      }),
+      })
     );
-    yield put(logoutSuccess('logout'));
-    showErrorAlert('Logout Successful');
+    yield put(logoutSuccess("logout"));
+    showErrorAlert("Logout Successful");
   } catch (error) {
     console.log(error);
     yield put(logoutFailure(error));
-    showErrorAlert('Logout Failer');
+    showErrorAlert("Logout Failer");
   }
 }
 
 /* Request Forgot Password */
 export function* forgotPasswordSaga(action) {
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
   };
   try {
-    let response = yield call(
-      postApi,
-      'auth/forgot-password/send-otp',
-      action?.payload?.data,
-      header,
-    );
+    let response = yield call(postApi, "auth/forgot-password/send-otp", action?.payload?.data, header);
 
     if (response?.status == 200) {
       yield put(forgotPasswordSuccess(action?.payload?.data));
       showErrorAlert(response.data.message);
 
-      if (action?.payload?.type == 'request') {
-        navigate('Verification', {
+      if (action?.payload?.type == "request") {
+        navigate("Verification", {
           data: action?.payload?.data,
-          type: 'fp',
+          type: "fp",
         });
       }
     } else {
@@ -276,22 +243,17 @@ export function* forgotPasswordSaga(action) {
 /* Check Valid Forgot Password */
 export function* checkValidforgotPassSaga(action) {
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
   };
   try {
-    let response = yield call(
-      postApi,
-      'auth/forgot-password/validate-otp',
-      action?.payload,
-      header,
-    );
+    let response = yield call(postApi, "auth/forgot-password/validate-otp", action?.payload, header);
 
     if (response?.status == 200) {
       yield put(checkValidforgotPassSuccess(action?.payload));
       showErrorAlert(response.data.message);
 
-      navigate('ChangePassword', {
+      navigate("ChangePassword", {
         data: action?.payload,
       });
     } else {
@@ -306,31 +268,28 @@ export function* checkValidforgotPassSaga(action) {
 
 const watchFunction = [
   (function* () {
-    yield takeLatest('Auth/loginRequest', loginSaga);
+    yield takeLatest("Auth/loginRequest", loginSaga);
   })(),
   (function* () {
-    yield takeLatest('Auth/checkEmailExitRequest', checkEmailExitSaga);
+    yield takeLatest("Auth/checkEmailExitRequest", checkEmailExitSaga);
   })(),
   (function* () {
-    yield takeLatest('Auth/signupRequest', signupSaga);
+    yield takeLatest("Auth/signupRequest", signupSaga);
   })(),
   (function* () {
-    yield takeLatest('Auth/otpVerifyRequest', otpVerifySaga);
+    yield takeLatest("Auth/otpVerifyRequest", otpVerifySaga);
   })(),
   (function* () {
-    yield takeLatest('Auth/resendOtpRequest', resendOtpSaga);
+    yield takeLatest("Auth/resendOtpRequest", resendOtpSaga);
   })(),
   (function* () {
-    yield takeLatest('Auth/logoutRequest', logoutSaga);
+    yield takeLatest("Auth/logoutRequest", logoutSaga);
   })(),
   (function* () {
-    yield takeLatest('Auth/forgotPasswordRequest', forgotPasswordSaga);
+    yield takeLatest("Auth/forgotPasswordRequest", forgotPasswordSaga);
   })(),
   (function* () {
-    yield takeLatest(
-      'Auth/checkValidforgotPassRequest',
-      checkValidforgotPassSaga,
-    );
+    yield takeLatest("Auth/checkValidforgotPassRequest", checkValidforgotPassSaga);
   })(),
 ];
 
