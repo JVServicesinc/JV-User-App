@@ -3,7 +3,7 @@ export default {
   IMAGE_URL: "",
   // BASE_URL: 'https://jvservices.ca/jv/api/api',
   // BASE_URL: "http://api.jvservices.ca/api",
-  STRIPE_PUBLIC_KEY: "pk_test_51NzkPHSJdxCyQkYTZEBcG7j9k6PhythHzMwV4IIU00B2bsfPWnFUW8v6JOjQ0j5flNSNIn7Is6DKKKlMmFtwM3Ea00mx3AiMF4",
+  STRIPE_PUBLIC_KEY: "pk_test_51KrOSQCuldPGQCPaZ43oaNvvTLQpvU2MHWd4EforE2eH0tIEyT6WJPxGDJzeRd9caPPeNJcambmjbmNdhqON2d7b00eApiWfUZ", //"pk_test_51NzkPHSJdxCyQkYTZEBcG7j9k6PhythHzMwV4IIU00B2bsfPWnFUW8v6JOjQ0j5flNSNIn7Is6DKKKlMmFtwM3Ea00mx3AiMF4",
   BASE_URL: "https://jvapis.ez-xpert.ca/api", //'https://api.jvservices.ca/api',
   SOCKET_URL: "http://159.203.18.75:3000/",
   STRIPE_RETURN_URL: "https://jvapis.ez-xpert.ca/return",

@@ -11,6 +11,7 @@ import {
   Platform,
   Dimensions,
 } from "react-native";
+import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import { Colors } from "../../../themes/Colors";
 import normalize from "../../../utils/helpers/normalize";
@@ -20,6 +21,7 @@ import { Icons } from "../../../themes/Icons";
 import Picker from "../../../components/Picker";
 import BookingItemSkeleton from "./components/BookingItemSkeleton";
 const { width, height } = Dimensions.get("screen");
+
 const BookingSuccessfull = ({ navigation, route }) => {
   const [isVisible1, setIsVisible1] = useState(false);
   const { cartData, isFetching } = useSelector((state) => state.GlobalReducer);
@@ -147,15 +149,22 @@ const BookingSuccessfull = ({ navigation, route }) => {
           data={cartData?.items}
           contentContainerStyle={{ width: "100%" }}
           style={{ width: "90%" }}
-          renderItem={(item) => (
-            <View style={styles.card}>
-              <Image source={item.image_url} style={[styles.img, { width: "25%" }]} />
-              <View style={{ width: "70%" }}>
-                <Text style={styles.heading11}>• {item.service_name}</Text>
-                <Text style={styles.subtest12}>• {item.service_duration} hrs</Text>
-                <Text style={styles.subtest12}>• Includes dummy info test description long</Text>
+          renderItem={({ item }) => (
+            console.log("Item --- ", item),
+            (
+              <View style={styles.card}>
+                <Image
+                  source={{ uri: item.image_url }}
+                  style={[styles.img, { width: "30%", borderRadius: Dimensions.get("window").width * 0.02 }]}
+                  resizeMode={"cover"}
+                />
+                <View style={{ width: "65%" }}>
+                  <Text style={styles.heading11}>• {item.service_name}</Text>
+                  <Text style={styles.subtest12}>• {item.service_duration} hrs</Text>
+                  <Text style={styles.subtest12}>• Includes dummy info test description long</Text>
+                </View>
               </View>
-            </View>
+            )
           )}
         />
       </View>

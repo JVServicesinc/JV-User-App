@@ -78,7 +78,7 @@ const PaymentOption = ({ navigation, route }) => {
       const orderConfRes = await confirmStripePayment(data);
       if (orderConfRes?.status == 200) {
         ShowToast("Order successfully placed!");
-        dispatch(setCartData({}));
+        // dispatch(setCartData({}));
         dispatch(setIsFetching(false));
         replace("BookingSuccessfull", { orderId: orderUId });
       }

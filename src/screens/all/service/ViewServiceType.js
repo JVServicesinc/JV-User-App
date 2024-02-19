@@ -124,12 +124,12 @@ const ViewServiceType = ({ navigation, route }) => {
             style={styles.item_main}
           >
             <Image
-              source={item?.image_urls[0] ? { uri: item?.image_urls[0] } : Images.no_photo}
+              source={item?.image_urls ? { uri: item?.image_urls[0] } : Images.no_photo}
               style={[
                 styles.img,
                 {
-                  width: item?.image_urls[0] ? "100%" : "75%",
-                  resizeMode: item?.image_urls[0] ? "cover" : "contain",
+                  width: item?.image_urls ? (item?.image_urls[0] ? "100%" : "75%") : "100%",
+                  resizeMode: item?.image_urls ? (item?.image_urls[0] ? "cover" : "contain") : "cover",
                 },
               ]}
             />
