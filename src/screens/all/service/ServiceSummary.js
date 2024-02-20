@@ -60,7 +60,7 @@ const ServiceSummary = ({ navigation }) => {
   const isCartEmpty = !!_.isEmpty(cartData?.items || []);
   const hasNullTiming = !(isServiceItem && cartData?.items?.some((item) => item?.timing === null));
 
-  console.log(hasNullTiming);
+  // console.log(hasNullTiming);
 
   const [slotSelectionDetail, setSlotSelectionDetail] = useState({
     slotModal: false,
@@ -68,7 +68,7 @@ const ServiceSummary = ({ navigation }) => {
     selectedCartItemId: "",
   });
 
-  console.log("Cart Data --- ", cartData);
+  // console.log("Cart Data --- ", cartData);
 
   const fetchCart = async () => {
     try {
@@ -80,7 +80,7 @@ const ServiceSummary = ({ navigation }) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -500,7 +500,8 @@ const ServiceSummary = ({ navigation }) => {
                     landmark: txt.landmark,
                     isSubmitLocation: txt.isSubmitLocation,
                   }));
-                  navigate("PaymentOption", { details: details });
+                  navigate("SearchingProvider", { details: details });
+                  //navigate("PaymentOption", { details: details });
                 }, 500);
               }}
             />

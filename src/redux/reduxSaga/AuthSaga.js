@@ -55,7 +55,6 @@ export function* loginSaga(action) {
     contenttype: "multipart/form-data",
   };
   try {
-    console.log("Login Saga --- ", action.payload);
     let response = yield call(postApi, "auth/login", action.payload, header);
 
     if (response?.status == 200) {
@@ -78,7 +77,7 @@ export function* loginSaga(action) {
       showErrorAlert(response.data.message);
     }
   } catch (error) {
-    console.log("error -- ", error);
+    // console.log("error -- ", error);
     yield put(loginFailure(error?.response?.data));
     if (error?.response?.data?.errors[0] == "Email is not verified") {
       showErrorAlert(error?.response?.data?.errors[0]);
@@ -108,7 +107,7 @@ export function* checkEmailExitSaga(action) {
       yield put(checkEmailExitFailure(response?.data));
     }
   } catch (error) {
-    console.log("error -- ", error);
+    // console.log("error -- ", error);
     yield put(checkEmailExitFailure({}));
     // showErrorAlert(error?.response?.data?.message);
   }
@@ -205,7 +204,7 @@ export function* logoutSaga() {
     yield put(logoutSuccess("logout"));
     showErrorAlert("Logout Successful");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     yield put(logoutFailure(error));
     showErrorAlert("Logout Failer");
   }

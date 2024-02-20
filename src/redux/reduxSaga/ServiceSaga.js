@@ -179,7 +179,7 @@ export function* getServiceSubCategorySaga(action) {
     Accept: "application/json",
     contenttype: "application/json",
   };
-  console.log("GetServiceSubCategorySaga -- ", action?.payload);
+  // console.log("GetServiceSubCategorySaga -- ", action?.payload);
   try {
     let response = yield call(
       getApi,
@@ -264,7 +264,7 @@ export function* addToCartServiceSaga(action) {
       yield put(addToCartServiceFailure(response?.data));
     }
   } catch (error) {
-    console.log("error -- ", error);
+    // console.log("error -- ", error);
     yield put(addToCartServiceFailure(error));
     // showErrorAlert(error?.response?.data?.response.status.msg);
   }
@@ -318,7 +318,7 @@ export function* removeCartItemsSaga(action) {
       yield put(removeCartItemsFailure(response?.data));
     }
   } catch (error) {
-    console.log("error -- ", error);
+    // console.log("error -- ", error);
     yield put(removeCartItemsFailure(error));
     // showErrorAlert(error?.response?.data?.response.status.msg);
   }
@@ -343,7 +343,7 @@ export function* addServiceWishlistSaga(action) {
       yield put(addServiceWishlistFailure(response?.data));
     }
   } catch (error) {
-    console.log("error -- ", error);
+    // console.log("error -- ", error);
     yield put(addServiceWishlistFailure(error));
     // showErrorAlert(error?.response?.data?.response.status.msg);
   }

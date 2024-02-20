@@ -52,7 +52,7 @@ const ViewAllProduct = ({ navigation, route }) => {
           }
         }
       } catch (error) {
-        console.log("Cart Fetch Error--->", error);
+        // console.log("Cart Fetch Error--->", error);
       }
     }
   };
@@ -66,11 +66,11 @@ const ViewAllProduct = ({ navigation, route }) => {
         try {
           const res = await removeCartItem(cartData?.cart_id, itemId);
           if (res?.data) {
-            console.log(res?.data);
+            // console.log(res?.data);
             ShowToast("Product succesfully removed!");
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else {
         const updateCartData = new FormData();
@@ -84,7 +84,7 @@ const ViewAllProduct = ({ navigation, route }) => {
             ShowToast("Product succesfully added!");
           }
         } catch (error) {
-          console.log(error?.response?.data);
+          // console.log(error?.response?.data);
         }
       }
       await fetchCartData(cartData?.cart_id);
@@ -105,7 +105,7 @@ const ViewAllProduct = ({ navigation, route }) => {
             await fetchCartData(response?.data?.data?.cart_id);
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
     }

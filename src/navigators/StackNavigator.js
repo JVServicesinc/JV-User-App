@@ -47,6 +47,7 @@ import { Tracking } from "../screens/all/tracking";
 import { LanguageSelector } from "../screens/auth/LanguageSelector";
 import { ChooseLanguage } from "../screens/main/Account/ChooseLanguage";
 import { DocumentsDetails } from "../screens/main/Account/DocumentsDetails";
+import { SearchingProvider } from "../screens/all/SummaryOptions/SearchingProvider";
 
 const StackNavigator = (props) => {
   const Stack = createStackNavigator();
@@ -92,6 +93,7 @@ const StackNavigator = (props) => {
     PaymentOption: PaymentOption,
     PaymentSuccessfull: PaymentSuccessfull,
     BookingSuccessfull: BookingSuccessfull,
+    SearchingProvider: SearchingProvider,
     ManageAddress: ManageAddress,
     Support: Support,
     SupportChat: SupportChat,
@@ -124,15 +126,11 @@ const StackNavigator = (props) => {
     return (
       <>
         <NavigationContainer ref={navigationRef}>
-          <Stack.Navigator
-            screenOptions={{ headerShown: false, gestureEnabled: false }}
-          >
+          <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false }}>
             {Object.entries({
               ...Screens,
             }).map(([name, component], index) => {
-              return (
-                <Stack.Screen key={index} name={name} component={component} />
-              );
+              return <Stack.Screen key={index} name={name} component={component} />;
             })}
           </Stack.Navigator>
         </NavigationContainer>

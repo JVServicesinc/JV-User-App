@@ -15,7 +15,7 @@ import { setCartData, setIsFetching } from "../../../redux/reducer/GlobalSlice";
 import constants from "../../../utils/helpers/constants";
 
 const PaymentOption = ({ navigation, route }) => {
-  const orderDetails = route?.params?.details;
+  const orderUId = route?.params?.orderId;
 
   // console.log(orderDetails?.address?.id, "Order details ----->");
 
@@ -24,7 +24,7 @@ const PaymentOption = ({ navigation, route }) => {
   const { initPaymentSheet, presentPaymentSheet, confirmPaymentSheetPayment } = useStripe();
   const dispatch = useDispatch();
   const [intentKey, setIntentKey] = useState();
-  const [orderUId, setOrderUId] = useState();
+  // const [orderUId, setOrderUId] = useState();
   const DATA = [
     {
       title: "Debit & Credit Cards",
@@ -56,14 +56,14 @@ const PaymentOption = ({ navigation, route }) => {
   // console.log("Cart ID", cartData);
 
   const handlePayment = async () => {
-    console.log(intentKey);
+    // console.log(intentKey);
     try {
       if (intentKey) {
         const paymentSheet = await presentPaymentSheet({
           clientSecret: intentKey,
         });
         if (paymentSheet.error) {
-          console.log(paymentSheet.error);
+          // console.log(paymentSheet.error);
           // if(paymentSheet.error.code === 'Canceled'){
           //   ShowToast('Something went wrong!');
           // }
@@ -72,12 +72,13 @@ const PaymentOption = ({ navigation, route }) => {
         }
       }
       dispatch(setIsFetching(true));
-      console.log(orderUId);
+      // console.log(orderUId);
       const data = new FormData();
       data.append("order_id", orderUId);
       const orderConfRes = await confirmStripePayment(data);
+      ShowToast("Order successfully placed");
+      console.log("Order Placed --- ", orderConfRes);
       if (orderConfRes?.status == 200) {
-        ShowToast("Order successfully placed!");
         // dispatch(setCartData({}));
         dispatch(setIsFetching(false));
         replace("BookingSuccessfull", { orderId: orderUId });
@@ -105,97 +106,45 @@ const PaymentOption = ({ navigation, route }) => {
   const initPayment = async () => {
     try {
       dispatch(setIsFetching(true));
-      let formdata = new FormData();
+      // let formdata = new FormData();
 
-      let payload = {
-        cart_id: cartData?.cart_id,
-        customer_address_id: orderDetails?.address?.id,
-        success_url: "https://example.com/success",
-        cancel_url: "https://example.com/cancel",
-      };
+      // let payload = {
+      //   cart_id: cartData?.cart_id,
+      //   customer_address_id: orderDetails?.address?.id,
+      //   success_url: "https://example.com/success",
+      //   cancel_url: "https://example.com/cancel",
+      // };
 
-      // console.log("Payload---->", payload);
+      // // console.log("Payload---->", payload);
 
-      for (key in payload) {
-        formdata.append(key, payload[key]);
-      }
-      //   .then(res => {
-      //     console.log(res?.data?.data);
-      //     const orderId = res?.data?.data?.order_id;
-      //     console.log(orderId, 'Order ID---------->');
-      //     if (orderId) {
-      //       // const payload = new FormData();
-      //       createPaymentIntent(orderId)
-      //         .then(res => {
-      //           const paymentIntent = res?.data?.data?.paymentIntent;
-      //           if (paymentIntent) {
-      //             initPaymentSheet({
-      //               merchantDisplayName: 'JV',
-      //               paymentIntentClientSecret: paymentIntent,
-      //             }).then(
-      //               async () =>
-      //                 await presentPaymentSheet()
-      //                   .then(async res => {
-      //                     if (res.error) {
-      //                       console.log('Success!', res);
-      //                       ShowToast(
-      //                         res?.error?.message || 'Something went wrong!',
-      //                       );
-      //                     }else{
-      //                       let data = new FormData();
-      //                       data.append("order_id", orderId);
-      //                       const res = await confirmPayment();
-      //                       if(res?.status == 200){
-      //                         confirmPaymentSheetPayment().then(() => {
-      //                           ShowToast("Order confirmed successfully");
-      //                           navigate('BookingSuccessfull')
-      //                         })
-      //                       }
-      //                     }
-      //                   })
-      //                   .catch(e => ShowToast('Something went wrong!')),
-      //             );
-      //           }
-      //           console.log(paymentIntent, '<-----Intent');
-      //         })
-      //         .catch(e =>
-      //           console.log(e?.response?.data, '<-----Intent creation'),
-      //         );
-      //     } else {
-      //       ShowToast('Something went wrong!');
-      //     }
-      //   })
-      //   .catch(e => {
-      //     ShowToast('Something went wrong!');
-      //     console.log(e.response.data.errors, 'error');
-      //   })
-      //   .finally(() => dispatch(setIsFetching(false)));
-      // console.log("Create Order Form Data --- ", formdata);
-      const orderRes = await createOrder(formdata);
-      // console.log("Order Result --- ", orderRes.status, orderRes);
-      if (orderRes.status == 200) {
-        const orderId = orderRes?.data?.data?.order_id;
-        setOrderUId(orderId);
-        const res = await createPaymentIntent(orderId);
-        console.log("Payment Intent --- ", res?.data);
-        if (res.status == 200) {
-          const paymentIntent = res?.data?.data?.paymentIntent;
-          const ephemeralKey = res?.data?.data?.ephemeralKey;
-          setIntentKey(paymentIntent);
-          console.log(paymentIntent, ephemeralKey);
-          const init = await initPaymentSheet({
-            merchantDisplayName: "JV",
-            returnURL: constants.STRIPE_RETURN_URL,
-            paymentIntentClientSecret: paymentIntent,
-            customerEphemeralKeySecret: ephemeralKey,
-          });
-          if (init.error) {
-            // ShowToast('Something went wrong!');
-            console.log("Payment Intent Error --- ", init.error);
-            return;
-          }
-          // ShowToast("Order Created")
+      // for (key in payload) {
+      //   formdata.append(key, payload[key]);
+      // }
+      // const orderRes = await createOrder(formdata);
+      // if (orderRes.status == 200) {
+      // const orderId = orderRes?.data?.data?.order_id;
+      // setOrderUId(orderId);
+      const res = await createPaymentIntent(orderUId);
+      console.log("Payment Intent --- ", res?.data);
+      if (res.status == 200) {
+        const paymentIntent = res?.data?.data?.paymentIntent;
+        const ephemeralKey = res?.data?.data?.ephemeralKey;
+        setIntentKey(paymentIntent);
+        console.log(paymentIntent, ephemeralKey);
+        const init = await initPaymentSheet({
+          merchantDisplayName: "JV",
+          returnURL: constants.STRIPE_RETURN_URL,
+          paymentIntentClientSecret: paymentIntent,
+          customerEphemeralKeySecret: ephemeralKey,
+        });
+        if (init.error) {
+          // ShowToast('Something went wrong!');
+          console.log("Payment Intent Error --- ", init.error);
+          return;
+        } else {
+          // ShowToast("Order Created");
         }
+        // }
       } else {
         ShowToast("Something went wrong!");
         goBack();

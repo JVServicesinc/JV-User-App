@@ -38,10 +38,10 @@ const App = () => {
       if (url) {
         const stripeHandled = await handleURLCallback(url);
         if (stripeHandled) {
-          console.log("Stripe URL -- ", url);
+          // console.log("Stripe URL -- ", url);
           // This was a Stripe URL - you can return or add extra handling here as you see fit
         } else {
-          console.log("Stripe URL Error -- ", url);
+          // console.log("Stripe URL Error -- ", url);
           // This was NOT a Stripe URL – handle as you normally would
         }
       }
@@ -52,7 +52,7 @@ const App = () => {
   useEffect(() => {
     const getUrlAsync = async () => {
       const initialUrl = await Linking.getInitialURL();
-      console.log("Initital URL --- ", initialUrl);
+      // console.log("Initital URL --- ", initialUrl);
       handleDeepLink(initialUrl);
     };
 
@@ -67,14 +67,14 @@ const App = () => {
 
   useEffect(() => {
     messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log("Notification caused app to open from background state:", remoteMessage.notification);
+      // console.log("Notification caused app to open from background state:", remoteMessage.notification);
     });
 
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
         if (remoteMessage) {
-          console.log("Notification caused app to open from quit state:", remoteMessage.notification);
+          // console.log("Notification caused app to open from quit state:", remoteMessage.notification);
         }
       });
   }, []);
@@ -92,7 +92,9 @@ const App = () => {
               })
             );
           })
-          .catch((error) => console.log("Current Address Error.", error));
+          .catch((error) => {
+            // console.log("Current Address Error.", error);
+          });
 
         Geocoder.from({
           latitude: coordinate.latitude,
@@ -127,7 +129,7 @@ const App = () => {
           }
         }
       } catch (error) {
-        console.log("Cart Fetch Error--->", error);
+        // console.log("Cart Fetch Error--->", error);
       }
     }
   };
@@ -137,9 +139,9 @@ const App = () => {
       const authStatus = await messaging().requestPermission();
       const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-      console.log("Authorization status:", authStatus);
+      // console.log("Authorization status:", authStatus);
       if (enabled) {
-        console.log("Authorization status:", authStatus);
+        // console.log("Authorization status:", authStatus);
         await messaging().registerDeviceForRemoteMessages();
         const token = await messaging().getToken();
         console.log(token, "FCM token");
@@ -149,16 +151,18 @@ const App = () => {
           .then((res) => {
             if (res?.data) {
               // Alert.alert('Token set!');
-              console.log(res?.data);
+              // console.log(res?.data);
             }
           })
-          .catch((e) =>
+          .catch(
+            (e) => {
+              // console.log("Error SetDeviceToken", e);
+            }
             // Alert.alert(e.toString())
-            console.log(e)
           );
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -186,7 +190,9 @@ const App = () => {
             channel
               .create()
               .then() //.then((res) => console.log("Channel res----->", res))
-              .catch((e) => console.log("Channel error res----->", e));
+              .catch((e) => {
+                // console.log("Channel error res----->", e);
+              });
           })
           .catch((error) => Alert.alert(error.toString()));
       } catch (error) {
@@ -214,7 +220,7 @@ const App = () => {
           }
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         // Alert.alert(error?.response?.data?.message?.toString());
         // dispatch(globalLogout())
       }

@@ -82,7 +82,7 @@ const ServiceDetails = ({ navigation, route }) => {
           }
         }
       } catch (error) {
-        console.log("Cart Fetch Error--->", error);
+        // console.log("Cart Fetch Error--->", error);
       }
     }
   };
@@ -95,11 +95,11 @@ const ServiceDetails = ({ navigation, route }) => {
         try {
           const res = await removeCartItem(cartData?.cart_id, itemId);
           if (res?.data) {
-            console.log(res?.data);
+            // console.log(res?.data);
             ShowToast("Service succesfully removed!");
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else {
         const updateCartData = new FormData();
@@ -113,7 +113,7 @@ const ServiceDetails = ({ navigation, route }) => {
             ShowToast("Service succesfully added!");
           }
         } catch (error) {
-          console.log(error?.response?.data);
+          // console.log(error?.response?.data);
         }
       }
       await fetchCartData(cartData?.cart_id);
@@ -130,9 +130,9 @@ const ServiceDetails = ({ navigation, route }) => {
 
           try {
             const response = await createCart(fromdata);
-            console.log("Error!", response?.data);
+            // console.log("Error!", response?.data);
             if (response?.data) {
-              console.log(response?.data);
+              // console.log(response?.data);
               cartId = response?.data?.cart_id;
               await fetchCartData(response?.data?.data?.cart_id);
             }
@@ -156,7 +156,7 @@ const ServiceDetails = ({ navigation, route }) => {
   const [imagesFullscreen, setImagesFullscreen] = useState(false);
   const [imagesVertical, setImagesVertical] = useState(false);
   // console.log('vv ', global.selectedServiceCategory);
-  console.log("ProductDetails------>", productDetails?.image_urls);
+  // console.log("ProductDetails------>", productDetails?.image_urls);
 
   useEffect(() => {
     if (isFocused && !_.isEmpty(itemDetails)) {

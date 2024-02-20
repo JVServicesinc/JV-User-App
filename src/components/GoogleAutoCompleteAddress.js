@@ -1,4 +1,4 @@
-import React, {useState, useEffect, memo} from 'react';
+import React, { useState, useEffect, memo } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -11,28 +11,27 @@ import {
   Keyboard,
   Image,
   StyleSheet,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import normalize from '../utils/helpers/normalize';
-import _ from 'lodash';
-import {TextInput} from 'react-native-gesture-handler';
-import axios from 'axios';
-import {Colors} from '../themes/Colors';
-import {Fonts} from '../themes/Fonts';
-import {Icons} from '../themes/Icons';
-import {getCurrentLocation} from '../utils/helpers/halper';
-import Geocoder from 'react-native-geocoding';
-import {goBack} from '../utils/helpers/RootNavigation';
-import {useDispatch} from 'react-redux';
-import {setUserCurrentPosition} from '../redux/reducer/UserReducer';
-import constants from '../utils/helpers/constants';
+} from "react-native";
+import PropTypes from "prop-types";
+import normalize from "../utils/helpers/normalize";
+import _ from "lodash";
+import { TextInput } from "react-native-gesture-handler";
+import axios from "axios";
+import { Colors } from "../themes/Colors";
+import { Fonts } from "../themes/Fonts";
+import { Icons } from "../themes/Icons";
+import { getCurrentLocation } from "../utils/helpers/halper";
+import Geocoder from "react-native-geocoding";
+import { goBack } from "../utils/helpers/RootNavigation";
+import { useDispatch } from "react-redux";
+import { setUserCurrentPosition } from "../redux/reducer/UserReducer";
+import constants from "../utils/helpers/constants";
 
-const {height, width} = Dimensions.get('window');
-const API_KEY =
-  Platform.OS === 'ios' ? constants.IOS_API_KEY : constants.ANDROID_API_KEY;
+const { height, width } = Dimensions.get("window");
+const API_KEY = Platform.OS === "ios" ? constants.IOS_API_KEY : constants.ANDROID_API_KEY;
 const GEO = Geocoder.init(API_KEY);
 
-const GoogleAutoCompleteAddress = props => {
+const GoogleAutoCompleteAddress = (props) => {
   const [currentLocation, setCurrentLocation] = useState({});
   const dispatch = useDispatch();
 
@@ -63,26 +62,24 @@ const GoogleAutoCompleteAddress = props => {
     if (status) {
       axios
         .request({
-          method: 'post',
+          method: "post",
           url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${API_KEY}&input=${key}`,
         })
-        .then(response => {
+        .then((response) => {
           // console.log('response -- ', response.data);
           setSearchResult(response.data.predictions);
         })
-        .catch(e => {
-          console.log('error -- ', e.response);
+        .catch((e) => {
+          // console.log('error -- ', e.response);
         });
     }
   }
 
   function findLatLongFromPlaceId(placeId, callBack = () => {}) {
     axios
-      .get(
-        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${API_KEY}&language=${'en'}&regions=us`,
-      )
+      .get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${API_KEY}&language=${"en"}&regions=us`)
       .then(
-        response => {
+        (response) => {
           var result = response.data;
 
           let c = result?.result?.geometry?.location;
@@ -95,28 +92,28 @@ const GoogleAutoCompleteAddress = props => {
           let d = result?.result?.address_components;
 
           callBack({
-            postal_code: getdetails(d, 'postal_code'),
-            city: getdetails(d, 'locality'),
-            dist: getdetails(d, 'administrative_area_level_3'),
-            state: getdetails(d, 'administrative_area_level_1'),
-            country: getdetails(d, 'country'),
+            postal_code: getdetails(d, "postal_code"),
+            city: getdetails(d, "locality"),
+            dist: getdetails(d, "administrative_area_level_3"),
+            state: getdetails(d, "administrative_area_level_1"),
+            country: getdetails(d, "country"),
             location: location,
           });
         },
-        error => {
-          console.log(error);
+        (error) => {
+          // console.log(error);
           callBack(false);
-        },
+        }
       );
   }
 
   function getdetails(arr, type) {
-    let p = arr.filter(itm => itm?.types[0] == type);
-    return !_.isEmpty(arr) ? p[0]?.long_name : '';
+    let p = arr.filter((itm) => itm?.types[0] == type);
+    return !_.isEmpty(arr) ? p[0]?.long_name : "";
   }
 
   function getCurrentloc() {
-    getCurrentLocation(res => {
+    getCurrentLocation((res) => {
       if (res !== false) {
         setCurrentLocation({
           latitude: res?.latitude,
@@ -133,16 +130,18 @@ const GoogleAutoCompleteAddress = props => {
   function getAddress(coordinate) {
     // console.log('coordinate -- ',coordinate);
     Geocoder.from(coordinate.latitude, coordinate.longitude)
-      .then(json => {
+      .then((json) => {
         onChangeText(json.results[0]?.formatted_address);
         dispatch(
           setUserCurrentPosition({
             location: coordinate,
             address: json.results[0]?.formatted_address,
-          }),
+          })
         );
       })
-      .catch(error => console.log('addressComponent error ', error));
+      .catch((error) => {
+        // console.log("addressComponent error ", error);
+      });
 
     Geocoder.from({
       latitude: coordinate.latitude,
@@ -161,24 +160,19 @@ const GoogleAutoCompleteAddress = props => {
     <View
       style={[
         {
-          alignSelf: 'center',
+          alignSelf: "center",
           marginTop: props?.marginTop ? props?.marginTop : normalize(25),
-          width: props?.width ? props?.width : '90%',
+          width: props?.width ? props?.width : "90%",
           margin: props?.margin ? props?.margin : normalize(6),
           backgroundColor: Colors.white,
           borderTopLeftRadius: normalize(30),
           borderTopRightRadius: normalize(30),
-          borderBottomLeftRadius:
-            !_.isEmpty(searchResult) && isFocus ? normalize(8) : normalize(30),
-          borderBottomRightRadius:
-            !_.isEmpty(searchResult) && isFocus ? normalize(8) : normalize(30),
+          borderBottomLeftRadius: !_.isEmpty(searchResult) && isFocus ? normalize(8) : normalize(30),
+          borderBottomRightRadius: !_.isEmpty(searchResult) && isFocus ? normalize(8) : normalize(30),
           color: Colors.black,
           fontSize: props?.fontSize ? props?.fontSize : normalize(13),
           fontFamily: Fonts.Poppins_Medium,
-          shadowColor:
-            Platform.OS == 'android'
-              ? 'rgba(0,0,0,0.5)'
-              : 'rgba(195, 195, 195, 0.9)',
+          shadowColor: Platform.OS == "android" ? "rgba(0,0,0,0.5)" : "rgba(195, 195, 195, 0.9)",
           shadowOffset: {
             width: 0,
             height: 2,
@@ -188,7 +182,8 @@ const GoogleAutoCompleteAddress = props => {
           elevation: 5,
         },
         props.style,
-      ]}>
+      ]}
+    >
       <View style={styles.searchContainer}>
         <Image source={Icons.Search} style={styles.searchImg} />
         <TextInput
@@ -196,15 +191,13 @@ const GoogleAutoCompleteAddress = props => {
           placeholder={props?.placeholder}
           style={styles.searchInput}
           value={props.value}
-          onChangeText={txt => onChangeText(txt)}
+          onChangeText={(txt) => onChangeText(txt)}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
         />
-        <TouchableOpacity
-          onPress={() => getCurrentloc()}
-          style={styles.my_location}>
+        <TouchableOpacity onPress={() => getCurrentloc()} style={styles.my_location}>
           <Image source={Icons.my_location} style={styles.my_locationImg} />
         </TouchableOpacity>
       </View>
@@ -213,7 +206,7 @@ const GoogleAutoCompleteAddress = props => {
         <FlatList
           data={searchResult}
           keyExtractor={(item, index) => index.toString()}
-          keyboardShouldPersistTaps={'always'}
+          keyboardShouldPersistTaps={"always"}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingHorizontal: normalize(5),
@@ -222,45 +215,39 @@ const GoogleAutoCompleteAddress = props => {
           style={{
             height: normalize(200),
           }}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <TouchableOpacity
                 style={{
-                  width: '100%',
+                  width: "100%",
                   height: normalize(40),
-                  borderTopColor: '#ccc',
+                  borderTopColor: "#ccc",
                   paddingHorizontal: normalize(5),
                   borderTopWidth: index == 0 ? normalize(0) : 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
                 onPress={() => {
                   onChangeText(item?.description);
-                  findLatLongFromPlaceId(item?.place_id, res => {
+                  findLatLongFromPlaceId(item?.place_id, (res) => {
                     onSubmit(res);
 
                     dispatch(
                       setUserCurrentPosition({
                         location: res?.location,
-                        address:
-                          res?.city +
-                          ', ' +
-                          res?.state +
-                          ' ' +
-                          res?.postal_code +
-                          ', ' +
-                          res?.country,
-                      }),
+                        address: res?.city + ", " + res?.state + " " + res?.postal_code + ", " + res?.country,
+                      })
                     );
                   });
                   setSearchResult([]);
                   setTimeout(() => {
                     Keyboard.dismiss();
                   }, 10);
-                }}>
+                }}
+              >
                 <View
                   style={{
-                    backgroundColor: '#ccc',
+                    backgroundColor: "#ccc",
                     height: normalize(6),
                     width: normalize(6),
                     borderRadius: normalize(10),
@@ -270,11 +257,12 @@ const GoogleAutoCompleteAddress = props => {
                 <Text
                   numberOfLines={2}
                   style={{
-                    color: 'rgba(0,0,0,0.8)',
+                    color: "rgba(0,0,0,0.8)",
                     fontSize: normalize(11),
                     fontFamily: Fonts.Poppins_Medium,
-                    width: '95%',
-                  }}>
+                    width: "95%",
+                  }}
+                >
                   {item.description}
                 </Text>
               </TouchableOpacity>
@@ -301,11 +289,11 @@ GoogleAutoCompleteAddress.propTypes = {
 };
 
 GoogleAutoCompleteAddress.defaultProps = {
-  value: '',
-  onChangeText: '',
+  value: "",
+  onChangeText: "",
   inputHeight: normalize(48),
-  placeholderTextColor: 'grey',
-  placeholder: 'Provide the City or Zip',
+  placeholderTextColor: "grey",
+  placeholder: "Provide the City or Zip",
   isLeftOptions: false,
   isRightOptions: false,
 };
@@ -313,22 +301,22 @@ GoogleAutoCompleteAddress.defaultProps = {
 const styles = StyleSheet.create({
   searchContainer: {
     height: normalize(45),
-    flexDirection: 'row',
+    flexDirection: "row",
     borderColor: Colors.grey_goose,
     borderWidth: normalize(1),
     borderRadius: normalize(30),
-    alignItems: 'center',
-    overflow: 'hidden',
+    alignItems: "center",
+    overflow: "hidden",
   },
   searchImg: {
-    width: '10%',
+    width: "10%",
     height: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
     marginLeft: normalize(12),
   },
   searchInput: {
-    height: '100%',
-    width: '65%',
+    height: "100%",
+    width: "65%",
     fontFamily: Fonts.Roboto_Regular,
     fontSize: normalize(15),
     color: Colors.black,
@@ -336,15 +324,15 @@ const styles = StyleSheet.create({
   },
   my_location: {
     backgroundColor: Colors.rangoon_green,
-    height: '100%',
-    width: '25%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "100%",
+    width: "25%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   my_locationImg: {
     width: normalize(20),
     height: normalize(20),
-    resizeMode: 'contain',
+    resizeMode: "contain",
     marginRight: normalize(12),
   },
 });

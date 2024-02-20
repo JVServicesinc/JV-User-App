@@ -96,7 +96,7 @@ export const LanguageSelector = () => {
       <SafeAreaView>
         <View style={styles.subContainer}>
           <View style={styles.imageContainer}>
-            <LottieView source={Icons.Language_Prefer} style={styles.lottieStyle} autoPlay={true} />
+            <LottieView source={Icons.language_prefer} style={styles.lottieStyle} autoPlay={true} />
             <View style={styles.logoContainer}>
               <Image source={Icons.Applogo} style={styles.logoImage} />
             </View>

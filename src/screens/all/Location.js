@@ -1,27 +1,19 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
-import React, {useState} from 'react';
-import Header from '../../components/Header';
-import {Colors} from '../../themes/Colors';
-import normalize from '../../utils/helpers/normalize';
-import {Icons} from '../../themes/Icons';
-import {Fonts} from '../../themes/Fonts';
-import GoogleAutoCompleteAddress from '../../components/GoogleAutoCompleteAddress';
+import { View, Text, StyleSheet, Image, SafeAreaView, TouchableWithoutFeedback, Keyboard } from "react-native";
+import React, { useState } from "react";
+import Header from "../../components/Header";
+import { Colors } from "../../themes/Colors";
+import normalize from "../../utils/helpers/normalize";
+import { Icons } from "../../themes/Icons";
+import { Fonts } from "../../themes/Fonts";
+import GoogleAutoCompleteAddress from "../../components/GoogleAutoCompleteAddress";
 
 const Location = () => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <Header title={'Location'} />
+        <Header title={"Location"} />
       </View>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.main}>
@@ -31,16 +23,16 @@ const Location = () => {
 
           <GoogleAutoCompleteAddress
             value={search}
-            onChangeText={txt => {
+            onChangeText={(txt) => {
               setSearch(txt);
             }}
-            placeholder={'Other location search'}
+            placeholder={"Other location search"}
             placeholderTextColor={Colors.grey_cloud}
-            onSubmit={adr => {
-              console.log('---->>> ', adr);
+            onSubmit={(adr) => {
+              // console.log('---->>> ', adr);
             }}
             style={{
-              width: '90%',
+              width: "90%",
             }}
           />
         </View>
@@ -61,11 +53,11 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     // paddingTop: Platform.OS == 'ios' ? normalize(120) : normalize(125),
   },
   locationImg: {
-    resizeMode: 'contain',
+    resizeMode: "contain",
     height: normalize(65),
     width: normalize(65),
   },

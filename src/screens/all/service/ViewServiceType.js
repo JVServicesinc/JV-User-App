@@ -42,13 +42,13 @@ const ViewServiceType = ({ navigation, route }) => {
         if (res.status === 200) {
           const cartData = res?.data?.data;
           if (cartData) {
-            console.log("Set Card Data --- ", cartData);
+            // console.log("Set Card Data --- ", cartData);
             dispatch(setCartData(cartData));
             dispatch(setCartId(cartId));
           }
         }
       } catch (error) {
-        console.log("Cart Fetch Error--->", error);
+        // console.log("Cart Fetch Error--->", error);
       }
     }
   };
@@ -62,11 +62,11 @@ const ViewServiceType = ({ navigation, route }) => {
         try {
           const res = await removeCartItem(cartData?.cart_id, itemId);
           if (res?.data) {
-            console.log(res?.data);
+            // console.log(res?.data);
             ShowToast("Service succesfully removed!");
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else {
         const updateCartData = new FormData();
@@ -80,7 +80,7 @@ const ViewServiceType = ({ navigation, route }) => {
             ShowToast("Service succesfully added!");
           }
         } catch (error) {
-          console.log(error?.response?.data);
+          // console.log(error?.response?.data);
         }
       }
       await fetchCartData(cartData?.cart_id);
@@ -98,12 +98,12 @@ const ViewServiceType = ({ navigation, route }) => {
         try {
           const response = await createCart(fromdata);
           if (response?.data) {
-            console.log(response?.data);
+            // console.log(response?.data);
             await fetchCartData(response?.data?.data?.cart_id);
             ShowToast("Cart created!");
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
     }

@@ -25,10 +25,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { getCurrentLocation } from "../../../utils/helpers/halper";
 import constants from "../../../utils/helpers/constants";
 const MAP_PLATFROM_TYPE = Platform.OS === "android" ? "terrain" : "standard";
-import {
-  SOCKET_ACTIONS,
-  SocketService,
-} from "../../../utils/helpers/SocketService";
+import { SOCKET_ACTIONS, SocketService } from "../../../utils/helpers/SocketService";
 
 const { width, height } = Dimensions.get("window");
 const SIZES = {
@@ -64,15 +61,13 @@ const ServiceDayInside = ({ navigation }) => {
       name: "Joan Perkins",
       rate: "4.0",
       time: "1 day ago",
-      comment:
-        "Jim has done a fabulous job, it took exactly the same time as mentioned and he came on time to our doorstep.",
+      comment: "Jim has done a fabulous job, it took exactly the same time as mentioned and he came on time to our doorstep.",
     },
     {
       name: "Franky K",
       rate: "4.0",
       time: "2 day ago",
-      comment:
-        "Jim has done a fabulous job, it took exactly the same time as mentioned and he came on time to our doorstep.",
+      comment: "Jim has done a fabulous job, it took exactly the same time as mentioned and he came on time to our doorstep.",
     },
   ];
 
@@ -245,11 +240,7 @@ const ServiceDayInside = ({ navigation }) => {
             <MapViewDirections
               origin={fromLocation}
               destination={toLocation}
-              apikey={
-                Platform.OS === "ios"
-                  ? constants.IOS_API_KEY
-                  : constants.ANDROID_API_KEY
-              }
+              apikey={Platform.OS === "ios" ? constants.IOS_API_KEY : constants.ANDROID_API_KEY}
               strokeWidth={4}
               strokeColor={"#5E17EB"}
               optimizeWaypoints={false}
@@ -329,7 +320,7 @@ const ServiceDayInside = ({ navigation }) => {
         zoom: 18,
       });
     } catch (error) {
-      console.log("error --- ", error);
+      // console.log("error --- ", error);
     }
   }
 
@@ -361,7 +352,7 @@ const ServiceDayInside = ({ navigation }) => {
         [SOCKET_ACTIONS.RECONNECTATTEMPT]: () => {},
         [SOCKET_ACTIONS.ERROR]: () => {},
         [SOCKET_ACTIONS.AUTORESPONSE]: () => {
-          console.log("Received Socket Auto Response -- ", data);
+          // console.log("Received Socket Auto Response -- ", data);
 
           const userLocation = { latitude: 17.43748, longitude: 78.4487 };
 
@@ -384,7 +375,7 @@ const ServiceDayInside = ({ navigation }) => {
       action[socketAction] ? action[socketAction]() : action["default"]();
     };
 
-    console.log("Socket Service -- ", socketSetvice);
+    // console.log("Socket Service -- ", socketSetvice);
     socketSetvice.connect(trackSocketActions);
 
     return () => {
@@ -404,11 +395,7 @@ const ServiceDayInside = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.bc}>
           <Image source={Icons.BackArrow} style={styles.bi} />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => getMyCurrentLocation()}
-          onLongPress={() => setIsTracking(true)}
-          style={styles.bc1}
-        >
+        <TouchableOpacity onPress={() => getMyCurrentLocation()} onLongPress={() => setIsTracking(true)} style={styles.bc1}>
           <Image source={Icons.gps} style={styles.gps} />
         </TouchableOpacity>
       </View>
@@ -431,10 +418,7 @@ const ServiceDayInside = ({ navigation }) => {
                   <Text style={styles.rt}>{" 4.8 (27)"}</Text>
                 </View>
 
-                <TouchableOpacity
-                  onPress={() => setIsVisibleReview(true)}
-                  style={styles.vd}
-                >
+                <TouchableOpacity onPress={() => setIsVisibleReview(true)} style={styles.vd}>
                   <Text style={styles.vat}>{"view details"}</Text>
                   <Image style={styles.vrs} source={Icons.right_side} />
                 </TouchableOpacity>
@@ -473,17 +457,10 @@ const ServiceDayInside = ({ navigation }) => {
             </View>
           </View>
 
-          <View
-            style={[
-              styles.udc,
-              { marginTop: 0, paddingVertical: normalize(10) },
-            ]}
-          >
+          <View style={[styles.udc, { marginTop: 0, paddingVertical: normalize(10) }]}>
             <View>
               <Text style={styles.otp}>OTP</Text>
-              <Text style={styles.otpd}>
-                {"share with service provider\nto start service "}
-              </Text>
+              <Text style={styles.otpd}>{"share with service provider\nto start service "}</Text>
             </View>
             <Text style={styles.otpt}>4564</Text>
           </View>
@@ -491,9 +468,7 @@ const ServiceDayInside = ({ navigation }) => {
           <View style={styles.sc}>
             <Image source={Images.ac_service} style={styles.si} />
             <View>
-              <Text style={[styles.otpt, { fontSize: normalize(12) }]}>
-                AC Service
-              </Text>
+              <Text style={[styles.otpt, { fontSize: normalize(12) }]}>AC Service</Text>
               <Text style={styles.st}>{"• 1 hr\n• Includes dummy info"}</Text>
             </View>
           </View>
@@ -527,9 +502,7 @@ const ServiceDayInside = ({ navigation }) => {
                   <Text style={styles.ut}>Jim Carrey</Text>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Image style={styles.star} source={Icons.star} />
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
                       <Text style={styles.ustt}>{" 4.8 (27) "}</Text>
                       <Image source={Icons.tickmark} style={styles.tmark} />
                       <Text style={styles.ustt}>{" 38 jobs completed"}</Text>
@@ -582,20 +555,13 @@ const ServiceDayInside = ({ navigation }) => {
                           {[1, 2, 3, 4, 5].map((i, index) => {
                             return (
                               <Image
-                                source={
-                                  i > parseInt(item.rate)
-                                    ? Icons.start2
-                                    : Icons.star
-                                }
+                                source={i > parseInt(item.rate) ? Icons.start2 : Icons.star}
                                 style={{
                                   marginRight: normalize(5),
                                   height: normalize(12),
                                   width: normalize(12),
                                   resizeMode: "contain",
-                                  tintColor:
-                                    i > parseInt(item.rate)
-                                      ? undefined
-                                      : "#F5C443",
+                                  tintColor: i > parseInt(item.rate) ? undefined : "#F5C443",
                                 }}
                               />
                             );

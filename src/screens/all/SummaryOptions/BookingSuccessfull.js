@@ -20,14 +20,28 @@ import { Fonts } from "../../../themes/Fonts";
 import { Icons } from "../../../themes/Icons";
 import Picker from "../../../components/Picker";
 import BookingItemSkeleton from "./components/BookingItemSkeleton";
+import { setCartData } from "../../../redux/reducer/GlobalSlice";
+import { useDispatch } from "react-redux";
+
 const { width, height } = Dimensions.get("screen");
 
 const BookingSuccessfull = ({ navigation, route }) => {
   const [isVisible1, setIsVisible1] = useState(false);
   const { cartData, isFetching } = useSelector((state) => state.GlobalReducer);
+  const dispatch = useDispatch();
   const orderId = route?.params?.orderId;
 
-  console.log(cartData, "BookingSuccessful");
+  // console.log(cartData, "BookingSuccessful");
+
+  const onCloseClicked = () => {
+    dispatch(setCartData({}));
+    navigation.navigate("Home");
+  };
+
+  const onViewBookingClicked = () => {
+    dispatch(setCartData({}));
+    setIsVisible1(true);
+  };
 
   function BookingDelayed() {
     return (
@@ -87,7 +101,7 @@ const BookingSuccessfull = ({ navigation, route }) => {
       <StatusBar barStyle={"dark-content"} backgroundColor={Colors.white} />
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("Home")}
+        onPress={onCloseClicked}
         style={{
           height: normalize(30),
           width: normalize(30),
@@ -150,26 +164,24 @@ const BookingSuccessfull = ({ navigation, route }) => {
           contentContainerStyle={{ width: "100%" }}
           style={{ width: "90%" }}
           renderItem={({ item }) => (
-            console.log("Item --- ", item),
-            (
-              <View style={styles.card}>
-                <Image
-                  source={{ uri: item.image_url }}
-                  style={[styles.img, { width: "30%", borderRadius: Dimensions.get("window").width * 0.02 }]}
-                  resizeMode={"cover"}
-                />
-                <View style={{ width: "65%" }}>
-                  <Text style={styles.heading11}>• {item.service_name}</Text>
-                  <Text style={styles.subtest12}>• {item.service_duration} hrs</Text>
-                  <Text style={styles.subtest12}>• Includes dummy info test description long</Text>
-                </View>
+            // console.log("Item --- ", item),
+            <View style={styles.card}>
+              <Image
+                source={{ uri: item.image_url }}
+                style={[styles.img, { width: "30%", borderRadius: Dimensions.get("window").width * 0.02 }]}
+                resizeMode={"cover"}
+              />
+              <View style={{ width: "65%" }}>
+                <Text style={styles.heading11}>• {item.service_name}</Text>
+                <Text style={styles.subtest12}>• {item.service_duration} hrs</Text>
+                <Text style={styles.subtest12}>• Includes dummy info test description long</Text>
               </View>
-            )
+            </View>
           )}
         />
       </View>
       <TouchableOpacity
-        onPress={() => setIsVisible1(true)}
+        onPress={onViewBookingClicked}
         style={{
           backgroundColor: "black",
           height: normalize(42),

@@ -53,8 +53,8 @@ const ProductDetails = ({ navigation, route }) => {
 
   const status = cartData?.items?.some((itm) => itm?.product_id === itemDetails?.id);
 
-  console.log(itemDetails, "------------", cartData);
-  console.log(status);
+  // console.log(itemDetails, "------------", cartData);
+  // console.log(status);
 
   const fetchCartData = async (cartId) => {
     if (cartId) {
@@ -68,7 +68,7 @@ const ProductDetails = ({ navigation, route }) => {
           }
         }
       } catch (error) {
-        console.log("Cart Fetch Error--->", error);
+        // console.log("Cart Fetch Error--->", error);
       }
     }
   };
@@ -189,7 +189,7 @@ const ProductDetails = ({ navigation, route }) => {
             ShowToast("Service succesfully removed!");
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       } else {
         try {
@@ -203,7 +203,7 @@ const ProductDetails = ({ navigation, route }) => {
             ShowToast("Service succesfully added!");
           }
         } catch (error) {
-          console.log(error?.response?.data);
+          // console.log(error?.response?.data);
         }
       }
       await fetchCartData(cartData?.cart_id);
@@ -220,14 +220,14 @@ const ProductDetails = ({ navigation, route }) => {
 
           try {
             const response = await createCart(fromdata);
-            console.log("Error!", response?.data);
+            // console.log("Error!", response?.data);
             if (response?.data) {
-              console.log(response?.data);
+              // console.log(response?.data);
               cartId = response?.data?.cart_id;
               await fetchCartData(response?.data?.data?.cart_id);
             }
           } catch (error) {
-            console.log(error);
+            // console.log(error);
           }
         }
       });
