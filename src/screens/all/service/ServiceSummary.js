@@ -87,7 +87,7 @@ const ServiceSummary = ({ navigation }) => {
   useEffect(() => {
     isInternetConnected()
       .then(() => {
-        dispatch(getAllAddressRequest());
+        // dispatch(getAllAddressRequest());
       })
       .catch((err) => {
         showErrorAlert(t("no_internet"));
@@ -153,7 +153,7 @@ const ServiceSummary = ({ navigation }) => {
           paddingHorizontal: normalize(15),
         }}
       >
-        <Header title={"Summary"} />
+        <Header title={"Summary"} hideOrders={true} />
       </View>
       {!_.isEmpty(cartData?.items || []) ? (
         <ScrollView

@@ -160,6 +160,11 @@ const PaymentOption = ({ navigation, route }) => {
     initPayment();
   }, []);
 
+  const onBackPress = () => {
+    console.log("On Back Clicked ---- ");
+    navigation.navigate("ServiceSummary");
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -174,7 +179,7 @@ const PaymentOption = ({ navigation, route }) => {
           paddingHorizontal: normalize(15),
         }}
       >
-        <Header title={"Payment Option"} disableRightIcon={true} onPress={() => navigate("ServiceSummary")} />
+        <Header title={"Payment Option"} goBack={false} hideOrders={true} onPress={onBackPress} />
       </View>
 
       <View>

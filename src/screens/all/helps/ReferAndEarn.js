@@ -13,11 +13,11 @@ const ReferAndEarn = () => {
       title: "User",
       subTitle: "profile can explore & book\nservices in a min",
     },
-    {
-      icon: Icons.user16,
-      title: "Freelancer",
-      subTitle: "profile can explore & book\nservices in a min",
-    },
+    // {
+    //   icon: Icons.user16,
+    //   title: "Freelancer",
+    //   subTitle: "profile can explore & book\nservices in a min",
+    // },
     {
       icon: Icons.user16,
       title: "Service Provider",

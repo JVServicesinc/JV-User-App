@@ -40,7 +40,7 @@ const BookingSuccessfull = ({ navigation, route }) => {
 
   const onViewBookingClicked = () => {
     dispatch(setCartData({}));
-    setIsVisible1(true);
+    navigation.navigate("BookingTopTab");
   };
 
   function BookingDelayed() {
