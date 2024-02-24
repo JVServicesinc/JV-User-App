@@ -68,7 +68,7 @@ const ServiceSummary = ({ navigation }) => {
     selectedCartItemId: "",
   });
 
-  // console.log("Cart Data --- ", cartData);
+  console.log("Cart Data --- ", cartData.cart_id, cartData.items);
 
   const fetchCart = async () => {
     try {
@@ -84,15 +84,15 @@ const ServiceSummary = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    isInternetConnected()
-      .then(() => {
-        // dispatch(getAllAddressRequest());
-      })
-      .catch((err) => {
-        showErrorAlert(t("no_internet"));
-      });
-  }, [isFocused]);
+  // useEffect(() => {
+  //   isInternetConnected()
+  //     .then(() => {
+  //       // dispatch(getAllAddressRequest());
+  //     })
+  //     .catch((err) => {
+  //       showErrorAlert(t("no_internet"));
+  //     });
+  // }, [isFocused]);
 
   // items
   const DATA = [
@@ -139,8 +139,13 @@ const ServiceSummary = ({ navigation }) => {
       value: `$${(+cartData?.taxes?.qst || 0).toFixed(2)}`,
     },
     {
+      title: "Convenience Fee",
+      value: `$${(+cartData?.convenience_fee || 0).toFixed(2)}`,
+    },
+
+    {
       title: "Total",
-      value: `$${(+cartData?.subtotal + cartData?.taxes?.gst + cartData?.taxes?.qst).toFixed(2)}`,
+      value: `$${(+cartData?.total || 0).toFixed(2)}`,
     },
   ];
 

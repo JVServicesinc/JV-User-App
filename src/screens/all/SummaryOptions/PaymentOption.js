@@ -27,7 +27,7 @@ const PaymentOption = ({ navigation, route }) => {
   // const [orderUId, setOrderUId] = useState();
   const DATA = [
     {
-      title: "Debit & Credit Cards",
+      title: "Credit/Debit Cards",
       image: Icons.card,
       key: "cards",
     },
@@ -81,7 +81,7 @@ const PaymentOption = ({ navigation, route }) => {
       if (orderConfRes?.status == 200) {
         // dispatch(setCartData({}));
         dispatch(setIsFetching(false));
-        replace("BookingSuccessfull", { orderId: orderUId });
+        replace("BookingSuccessfull", { orderId: orderUId, orderData: orderConfRes?.data });
       }
     } catch (error) {
       console.log(error);

@@ -42,9 +42,11 @@ import {
 import Modal from "react-native-modal";
 import { useTranslation } from "react-i18next";
 import LottieView from "lottie-react-native";
-import { setWarningShownStatus } from "../../redux/reducer/GlobalSlice";
+import { setWarningShownStatus, setCartData, setCartId, setIsFetching } from "../../redux/reducer/GlobalSlice";
 import { navigate } from "../../utils/helpers/RootNavigation";
-import { getCartData } from "../../services/Endpoints";
+import { getCartData, updateCart, removeCartItem } from "../../services/Endpoints";
+import { getCurrentLocation } from "../../utils/helpers/halper";
+
 // Global
 global.selectedServiceCategory = {};
 global.selectedStoreCategory = {};
@@ -302,6 +304,84 @@ const Home = () => {
     );
   }
 
+  const fetchCartData = async (cartId) => {
+    if (cartId) {
+      try {
+        const res = await getCartData(cartId);
+        if (res.status === 200) {
+          const cartData = res?.data?.data;
+          if (cartData) {
+            console.log("Set Card Data --- ", cartData);
+            dispatch(setCartData(cartData));
+            dispatch(setCartId(cartId));
+          }
+        }
+      } catch (error) {
+        console.log("Cart Fetch Error--->", error);
+      }
+    }
+  };
+
+  const createOrUpdateCart = async (status, serviceItemData) => {
+    dispatch(setIsFetching(true));
+    if (cartData?.cart_id) {
+      if (status) {
+        const filteredItem = cartData?.items?.filter((item) => item?.service_id === serviceItemData?.id)[0];
+        const itemId = filteredItem?.id;
+        try {
+          const res = await removeCartItem(cartData?.cart_id, itemId);
+          dispatch(setIsFetching(false));
+          if (res?.data) {
+            // console.log("Cart Id 2222 ", res?.data);
+            ShowToast("Service succesfully removed!");
+          }
+        } catch (error) {
+          // console.log("Service Remove Error -- ", error);
+        }
+      } else {
+        const updateCartData = new FormData();
+        updateCartData.append("item_type", "service");
+        updateCartData.append("service_id", serviceItemData?.id);
+        updateCartData.append("qty", 1);
+        updateCartData.append("unit_price", serviceItemData?.price);
+        try {
+          const res = await updateCart(updateCartData, cartData?.cart_id);
+          dispatch(setIsFetching(false));
+          if (res?.data) {
+            // console.log("Service Sucess -- ", ServiceReducer.isMostBookedLoading);
+            ShowToast("Service succesfully added!");
+          }
+        } catch (error) {
+          // console.log("Service Error -- ", error);
+        }
+      }
+      await fetchCartData(cartData?.cart_id);
+    } else {
+      const res = await getCurrentLocation();
+      if (res?.longitude !== 0 && res?.latitude !== 0) {
+        let fromdata = new FormData();
+        fromdata.append("customer_lng", "" + parseFloat(res?.longitude).toFixed(4));
+        fromdata.append("customer_lat", "" + parseFloat(res?.latitude).toFixed(4));
+        fromdata.append("item_type", "service");
+        fromdata.append("service_id", serviceItemData?.id);
+        fromdata.append("qty", 1);
+        fromdata.append("unit_price", serviceItemData?.price);
+
+        try {
+          const response = await createCart(fromdata);
+          dispatch(setIsFetching(false));
+          if (response?.data) {
+            // console.log(response?.data);
+            await fetchCartData(response?.data?.data?.cart_id);
+            ShowToast("Cart created!");
+          }
+        } catch (error) {
+          // console.log("Cart Id 5555 ", error);
+        }
+      }
+    }
+  };
+
   function SingleHMList({ title, data, style }) {
     return (
       <>
@@ -320,13 +400,14 @@ const Home = () => {
           contentContainerStyle={{ paddingStart: normalize(18) }}
           renderItem={({ item, index }) => {
             // console.log("Most Booked Item --- ", item);
+            const status = cartData?.items?.some((itm) => itm?.service_id === item?.id);
             return (
-              <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
+              <Animatable.View animation={"fadeInRight"} duration={400} delay={index * 100}>
                 <TouchableOpacity
                   style={[
                     styles.card1,
                     {
-                      height: normalize(185),
+                      height: normalize(200),
                     },
                   ]}
                 >
@@ -390,6 +471,32 @@ const Home = () => {
                     >
                       ${item.price}
                     </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{
+                      width: normalize(26),
+                      height: normalize(26),
+                      alignSelf: "flex-end",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: Colors.black,
+                      borderRadius: Dimensions.get("screen").width * 0.5,
+                      justifyContent: "center",
+                      marginTop: normalize(6),
+                    }}
+                    onPress={async () => {
+                      createOrUpdateCart(status, item);
+                    }}
+                  >
+                    <Image
+                      style={{
+                        height: normalize(10),
+                        width: normalize(10),
+                        tintColor: "white",
+                      }}
+                      source={status ? Icons.tick : Icons.add}
+                    />
                   </TouchableOpacity>
                 </TouchableOpacity>
               </Animatable.View>
@@ -536,7 +643,7 @@ const Home = () => {
     let isValidImage = true;
 
     return (
-      <Animatable.View animation={"fadeInRight"} duration={400} delay={index * 50} style={[containerStyle]}>
+      <Animatable.View animation={"fadeInRight"} duration={400} delay={index * 100} style={[containerStyle]}>
         <TouchableOpacity
           style={styles.card}
           onPress={() => {

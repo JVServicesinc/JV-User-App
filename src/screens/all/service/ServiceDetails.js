@@ -695,6 +695,34 @@ const ServiceDetails = ({ navigation, route }) => {
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backContainer}>
         <Image source={Icons.BackArrow} style={styles.backImg} />
       </TouchableOpacity>
+      {status && (
+        <TouchableOpacity
+          style={{
+            width: "80%",
+            height: normalize(40),
+            alignSelf: "center",
+            flexDirection: "row",
+            alignItems: "center",
+            backgroundColor: Colors.black,
+            borderRadius: Dimensions.get("screen").width * 0.5,
+            justifyContent: "center",
+            marginTop: normalize(6),
+          }}
+          onPress={async () => {
+            navigation.navigate("ServiceSummary");
+          }}
+        >
+          <Text
+            style={{
+              color: "#fff",
+              fontFamily: Fonts.Poppins_Medium,
+              fontSize: normalize(12),
+            }}
+          >
+            Check Out
+          </Text>
+        </TouchableOpacity>
+      )}
       {/* {!_.isEmpty(selecedService) ? (
         <View
           style={{

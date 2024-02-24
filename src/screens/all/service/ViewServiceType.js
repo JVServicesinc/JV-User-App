@@ -66,7 +66,7 @@ const ViewServiceType = ({ navigation, route }) => {
             ShowToast("Service succesfully removed!");
           }
         } catch (error) {
-          // console.log(error);
+          // console.log("Service Remove Error -- ", error);
         }
       } else {
         const updateCartData = new FormData();
@@ -77,10 +77,11 @@ const ViewServiceType = ({ navigation, route }) => {
         try {
           const res = await updateCart(updateCartData, cartData?.cart_id);
           if (res?.data) {
+            // console.log("Service Sucess -- ", res?.data);
             ShowToast("Service succesfully added!");
           }
         } catch (error) {
-          // console.log(error?.response?.data);
+          // console.log("Service Error -- ", error?.response?.data);
         }
       }
       await fetchCartData(cartData?.cart_id);
@@ -114,7 +115,7 @@ const ViewServiceType = ({ navigation, route }) => {
     ({ item, index }) => {
       const status = cartData?.items?.some((itm) => itm?.service_id === item?.id);
       return (
-        <Animatable.View animation={"fadeInUp"} duration={800} delay={index * 300}>
+        <Animatable.View animation={"fadeInUp"} duration={400} delay={index * 100}>
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("ServiceDetails", {

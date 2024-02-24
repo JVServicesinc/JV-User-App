@@ -29,9 +29,9 @@ const BookingSuccessfull = ({ navigation, route }) => {
   const [isVisible1, setIsVisible1] = useState(false);
   const { cartData, isFetching } = useSelector((state) => state.GlobalReducer);
   const dispatch = useDispatch();
-  const orderId = route?.params?.orderId;
 
-  // console.log(cartData, "BookingSuccessful");
+  const orderData = route?.params?.orderData.data;
+  console.log("Data --- ", orderData);
 
   const onCloseClicked = () => {
     dispatch(setCartData({}));
@@ -39,8 +39,10 @@ const BookingSuccessfull = ({ navigation, route }) => {
   };
 
   const onViewBookingClicked = () => {
-    dispatch(setCartData({}));
-    navigation.navigate("BookingTopTab");
+    // dispatch(setCartData({}));
+    navigation.navigate("PaymentSuccessfull", {
+      orderData: orderData,
+    });
   };
 
   function BookingDelayed() {

@@ -1,59 +1,45 @@
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet,
-  StatusBar,
-  SafeAreaView,
-} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-import {Colors} from '../../../themes/Colors';
-import normalize from '../../../utils/helpers/normalize';
-import Header from '../../../components/Header';
-import {Fonts} from '../../../themes/Fonts';
-import * as Animatable from 'react-native-animatable';
-import {useIsFocused} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import showErrorAlert from '../../../utils/helpers/Toast';
-import isInternetConnected from '../../../utils/helpers/NetInfo';
-import {
-  addServiceWishlistRequest,
-  getServiceSubCategoryRequest,
-} from '../../../redux/reducer/ServiceReducer';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {Icons} from '../../../themes/Icons';
-import _ from 'lodash';
-import LottieView from 'lottie-react-native';
-import Loader from '../../../utils/helpers/Loader';
+import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, StatusBar, SafeAreaView } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { Colors } from "../../../themes/Colors";
+import normalize from "../../../utils/helpers/normalize";
+import Header from "../../../components/Header";
+import { Fonts } from "../../../themes/Fonts";
+import * as Animatable from "react-native-animatable";
+import { useIsFocused } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import showErrorAlert from "../../../utils/helpers/Toast";
+import isInternetConnected from "../../../utils/helpers/NetInfo";
+import { addServiceWishlistRequest, getServiceSubCategoryRequest } from "../../../redux/reducer/ServiceReducer";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { Icons } from "../../../themes/Icons";
+import _ from "lodash";
+import LottieView from "lottie-react-native";
+import Loader from "../../../utils/helpers/Loader";
 
-const ViewServiceCategory = ({navigation, route}) => {
+const ViewServiceCategory = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const ServiceReducer = useSelector(state => state.ServiceReducer);
-  const {cateId, title, id} = route?.params;
+  const ServiceReducer = useSelector((state) => state.ServiceReducer);
+  const { cateId, title, id } = route?.params;
   const [data, setData] = useState([]);
 
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
   const renderItem = useCallback(
-    ({item, index}) => {
+    ({ item, index }) => {
       return (
-        <Animatable.View
-          animation={'fadeInUp'}
-          duration={800}
-          delay={index * 300}>
+        <Animatable.View animation={"fadeInUp"} duration={400} delay={index * 100}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('ViewServiceType', {
+              navigation.navigate("ViewServiceType", {
                 cateId: cateId,
                 id: item?.id,
                 title: item?.name,
               });
             }} //ServiceDetails
-            style={styles.itemV}>
-            <Image source={{uri: item?.image_url}} style={styles.itemImg} />
+            style={styles.itemV}
+          >
+            <Image source={{ uri: item?.image_url }} style={styles.itemImg} />
 
             <Text numberOfLines={2} style={styles.itemText}>
               {item.name}
@@ -63,17 +49,15 @@ const ViewServiceCategory = ({navigation, route}) => {
               style={styles.heart}
               onPress={() => {
                 addWishlist(item);
-              }}>
-              <Image
-                source={item?.favourite ? Icons.heart_fill : Icons.heart}
-                style={styles.heartImg}
-              />
+              }}
+            >
+              <Image source={item?.favourite ? Icons.heart_fill : Icons.heart} style={styles.heartImg} />
             </TouchableOpacity>
           </TouchableOpacity>
         </Animatable.View>
       );
     },
-    [data],
+    [data]
   );
 
   function addWishlist(service) {
@@ -90,18 +74,18 @@ const ViewServiceCategory = ({navigation, route}) => {
   }
 
   useEffect(() => {
-    if (isFocused && id !== '' && cateId !== '') {
+    if (isFocused && id !== "" && cateId !== "") {
       isInternetConnected()
         .then(() => {
           dispatch(
             getServiceSubCategoryRequest({
               cateId: cateId,
               serId: id,
-            }),
+            })
           );
         })
-        .catch(err => {
-          showErrorAlert('Please Connect To Internet');
+        .catch((err) => {
+          showErrorAlert("Please Connect To Internet");
         });
     }
   }, [isFocused, id]);
@@ -113,22 +97,15 @@ const ViewServiceCategory = ({navigation, route}) => {
           return (
             <SkeletonPlaceholder.Item
               key={index}
-              width={'90%'}
+              width={"90%"}
               alignSelf="center"
               flexDirection="row"
               alignItems="center"
               marginTop={normalize(8)}
-              justifyContent="space-between">
-              <SkeletonPlaceholder.Item
-                width={normalize(138)}
-                height={normalize(138)}
-                borderRadius={8}
-              />
-              <SkeletonPlaceholder.Item
-                width={normalize(138)}
-                height={normalize(138)}
-                borderRadius={8}
-              />
+              justifyContent="space-between"
+            >
+              <SkeletonPlaceholder.Item width={normalize(138)} height={normalize(138)} borderRadius={8} />
+              <SkeletonPlaceholder.Item width={normalize(138)} height={normalize(138)} borderRadius={8} />
             </SkeletonPlaceholder.Item>
           );
         })}
@@ -137,11 +114,8 @@ const ViewServiceCategory = ({navigation, route}) => {
   }
 
   useEffect(() => {
-    if (
-      isFocused &&
-      !_.isEmpty(ServiceReducer?.getServiceSubCategoryRes?.data)
-    ) {
-      let temp = ServiceReducer?.getServiceSubCategoryRes?.data.map(pre => ({
+    if (isFocused && !_.isEmpty(ServiceReducer?.getServiceSubCategoryRes?.data)) {
+      let temp = ServiceReducer?.getServiceSubCategoryRes?.data.map((pre) => ({
         ...pre,
         favourite: false,
       }));
@@ -150,23 +124,24 @@ const ViewServiceCategory = ({navigation, route}) => {
   }, [isFocused, ServiceReducer]);
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: Colors.white}}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
+      <StatusBar barStyle={"dark-content"} backgroundColor={Colors.white} />
       <Loader
         visible={
-          ServiceReducer.status == 'Service/addServiceWishlistRequest'
+          ServiceReducer.status == "Service/addServiceWishlistRequest"
           // ServiceReducer.status == 'Service/getCartItemsRequest' ||
           // ServiceReducer.status == 'Service/removeCartItemsRequest'
         }
       />
       <View
         style={{
-          width: '100%',
+          width: "100%",
           paddingHorizontal: normalize(15),
-        }}>
-        <Header title={title} isShowOrders={true} type={'service'} />
+        }}
+      >
+        <Header title={title} isShowOrders={true} type={"service"} />
       </View>
-      {ServiceReducer.status == 'Service/getServiceSubCategoryRequest' ? (
+      {ServiceReducer.status == "Service/getServiceSubCategoryRequest" ? (
         <LoadingSkeleton />
       ) : (
         <FlatList
@@ -182,7 +157,7 @@ const ViewServiceCategory = ({navigation, route}) => {
           }}
           showsVerticalScrollIndicator={false}
           columnWrapperStyle={{
-            justifyContent: 'space-between',
+            justifyContent: "space-between",
             marginHorizontal: normalize(15),
             marginVertical: normalize(7),
           }}
@@ -190,24 +165,26 @@ const ViewServiceCategory = ({navigation, route}) => {
             <View
               style={{
                 marginTop: normalize(130),
-              }}>
+              }}
+            >
               <LottieView
-                source={require('../../../assets/json/empty_service.json')}
+                source={require("../../../assets/json/empty_service.json")}
                 autoPlay
                 loop
                 style={{
                   height: normalize(200),
                   width: normalize(200),
-                  alignSelf: 'center',
+                  alignSelf: "center",
                 }}
               />
               <Text
                 style={{
-                  color: '#068a8a',
+                  color: "#068a8a",
                   fontFamily: Fonts.Poppins_Medium,
                   fontSize: normalize(14),
-                  alignSelf: 'center',
-                }}>
+                  alignSelf: "center",
+                }}
+              >
                 Service Not Availble
               </Text>
             </View>
@@ -230,14 +207,14 @@ const styles = StyleSheet.create({
     padding: normalize(5),
   },
   itemImg: {
-    width: '100%',
+    width: "100%",
     height: normalize(115),
-    resizeMode: 'cover',
+    resizeMode: "cover",
     borderRadius: normalize(10),
   },
   itemText: {
     fontSize: normalize(14),
-    color: '#161616',
+    color: "#161616",
     fontFamily: Fonts.Poppins_Regular,
     marginTop: normalize(5),
     marginLeft: normalize(5),
@@ -245,17 +222,17 @@ const styles = StyleSheet.create({
   heart: {
     width: normalize(30),
     height: normalize(30),
-    position: 'absolute',
+    position: "absolute",
     margin: normalize(2),
     right: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: normalize(6),
     backgroundColor: Colors.white,
   },
   heartImg: {
-    resizeMode: 'contain',
+    resizeMode: "contain",
     height: normalize(18),
     width: normalize(18),
   },

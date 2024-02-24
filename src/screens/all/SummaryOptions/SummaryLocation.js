@@ -175,9 +175,9 @@ const SummaryLocation = ({ details, onPress }) => {
             keyExtractor={(item) => item.value}
             style={{
               width: "100%",
-              maxHeight: 200,
+              maxHeight: Dimensions.get("screen").height * 0.28,
               position: "absolute",
-              top: "43%",
+              top: "44%",
               alignSelf: "center",
               zIndex: 10,
               backgroundColor: "white",
