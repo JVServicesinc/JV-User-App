@@ -17,7 +17,7 @@ import constants from "../../../utils/helpers/constants";
 const PaymentOption = ({ navigation, route }) => {
   const orderUId = route?.params?.orderId;
 
-  // console.log(orderDetails?.address?.id, "Order details ----->");
+  console.log(route?.params, "Order details ----->");
 
   const [selectIndex, setSelectIndex] = useState(-1);
   const { cartData } = useSelector((state) => state.GlobalReducer);
@@ -124,6 +124,7 @@ const PaymentOption = ({ navigation, route }) => {
       // if (orderRes.status == 200) {
       // const orderId = orderRes?.data?.data?.order_id;
       // setOrderUId(orderId);
+      console.log("Order UID --- ", orderUId);
       const res = await createPaymentIntent(orderUId);
       console.log("Payment Intent --- ", res?.data);
       if (res.status == 200) {

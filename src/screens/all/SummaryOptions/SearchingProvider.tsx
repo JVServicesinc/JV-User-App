@@ -96,14 +96,14 @@ export const SearchingProvider: React.FC<Props> = ({ navigation, route }) => {
         cancel_url: "https://example.com/cancel",
       };
 
-      // console.log("Payload---->", payload);
+      console.log("Payload---->", payload);
 
       for (const key in payload) {
         formdata.append(key, payload[key]);
       }
       const orderRes = await createOrder(formdata);
       if (orderRes.status == 200) {
-        // console.log("Order Details --- ", orderRes);
+        console.log("Order Details --- ", orderRes);
         setTimeout(() => {
           setIsSearching(false);
           setTimeout(() => {

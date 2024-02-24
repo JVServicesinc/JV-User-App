@@ -375,16 +375,6 @@ const ServiceDetails = ({ navigation, route }) => {
                 {productDetails.name}
               </Text>
 
-              <Text
-                style={{
-                  fontFamily: Fonts.Poppins_Regular,
-                  fontSize: normalize(11),
-                  color: Colors.davy_grey,
-                }}
-              >
-                {productDetails.description}
-              </Text>
-
               <View
                 style={{
                   backgroundColor: "green",
@@ -574,25 +564,18 @@ const ServiceDetails = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </Modal>
-        {/* Prithick */}
+
         {!_.isEmpty(productDetails) && (
-          <View style={{ width: "90%", alignSelf: "center" }}>
+          <View style={{ width: "90%", alignSelf: "center", marginTop: "3%" }}>
             <Text
               style={{
                 fontFamily: Fonts.Poppins_Regular,
-                fontSize: 12,
+                fontSize: normalize(10),
                 color: Colors.black,
               }}
               numberOfLines={8}
             >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-              in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-              proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-              ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-              dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-              anim id est laborum.
+              {productDetails.description}
             </Text>
           </View>
         )}
@@ -719,22 +702,10 @@ const ServiceDetails = ({ navigation, route }) => {
               fontSize: normalize(12),
             }}
           >
-            Check Out
+            View Summary
           </Text>
         </TouchableOpacity>
       )}
-      {/* {!_.isEmpty(selecedService) ? (
-        <View
-          style={{
-            paddingVertical: normalize(10),
-          }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Summary')}
-            style={styles.touch2}>
-            <Text style={styles.title1}>View summary</Text>
-          </TouchableOpacity>
-        </View>
-      ) : null} */}
     </SafeAreaView>
   );
 };

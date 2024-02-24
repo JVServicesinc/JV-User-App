@@ -89,18 +89,25 @@ const SummaryLocation = ({ details, onPress }) => {
   }
 
   const renderItem = ({ item, index }) => (
-    <TouchableOpacity
-      onPress={() => setSelectedLocation(item.description)}
+    <View
+      key={index}
       style={{
+        width: "100%",
+        marginTop: 5,
         borderColor: Colors.grey_goose,
         borderWidth: 1,
         borderRadius: Dimensions.get("window").width * 0.02,
-        width: "100%",
-        marginTop: 5,
       }}
     >
-      <Text style={{ padding: 10, color: "black" }}>{item.description}</Text>
-    </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => setSelectedLocation(item.description)}
+        style={{
+          width: "100%",
+        }}
+      >
+        <Text style={{ padding: 10, color: "black" }}>{item.description}</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   return (

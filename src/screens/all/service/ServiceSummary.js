@@ -251,6 +251,7 @@ const ServiceSummary = ({ navigation }) => {
               renderItem={({ item, index }) => {
                 return (
                   <View
+                    key={index}
                     style={{
                       backgroundColor: "#F3F3F3",
                       height: normalize(158),

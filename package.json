@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "npx react-native run-android",
+    "android_apk_release": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd ..",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start --reset-cache",

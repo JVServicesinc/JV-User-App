@@ -228,20 +228,19 @@ export function* getServiceDetailsSaga(action) {
     contenttype: "application/json",
     accesstoken: item.token,
   };
-  console.log("GetServiceDetailsSaga --- ", action?.payload);
   try {
     let response = yield call(getApi, `services/${action?.payload}`, header);
 
     if (response?.status == 200) {
-      console.log("GetServiceDetailsSaga --- Response ", response?.data?.data);
+      // console.log("GetServiceDetailsSaga --- Response ", response?.data?.data);
       yield put(getServiceDetailsSuccess(response?.data?.data));
       //   showErrorAlert(response.data.message);
     } else {
-      console.log("GetServiceDetailsSaga --- Else ", response?.data);
+      // console.log("GetServiceDetailsSaga --- Else ", response?.data);
       yield put(getServiceDetailsFailure(response?.data));
     }
   } catch (error) {
-    console.log("GetServiceDetailsSaga --- Error ", error?.response?.data);
+    // console.log("GetServiceDetailsSaga --- Error ", error?.response?.data);
     yield put(getServiceDetailsFailure(error));
     // showErrorAlert(error?.response?.data?.response.status.msg);
   }

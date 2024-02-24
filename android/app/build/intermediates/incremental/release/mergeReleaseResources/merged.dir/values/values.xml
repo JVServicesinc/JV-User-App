@@ -2386,9 +2386,9 @@
     <string name="fallback_menu_item_share_link">Share link</string>
     <string name="fcm_fallback_notification_channel_label">Miscellaneous</string>
     <string name="gcm_defaultSenderId" translatable="false">554523297647</string>
-    <string name="google_api_key" translatable="false">AIzaSyDJzLxbnSawJABJlKpUpopVZGt9Adp08uQ</string>
+    <string name="google_api_key" translatable="false">AIzaSyB4maXIuzL2Sn_dQGzzLxuooeC45Z1M5io</string>
     <string name="google_app_id" translatable="false">1:554523297647:android:1475047a96adfeebcf8a9a</string>
-    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDJzLxbnSawJABJlKpUpopVZGt9Adp08uQ</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB4maXIuzL2Sn_dQGzzLxuooeC45Z1M5io</string>
     <string name="google_storage_bucket" translatable="false">jeveuxuser.appspot.com</string>
     <string description="Alternate text for the Google Pay logo-only button [CHAR_LIMIT=40]" name="gpay_logo_description">Google Pay</string>
     <string name="header_description" translatable="false">Heading</string>

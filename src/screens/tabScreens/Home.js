@@ -323,14 +323,14 @@ const Home = () => {
   };
 
   const createOrUpdateCart = async (status, serviceItemData) => {
-    dispatch(setIsFetching(true));
+    // dispatch(setIsFetching(true));
     if (cartData?.cart_id) {
       if (status) {
         const filteredItem = cartData?.items?.filter((item) => item?.service_id === serviceItemData?.id)[0];
         const itemId = filteredItem?.id;
         try {
           const res = await removeCartItem(cartData?.cart_id, itemId);
-          dispatch(setIsFetching(false));
+          // dispatch(setIsFetching(false));
           if (res?.data) {
             // console.log("Cart Id 2222 ", res?.data);
             ShowToast("Service succesfully removed!");
@@ -346,7 +346,7 @@ const Home = () => {
         updateCartData.append("unit_price", serviceItemData?.price);
         try {
           const res = await updateCart(updateCartData, cartData?.cart_id);
-          dispatch(setIsFetching(false));
+          // dispatch(setIsFetching(false));
           if (res?.data) {
             // console.log("Service Sucess -- ", ServiceReducer.isMostBookedLoading);
             ShowToast("Service succesfully added!");
@@ -369,7 +369,7 @@ const Home = () => {
 
         try {
           const response = await createCart(fromdata);
-          dispatch(setIsFetching(false));
+          // dispatch(setIsFetching(false));
           if (response?.data) {
             // console.log(response?.data);
             await fetchCartData(response?.data?.data?.cart_id);
@@ -475,9 +475,9 @@ const Home = () => {
 
                   <TouchableOpacity
                     style={{
-                      width: normalize(26),
+                      width: "80%",
                       height: normalize(26),
-                      alignSelf: "flex-end",
+                      alignSelf: "center",
                       flexDirection: "row",
                       alignItems: "center",
                       backgroundColor: Colors.black,
@@ -489,14 +489,25 @@ const Home = () => {
                       createOrUpdateCart(status, item);
                     }}
                   >
-                    <Image
+                    {!status && (
+                      <Image
+                        style={{
+                          height: normalize(10),
+                          width: normalize(10),
+                          tintColor: "white",
+                        }}
+                        source={Icons.add}
+                      />
+                    )}
+                    <Text
                       style={{
-                        height: normalize(10),
-                        width: normalize(10),
-                        tintColor: "white",
+                        color: "#fff",
+                        fontFamily: Fonts.Poppins_Medium,
+                        fontSize: normalize(12),
                       }}
-                      source={status ? Icons.tick : Icons.add}
-                    />
+                    >
+                      {status ? "Remove" : " Add"}
+                    </Text>
                   </TouchableOpacity>
                 </TouchableOpacity>
               </Animatable.View>
