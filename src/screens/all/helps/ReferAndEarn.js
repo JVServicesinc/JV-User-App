@@ -122,7 +122,7 @@ const ReferAndEarn = () => {
 
             {DATA.map((item, index) => {
               return (
-                <TouchableOpacity style={styles.itc}>
+                <TouchableOpacity key={index} style={styles.itc}>
                   <View style={styles.itpb}>
                     <Image source={item.icon} style={styles.itpi} />
                   </View>
@@ -138,7 +138,7 @@ const ReferAndEarn = () => {
             <View style={styles.v2}>
               {DATA2.map((item, index) => {
                 return (
-                  <TouchableOpacity disabled={true} style={styles.vcontainer}>
+                  <TouchableOpacity key={index} disabled={true} style={styles.vcontainer}>
                     <View style={styles.circle}>
                       <Image source={item.icon} style={styles.vimg} />
                     </View>

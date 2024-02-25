@@ -175,6 +175,7 @@ const ServiceSummary = ({ navigation }) => {
             {cartData?.items?.map((item, index) => {
               return (
                 <View
+                  key={index}
                   style={{
                     marginVertical: 4,
                     flexDirection: "row",
@@ -242,7 +243,6 @@ const ServiceSummary = ({ navigation }) => {
             <FlatList
               horizontal
               data={DATA}
-              keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
                 paddingHorizontal: normalize(10),
@@ -359,6 +359,7 @@ const ServiceSummary = ({ navigation }) => {
             {PaymentData.map((itme, index) => {
               return (
                 <View
+                  key={index}
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-between",

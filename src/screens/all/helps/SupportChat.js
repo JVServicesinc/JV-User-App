@@ -20,15 +20,15 @@ import { useSelector } from "react-redux";
 import { StreamChat } from "stream-chat";
 import constants from "../../../utils/helpers/constants";
 import moment from "moment";
+import { MessageHandler } from "./MessageHandler";
 
 const client = StreamChat.getInstance(constants.GETSTREAM_API_KEY);
 
 const SupportChat = ({ navigation }) => {
   const { userInfo } = useSelector((state) => state.UserReducer);
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const sendMessage = () => {
+  const sendMessage = (message) => {
     const channel = client.channel("messaging", {
       members: ["411", userInfo?.id?.toString()],
     });
@@ -39,7 +39,6 @@ const SupportChat = ({ navigation }) => {
       })
       .then(() => {
         // console.log("Send Message res----->", messageResponse);
-        setMessage("");
       })
       .catch((e) => {
         console.log("Send Message error res----->", e);
@@ -54,47 +53,46 @@ const SupportChat = ({ navigation }) => {
           name: userInfo?.full_name,
           image: "",
         };
-        console.log("Auth Info --- ", authInfo);
+        // console.log("Auth Info --- ", authInfo);
         client
           .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
           .then((res) => {
-            console.log("StreamChat Connected!", res);
+            console.log("StreamChat Connected!");
             const channel = client.channel("messaging", {
               members: ["411", userInfo?.id?.toString()],
             });
             channel
               .create()
               .then((res) => {
-                console.log("Channel res----->", res);
+                // console.log("Channel res----->", res);
                 channel
                   .query({ messages: { limit: 100 } })
                   .then(async (messageResponse) => {
                     setMessages(messageResponse.messages.reverse());
 
                     channel.on("message.new", (event) => {
-                      console.log("New message:", event.message, messages);
+                      // console.log("New message:", event.message, messages);
                       setMessages((prevValue) => [...prevValue.reverse(), event.message].reverse());
                     });
-
                     await channel.watch();
                   })
                   .catch((e) => {
-                    console.log("List Message error res----->", e);
+                    // console.log("List Message error res----->", e);
                   });
               })
               .catch((e) => {
-                console.log("Channel error res----->", e);
+                // console.log("Channel error res----->", e);
               });
           })
           .catch((error) => {
-            console.log("Error --- 000 ", error);
+            // console.log("Error --- 000 ", error);
           });
       } catch (error) {
-        console.log("Error --- 111 ", error);
+        // console.log("Error --- 111 ", error);
       }
     };
 
-    console.log("User Info --- ", userInfo);
+    // console.log("User Info --- ", userInfo);
     if (userInfo?.id) {
       connectGetStreamChat();
     }
@@ -152,65 +150,7 @@ const SupportChat = ({ navigation }) => {
               }}
             />
           </View>
-          <View
-            style={{
-              height: normalize(40),
-              width: "100%",
-              alignItems: "flex-start",
-              justifyContent: "center",
-              borderColor: "#DADADA",
-              borderWidth: normalize(1),
-              borderRadius: normalize(50),
-            }}
-          >
-            <View
-              style={{
-                height: "100%",
-                width: "100%",
-                paddingHorizontal: normalize(6),
-                flexDirection: "row",
-                justifyContent: "space-between",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <TextInput
-                style={{
-                  flex: 1,
-                  // paddingHorizontal: normalize(10),
-                  color: "black",
-                  fontFamily: Fonts.Poppins_Medium,
-                  fontSize: normalize(12),
-                }}
-                autoCorrect={false}
-                spellCheck={false}
-                value={message}
-                placeholder="Send Message"
-                placeholderTextColor={"#DADADA"}
-                onChangeText={(txt) => setMessage(txt)}
-              />
-              <TouchableOpacity
-                style={{
-                  height: normalize(35),
-                  width: normalize(35),
-                  borderRadius: normalize(40),
-                  backgroundColor: "black",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={sendMessage}
-              >
-                <Image
-                  source={Icons.sent}
-                  style={{
-                    height: normalize(16),
-                    width: normalize(16),
-                    resizeMode: "contain",
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
+          <MessageHandler sendMessage={sendMessage} />
         </KeyboardAvoidingView>
       </View>
     </SafeAreaView>

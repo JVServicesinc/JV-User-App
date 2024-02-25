@@ -1,13 +1,4 @@
-import {
-  Text,
-  View,
-  StatusBar,
-  Image,
-  TouchableOpacity,
-  SafeAreaView,
-  Modal,
-  Dimensions,
-} from "react-native";
+import { Text, View, StatusBar, Image, TouchableOpacity, SafeAreaView, Modal, Dimensions } from "react-native";
 import React, { useState } from "react";
 import Header from "../../../components/Header";
 import { Colors } from "../../../themes/Colors";
@@ -42,9 +33,7 @@ const Support = ({ navigation }) => {
         }}
       >
         <StatusBar backgroundColor={"#fff"} barStyle={"dark-content"} />
-
         <Header title={"Support"} />
-
         <Image
           source={Icons.headphone}
           style={{
@@ -71,6 +60,7 @@ const Support = ({ navigation }) => {
         {OPTIONS.map((item, index) => {
           return (
             <TouchableOpacity
+              key={index}
               onPress={() => {
                 if (index == 0) {
                   navigation.navigate("SupportChat");

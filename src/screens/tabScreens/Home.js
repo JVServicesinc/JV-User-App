@@ -100,7 +100,6 @@ const Home = () => {
         dispatch(getBannersRequest());
         dispatch(getMostBookedServicesRequest());
         dispatch(getFeaturedServicesRequest());
-        // dispatch(getAllServiceWishlistRequest());
       })
       .catch((err) => {
         showErrorAlert("Please Connect To Internet");
@@ -585,30 +584,9 @@ const Home = () => {
 
   function LoadingSliderSkeleton() {
     return (
-      <>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          style={{
-            marginVertical: normalize(15),
-          }}
-          horizontal
-        >
-          {[1, 2, 3].map(({ _, index }) => {
-            return (
-              <SkeletonPlaceholder key={index} borderRadius={8}>
-                <View
-                  style={{
-                    width: normalize(250),
-                    height: normalize(90),
-                    backgroundColor: "red",
-                    marginLeft: normalize(15),
-                  }}
-                />
-              </SkeletonPlaceholder>
-            );
-          })}
-        </ScrollView>
-      </>
+      <SkeletonPlaceholder borderRadius={4}>
+        <SkeletonPlaceholder.Item width={"90%"} height={normalize(100)} marginLeft={normalize(15)} />
+      </SkeletonPlaceholder>
     );
   }
 
@@ -791,15 +769,12 @@ const Home = () => {
                 style={{
                   backgroundColor: "white",
                   paddingBottom: normalize(5),
-                  paddingHorizontal: normalize(5),
                 }}
               >
                 {ServiceReducer.isCategoryLoading ? (
-                  <>
-                    {[1, 2, 3].map((item, index) => {
-                      return <LoadingSkeleton key={index} />;
-                    })}
-                  </>
+                  [1, 2, 3].map((item, index) => {
+                    return <LoadingSkeleton key={index} />;
+                  })
                 ) : (
                   <FlatList
                     data={ServiceReducer?.getAllServiceCateRes}
