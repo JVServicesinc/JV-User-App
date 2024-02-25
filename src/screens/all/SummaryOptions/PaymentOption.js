@@ -69,22 +69,26 @@ const PaymentOption = ({ navigation, route }) => {
           // }
           ShowToast(paymentSheet?.error?.localizedMessage || "Something went wrong!");
           return;
+        } else {
+          console.log("Payment Confirm --- ", paymentSheet);
         }
       }
       dispatch(setIsFetching(true));
+      const { paymentIntent, error } = await confirmPaymentSheetPayment();
+      console.log("Confirm PaymentSheet Payment --- ", paymentIntent, error);
       // console.log(orderUId);
       const data = new FormData();
       data.append("order_id", orderUId);
       const orderConfRes = await confirmStripePayment(data);
       ShowToast("Order successfully placed");
-      console.log("Order Placed --- ", orderConfRes);
+      // console.log("Order Placed --- ", orderConfRes);
       if (orderConfRes?.status == 200) {
         // dispatch(setCartData({}));
         dispatch(setIsFetching(false));
         replace("BookingSuccessfull", { orderId: orderUId, orderData: orderConfRes?.data });
       }
     } catch (error) {
-      console.log(error);
+      console.log("PaymentSheet Error -- ", error);
       dispatch(setIsFetching(false));
     }
   };
@@ -143,6 +147,7 @@ const PaymentOption = ({ navigation, route }) => {
           console.log("Payment Intent Error --- ", init.error);
           return;
         } else {
+          console.log("Init --- ", init);
           // ShowToast("Order Created");
         }
         // }

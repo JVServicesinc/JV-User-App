@@ -517,34 +517,6 @@ const Home = () => {
     );
   }
 
-  const cards = [
-    {
-      id: 0,
-      image: Images.Banner,
-      desc: "",
-    },
-    {
-      id: 1,
-      image: Images.Banner,
-      desc: "",
-    },
-    {
-      id: 2,
-      image: Images.Banner,
-      desc: "",
-    },
-    {
-      id: 3,
-      image: Images.Banner,
-      desc: "",
-    },
-    {
-      id: 4,
-      image: Images.Banner,
-      desc: "",
-    },
-  ];
-
   function LoadingSkeleton({ num }) {
     return (
       <>

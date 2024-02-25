@@ -3,6 +3,7 @@ import { Fonts } from "../../../themes/Fonts";
 import { Icons } from "../../../themes/Icons";
 import normalize from "../../../utils/helpers/normalize";
 import { useState } from "react";
+import showErrorAlert from "../../../utils/helpers/Toast";
 
 interface Props {
   sendMessage: (message: string) => void;
@@ -12,8 +13,12 @@ export const MessageHandler = ({ sendMessage }: Props) => {
   const [message, setMessage] = useState("");
 
   const pushMessage = () => {
-    sendMessage(message);
-    setMessage("");
+    if (message === "") {
+      showErrorAlert("Please Enter Message");
+    } else {
+      sendMessage(message);
+      setMessage("");
+    }
   };
 
   return (
@@ -41,7 +46,6 @@ export const MessageHandler = ({ sendMessage }: Props) => {
         <TextInput
           style={{
             flex: 1,
-            // paddingHorizontal: normalize(10),
             color: "black",
             fontFamily: Fonts.Poppins_Medium,
             fontSize: normalize(12),

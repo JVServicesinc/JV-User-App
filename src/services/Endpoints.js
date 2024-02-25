@@ -36,8 +36,8 @@ export const createPaymentIntent = (orderId) => {
   return axios.post(`orders/${orderId}/payment-intent`);
 };
 
-export const getServiceSlots = (serviceId, dayId) => {
-  return axios.get(`services/${serviceId}/slots/${dayId}`);
+export const getServiceSlots = (serviceId, dayId, date) => {
+  return axios.get(`services/${serviceId}/slots/${dayId}/${date}`);
 };
 
 export const updateServiceItemSlot = (cartId, cartItemId, data) => {

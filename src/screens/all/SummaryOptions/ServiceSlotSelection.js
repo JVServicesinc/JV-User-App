@@ -13,38 +13,7 @@ import { convertTo24HourFormat } from "../../../utils/helpers/time";
 import { ShowToast } from "../../../utils/helpers/Toast";
 import { setIsFetching } from "../../../redux/reducer/GlobalSlice";
 const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) => {
-  //   const WEEKDAYS = [
-  //     {
-  //       day: 'Mon',
-  //       id: 0,
-  //     },
-  //     {
-  //       day: 'Tue',
-  //       id: 1,
-  //     },
-  //     {
-  //       day: 'Wed',
-  //       id: 2,
-  //     },
-  //     {
-  //       day: 'Thu',
-  //       id: 3,
-  //     },
-  //     {
-  //       day: 'Fri',
-  //       id: 4,
-  //     },
-  //     {
-  //       day: 'Sat',
-  //       id: 5,
-  //     },
-  //     {
-  //       day: 'Sun',
-  //       id: 6,
-  //     },
-  //   ];
   const { cartData } = useSelector((state) => state.GlobalReducer);
-  const WEEKDAYS = useWeekDaysWithDate();
   const WEEKDAYSIDMAP = {
     Mon: 0,
     Tue: 1,
@@ -55,17 +24,13 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
     Sun: 6,
   };
 
-  const [details, setDetails] = useState({
-    selectDate: moment().format("ddd"),
-    selectTime: "",
-    isSelectDateTime: false,
-  });
   const [weeksInfo, setWeeksInfo] = useState([]);
   const [availableSlots, setAvailableSlots] = useState([]);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(moment(new Date()).format("ddd"));
+  const [selectedDay, setSelectedDay] = useState(moment(new Date()).add(1, "day").format("ddd"));
   const [selectedDate, setSelectedDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
   const [selectedSlot, setSelectedSlot] = useState();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -73,7 +38,7 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
     (async () => {
       setIsLoadingSlots(true);
       try {
-        const res = await getServiceSlots(serviceId, dayId);
+        const res = await getServiceSlots(serviceId, dayId, selectedDate);
         if (res?.status == 200) {
           setAvailableSlots(res?.data?.data);
         }
@@ -85,8 +50,8 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
   }, [selectedDay]);
 
   useEffect(() => {
-    const startDate = moment();
-    const endDate = moment().add(1, "weeks");
+    const startDate = moment().add(1, "day");
+    const endDate = moment().add(1, "day").add(1, "weeks");
     const dates = [];
     let currentDate = startDate;
 
@@ -115,7 +80,6 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
       data.append("weekday_number", dayId);
       data.append("timing", time);
       data.append("slot_date", selectedDate);
-      console.log("Form Data -- ", data);
       const res = await updateServiceItemSlot(cartId, cartItemId, data);
       if (res?.status == 200) {
         console.log(res?.data);

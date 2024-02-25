@@ -179,7 +179,6 @@ const SummaryLocation = ({ details, onPress }) => {
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.value}
             style={{
               width: "100%",
               maxHeight: Dimensions.get("screen").height * 0.28,

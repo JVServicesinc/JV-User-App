@@ -9,6 +9,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import Header from "../../../components/Header";
@@ -114,41 +115,47 @@ const SupportChat = ({ navigation }) => {
         <Header title={"Support Chat"} />
         <KeyboardAvoidingView style={{ width: "100%", height: "100%" }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
           <View style={{ width: "100%", height: "78%" }}>
-            <FlatList
-              inverted
-              data={messages}
-              style={{ width: "100%", height: "100%" }}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item, index }) => {
-                // console.log("Item --- ", item);
-                return (
-                  <View key={item.id} style={{ marginBottom: normalize(10) }}>
-                    <View
-                      style={{
-                        backgroundColor: "#F0F0F0",
-                        padding: normalize(10),
-                        width: "85%",
-                        borderRadius: normalize(8),
-                        alignSelf: item.userType == "user" ? "flex-end" : "flex-start",
-                      }}
-                    >
-                      <Text style={{ color: "#161616", fontFamily: Fonts.Poppins_Medium, fontSize: normalize(12) }}>{item.text}</Text>
+            {messages.length <= 0 ? (
+              <View style={{ width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                <ActivityIndicator color={"black"} size={"large"} />
+              </View>
+            ) : (
+              <FlatList
+                inverted
+                data={messages}
+                style={{ width: "100%", height: "100%" }}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item, index }) => {
+                  // console.log("Item --- ", item);
+                  return (
+                    <View key={item.id} style={{ marginBottom: normalize(10) }}>
+                      <View
+                        style={{
+                          backgroundColor: "#F0F0F0",
+                          padding: normalize(10),
+                          width: "85%",
+                          borderRadius: normalize(8),
+                          alignSelf: item.userType == "user" ? "flex-end" : "flex-start",
+                        }}
+                      >
+                        <Text style={{ color: "#161616", fontFamily: Fonts.Poppins_Medium, fontSize: normalize(12) }}>{item.text}</Text>
+                      </View>
+                      <Text
+                        style={{
+                          color: "#757575",
+                          fontFamily: Fonts.Poppins_Medium,
+                          fontSize: normalize(10.5),
+                          marginTop: normalize(5),
+                          alignSelf: item.userType == "user" ? "flex-end" : "flex-start",
+                        }}
+                      >
+                        {moment(item.created_at).format("DD MMM, YYYY HH:MM A")}
+                      </Text>
                     </View>
-                    <Text
-                      style={{
-                        color: "#757575",
-                        fontFamily: Fonts.Poppins_Medium,
-                        fontSize: normalize(10.5),
-                        marginTop: normalize(5),
-                        alignSelf: item.userType == "user" ? "flex-end" : "flex-start",
-                      }}
-                    >
-                      {moment(item.created_at).format("DD MMM, YYYY HH:MM A")}
-                    </Text>
-                  </View>
-                );
-              }}
-            />
+                  );
+                }}
+              />
+            )}
           </View>
           <MessageHandler sendMessage={sendMessage} />
         </KeyboardAvoidingView>
