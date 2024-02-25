@@ -13,6 +13,8 @@ const LanguageSlice = createSlice({
   reducers: {
     /* onStart */
     setLanguage(state, action) {
+      console.log("Set Language --- ", action.payload);
+
       state.isLanguageSelected = action.payload;
       state.status = action.type;
     },

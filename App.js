@@ -9,8 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserCurrentPosition } from "./src/redux/reducer/UserReducer";
 import { getCartData, getUserData, setDeviceToken } from "./src/services/Endpoints";
 import { globalLogout, setCartData, setCartId, setShowLocationDisabledModal, setUserData } from "./src/redux/reducer/GlobalSlice";
-import { StreamChat } from "stream-chat";
-import C from "./src/utils/helpers/constants";
 import Modal from "react-native-modal";
 import LottieView from "lottie-react-native";
 import { Icons } from "./src/themes/Icons";
@@ -24,46 +22,44 @@ import "intl-pluralrules";
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
-const client = StreamChat.getInstance(C.GETSTREAM_API_KEY);
 const App = () => {
   const { token } = useSelector((state) => state.AuthReducer);
-  const { userInfo } = useSelector((state) => state.UserReducer);
   const { showLocationDisabledModal, isFetching } = useSelector((state) => state.GlobalReducer);
 
   const dispatch = useDispatch();
-  const { handleURLCallback } = useStripe();
+  // const { handleURLCallback } = useStripe();
 
-  const handleDeepLink = useCallback(
-    async (url) => {
-      if (url) {
-        const stripeHandled = await handleURLCallback(url);
-        if (stripeHandled) {
-          // console.log("Stripe URL -- ", url);
-          // This was a Stripe URL - you can return or add extra handling here as you see fit
-        } else {
-          // console.log("Stripe URL Error -- ", url);
-          // This was NOT a Stripe URL – handle as you normally would
-        }
-      }
-    },
-    [handleURLCallback]
-  );
+  // const handleDeepLink = useCallback(
+  //   async (url) => {
+  //     if (url) {
+  //       const stripeHandled = await handleURLCallback(url);
+  //       if (stripeHandled) {
+  //         // console.log("Stripe URL -- ", url);
+  //         // This was a Stripe URL - you can return or add extra handling here as you see fit
+  //       } else {
+  //         // console.log("Stripe URL Error -- ", url);
+  //         // This was NOT a Stripe URL – handle as you normally would
+  //       }
+  //     }
+  //   },
+  //   [handleURLCallback]
+  // );
 
-  useEffect(() => {
-    const getUrlAsync = async () => {
-      const initialUrl = await Linking.getInitialURL();
-      // console.log("Initital URL --- ", initialUrl);
-      handleDeepLink(initialUrl);
-    };
+  // useEffect(() => {
+  //   const getUrlAsync = async () => {
+  //     const initialUrl = await Linking.getInitialURL();
+  //     // console.log("Initital URL --- ", initialUrl);
+  //     handleDeepLink(initialUrl);
+  //   };
 
-    getUrlAsync();
+  //   getUrlAsync();
 
-    const deepLinkListener = Linking.addEventListener("url", (event) => {
-      handleDeepLink(event.url);
-    });
+  //   const deepLinkListener = Linking.addEventListener("url", (event) => {
+  //     handleDeepLink(event.url);
+  //   });
 
-    return () => deepLinkListener.remove();
-  }, [handleDeepLink]);
+  //   return () => deepLinkListener.remove();
+  // }, [handleDeepLink]);
 
   useEffect(() => {
     messaging().onNotificationOpenedApp((remoteMessage) => {
@@ -171,39 +167,6 @@ const App = () => {
       fetchCartData();
     }
   }, [token]);
-
-  useEffect(() => {
-    const connectGetStreamChat = async () => {
-      try {
-        let authInfo = {
-          id: userInfo?.id?.toString(),
-          name: userInfo?.full_name,
-          image: "",
-        };
-        await client
-          .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
-          .then((res) => {
-            // console.log("StreamChat Connected!");
-            const channel = client.channel("messaging", {
-              members: ["411", "407"],
-            });
-            channel
-              .create()
-              .then() //.then((res) => console.log("Channel res----->", res))
-              .catch((e) => {
-                // console.log("Channel error res----->", e);
-              });
-          })
-          .catch((error) => Alert.alert(error.toString()));
-      } catch (error) {
-        Alert.alert("Error!");
-      }
-    };
-
-    if (userInfo?.id) {
-      connectGetStreamChat();
-    }
-  }, [userInfo?.id]);
 
   useEffect(() => {
     const fetchUserData = async () => {

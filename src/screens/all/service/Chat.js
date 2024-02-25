@@ -11,29 +11,76 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import React, {memo, useState} from 'react';
-import {Fonts} from '../../../themes/Fonts';
-import normalize from '../../../utils/helpers/normalize';
-import {Colors} from '../../../themes/Colors';
-import {Images} from '../../../themes/Images';
-import {Icons} from '../../../themes/Icons';
+} from "react-native";
+import React, { memo, useState, useEffect } from "react";
+import { Fonts } from "../../../themes/Fonts";
+import normalize from "../../../utils/helpers/normalize";
+import { Colors } from "../../../themes/Colors";
+import { Images } from "../../../themes/Images";
+import { Icons } from "../../../themes/Icons";
+import { useSelector } from "react-redux";
+import { StreamChat } from "stream-chat";
+import constants from "../../../utils/helpers/constants";
 
-const Chat = ({navigation}) => {
-  const [message, setMessage] = useState('');
+const client = StreamChat.getInstance(constants.GETSTREAM_API_KEY);
+const Chat = ({ navigation }) => {
+  const { userInfo } = useSelector((state) => state.UserReducer);
+  const [message, setMessage] = useState("");
 
   const CHAT = [
     {
-      message: 'Hey Harry, I am having issue in finding your address',
-      time: 'Today 09:37 am',
-      type: 'sender',
+      message: "Hey Harry, I am having issue in finding your address",
+      time: "Today 09:37 am",
+      type: "sender",
     },
     {
-      message: 'Are you near the extension gate ?',
-      time: 'Today 09:39 am',
-      type: 'receiver',
+      message: "Are you near the extension gate ?",
+      time: "Today 09:39 am",
+      type: "receiver",
     },
   ];
+
+  useEffect(() => {
+    const connectGetStreamChat = () => {
+      try {
+        let authInfo = {
+          id: userInfo?.id?.toString(),
+          name: userInfo?.full_name,
+          image: "",
+        };
+        client
+          .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
+          .then((res) => {
+            console.log("StreamChat Connected!");
+            const channel = client.channel("messaging", {
+              members: ["411", "407"],
+            });
+            channel
+              .create()
+              .then((res) => console.log("Channel res----->", res)) //.then() //
+              .catch((e) => {
+                console.log("Channel error res----->", e);
+              });
+          })
+          .catch((error) => Alert.alert(error.toString()));
+      } catch (error) {
+        Alert.alert("Error!");
+      }
+    };
+
+    console.log("User Info --- ", userInfo);
+
+    connectGetStreamChat();
+
+    return () => {
+      client
+        .disconnectUser()
+        .then((res) => console.log("Disconnct res----->", res)) //.then() //
+        .catch((e) => {
+          console.log("Disconnct error res----->", e);
+        });
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.conatiner}>
@@ -43,9 +90,10 @@ const Chat = ({navigation}) => {
         </TouchableOpacity>
         <View
           style={{
-            flexDirection: 'row',
-            marginTop: Platform.OS == 'android' ? normalize(5) : 0,
-          }}>
+            flexDirection: "row",
+            marginTop: Platform.OS == "android" ? normalize(5) : 0,
+          }}
+        >
           <Text style={styles.name}>Jim Carrey</Text>
           <View style={styles.status} />
         </View>
@@ -53,23 +101,25 @@ const Chat = ({navigation}) => {
           style={[
             styles.tc,
             {
-              borderColor: '#70D07A',
-              marginTop: Platform.OS == 'android' ? normalize(5) : 0
+              borderColor: "#70D07A",
+              marginTop: Platform.OS == "android" ? normalize(5) : 0,
             },
-          ]}>
+          ]}
+        >
           <Image source={Images.call} style={styles.ci} />
         </TouchableOpacity>
       </View>
 
-      <KeyboardAvoidingView style={{flex: 1}} behavior="padding">
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            width: '90%',
-            alignSelf: 'center',
+            width: "90%",
+            alignSelf: "center",
             paddingVertical: normalize(12),
           }}
-          style={{flex: 1}}>
+          style={{ flex: 1 }}
+        >
           {CHAT.map((item, index) => {
             return (
               <View>
@@ -79,29 +129,29 @@ const Chat = ({navigation}) => {
                     padding: normalize(10),
                     marginBottom: normalize(5),
                     borderRadius: normalize(8),
-                    backgroundColor:
-                      item.type == 'sender' ? '#F2EBFF' : '#F3F3F3',
-                    alignSelf:
-                      item.type == 'sender' ? 'flex-end' : 'flex-start',
-                  }}>
+                    backgroundColor: item.type == "sender" ? "#F2EBFF" : "#F3F3F3",
+                    alignSelf: item.type == "sender" ? "flex-end" : "flex-start",
+                  }}
+                >
                   <Text
                     style={{
-                      color: '#161616',
+                      color: "#161616",
                       fontFamily: Fonts.Poppins_Regular,
                       fontSize: normalize(11.5),
-                    }}>
+                    }}
+                  >
                     {item.message}
                   </Text>
                 </View>
                 <Text
                   style={{
-                    color: '#757575',
+                    color: "#757575",
                     fontFamily: Fonts.Poppins_Regular,
                     fontSize: normalize(10),
                     marginBottom: normalize(10),
-                    alignSelf:
-                      item.type == 'sender' ? 'flex-end' : 'flex-start',
-                  }}>
+                    alignSelf: item.type == "sender" ? "flex-end" : "flex-start",
+                  }}
+                >
                   {item.time}
                 </Text>
               </View>
@@ -112,15 +162,16 @@ const Chat = ({navigation}) => {
         <View
           style={{
             height: normalize(60),
-            width: '100%',
-            justifyContent: 'center',
-          }}>
+            width: "100%",
+            justifyContent: "center",
+          }}
+        >
           <View style={styles.inputc}>
             <TextInput
               value={message}
-              onChangeText={txt => setMessage(txt)}
+              onChangeText={(txt) => setMessage(txt)}
               placeholder="Send Message"
-              placeholderTextColor={'#DADADA'}
+              placeholderTextColor={"#DADADA"}
               style={styles.input}
             />
             <TouchableOpacity style={styles.touch}>
@@ -141,41 +192,41 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   hc: {
-    width: '90%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignSelf: 'center',
-    alignItems: 'center',
-    marginTop: Platform.OS == 'android' ? normalize(10) : 0,
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "center",
+    alignItems: "center",
+    marginTop: Platform.OS == "android" ? normalize(10) : 0,
   },
   tc: {
     height: normalize(32),
     width: normalize(32),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: normalize(1),
     borderRadius: normalize(8),
-    borderColor: 'white',
-    marginTop: Platform.OS == 'android' ? normalize(5) : 0,
+    borderColor: "white",
+    marginTop: Platform.OS == "android" ? normalize(5) : 0,
   },
   bi: {
     height: normalize(14),
     width: normalize(14),
-    resizeMode: 'contain',
-    alignSelf: 'flex-start',
+    resizeMode: "contain",
+    alignSelf: "flex-start",
   },
   ci: {
     height: normalize(14),
     width: normalize(14),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   name: {
-    color: '#161616',
+    color: "#161616",
     fontFamily: Fonts.Poppins_Medium,
     fontSize: normalize(14),
   },
   status: {
-    backgroundColor: '#70D07A',
+    backgroundColor: "#70D07A",
     height: normalize(6),
     width: normalize(6),
     borderRadius: normalize(8),
@@ -183,34 +234,34 @@ const styles = StyleSheet.create({
     marginLeft: normalize(3),
   },
   inputc: {
-    width: '90%',
-    alignSelf: 'center',
+    width: "90%",
+    alignSelf: "center",
     height: normalize(40),
-    borderColor: '#DADADA',
+    borderColor: "#DADADA",
     borderWidth: normalize(1),
     borderRadius: normalize(30),
     paddingHorizontal: normalize(3),
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   input: {
     flex: 1,
     paddingHorizontal: normalize(10),
     fontFamily: Fonts.Poppins_Regular,
-    color: 'black',
+    color: "black",
     fontSize: normalize(11),
   },
   touch: {
     height: normalize(32.5),
     width: normalize(32.5),
     borderRadius: normalize(40),
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#272727',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#272727",
   },
   send: {
     height: normalize(12),
     width: normalize(12),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
 });

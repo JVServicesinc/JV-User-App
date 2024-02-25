@@ -1,6 +1,6 @@
-import {call, put, select, takeLatest} from 'redux-saga/effects';
-import showErrorAlert from '../../utils/helpers/Toast';
-import {getApi, postApi} from '../../utils/helpers/ApiRequest';
+import { call, put, select, takeLatest } from "redux-saga/effects";
+import showErrorAlert from "../../utils/helpers/Toast";
+import { getApi, postApi } from "../../utils/helpers/ApiRequest";
 import {
   /* Update User Informaition */
   updateUserInfoFailure,
@@ -26,27 +26,28 @@ import {
   /* Address */
   getAllAddressSuccess,
   getAllAddressFailure,
-  
+
   /* Update Address */
   updateAddressSuccess,
   updateAddressFailure,
-} from '../reducer/UserReducer';
-import {logoutRequest} from '../reducer/AuthReducer';
-import {goBack} from '../../utils/helpers/RootNavigation';
+} from "../reducer/UserReducer";
+import { logoutRequest } from "../reducer/AuthReducer";
+import { goBack } from "../../utils/helpers/RootNavigation";
 
-let getItem = state => state.AuthReducer;
+let getItem = (state) => state.AuthReducer;
 
 /* User Informaition */
 export function* getUserInfoSaga() {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'application/json',
+    Accept: "application/json",
+    contenttype: "application/json",
     accesstoken: item.token,
   };
   try {
-    let response = yield call(getApi, 'user/profile', header);
+    let response = yield call(getApi, "user/profile", header);
     if (response?.status == 200) {
+      console.log("UserInfoSaga", response?.data);
       yield put(getUserInfoSuccess(response?.data?.data));
     } else {
       yield put(getUserInfoFailure(response?.data));
@@ -61,13 +62,13 @@ export function* getUserInfoSaga() {
 export function* updateUserInfoSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
     accesstoken: item.token,
   };
 
   try {
-    let response = yield call(postApi, 'user/profile', action?.payload, header);
+    let response = yield call(postApi, "user/profile", action?.payload, header);
 
     if (response?.status == 200) {
       yield put(updateUserInfoSuccess(response?.data));
@@ -86,16 +87,11 @@ export function* updateUserInfoSaga(action) {
 export function* updatePasswordSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
   };
   try {
-    let response = yield call(
-      postApi,
-      'auth/forgot-password/change-password',
-      action?.payload,
-      header,
-    );
+    let response = yield call(postApi, "auth/forgot-password/change-password", action?.payload, header);
     if (response?.status == 200) {
       yield put(updatePasswordSuccess(response?.data));
       showErrorAlert(response?.data?.message);
@@ -112,12 +108,12 @@ export function* updatePasswordSaga(action) {
 export function* deleteAccountSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
     accesstoken: item.token,
   };
   try {
-    let response = yield call(postApi, 'user/delete', action?.payload, header);
+    let response = yield call(postApi, "user/delete", action?.payload, header);
     if (response?.status == 200) {
       yield put(deleteAccountSuccess(response?.data?.data));
       showErrorAlert(response.data.message);
@@ -135,17 +131,12 @@ export function* deleteAccountSaga(action) {
 export function* addAddressSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
     accesstoken: item.token,
   };
   try {
-    let response = yield call(
-      postApi,
-      'user/addresses',
-      action?.payload,
-      header,
-    );
+    let response = yield call(postApi, "user/addresses", action?.payload, header);
     if (response?.status == 200) {
       yield put(addAddressSuccess(response?.data));
       showErrorAlert(response?.data?.message);
@@ -163,12 +154,12 @@ export function* addAddressSaga(action) {
 export function* getAllAddressSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
     accesstoken: item.token,
   };
   try {
-    let response = yield call(getApi, 'user/addresses', header);
+    let response = yield call(getApi, "user/addresses", header);
     if (response?.status == 200) {
       yield put(getAllAddressSuccess(response?.data));
       // showErrorAlert(response?.data?.message);
@@ -185,17 +176,12 @@ export function* getAllAddressSaga(action) {
 export function* updateAddressSaga(action) {
   const item = yield select(getItem);
   let header = {
-    Accept: 'application/json',
-    contenttype: 'multipart/form-data',
+    Accept: "application/json",
+    contenttype: "multipart/form-data",
     accesstoken: item.token,
   };
   try {
-    let response = yield call(
-      postApi,
-      `user/addresses/${action.payload?.id}/update`,
-      action?.payload?.data,
-      header,
-    );
+    let response = yield call(postApi, `user/addresses/${action.payload?.id}/update`, action?.payload?.data, header);
     if (response?.status == 200) {
       yield put(updateAddressSuccess(response?.data));
       showErrorAlert(response?.data?.message);
@@ -211,25 +197,25 @@ export function* updateAddressSaga(action) {
 
 const watchFunction = [
   (function* () {
-    yield takeLatest('User/getUserInfoRequest', getUserInfoSaga);
+    yield takeLatest("User/getUserInfoRequest", getUserInfoSaga);
   })(),
   (function* () {
-    yield takeLatest('User/updateUserInfoRequest', updateUserInfoSaga);
+    yield takeLatest("User/updateUserInfoRequest", updateUserInfoSaga);
   })(),
   (function* () {
-    yield takeLatest('User/updatePasswordRequest', updatePasswordSaga);
+    yield takeLatest("User/updatePasswordRequest", updatePasswordSaga);
   })(),
   (function* () {
-    yield takeLatest('User/deleteAccountRequest', deleteAccountSaga);
+    yield takeLatest("User/deleteAccountRequest", deleteAccountSaga);
   })(),
   (function* () {
-    yield takeLatest('User/addAddressRequest', addAddressSaga);
+    yield takeLatest("User/addAddressRequest", addAddressSaga);
   })(),
   (function* () {
-    yield takeLatest('User/getAllAddressRequest', getAllAddressSaga);
+    yield takeLatest("User/getAllAddressRequest", getAllAddressSaga);
   })(),
   (function* () {
-    yield takeLatest('User/updateAddressRequest', updateAddressSaga);
+    yield takeLatest("User/updateAddressRequest", updateAddressSaga);
   })(),
 ];
 

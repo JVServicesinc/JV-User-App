@@ -71,7 +71,6 @@ const Splash = () => {
   }
 
   function getInfo() {
-    // console.log('getInfo -- ');
     getData(constants.STARTING, (res) => {
       if (res !== "") {
         // dispatch(setStart('1'));
@@ -97,7 +96,7 @@ const Splash = () => {
           } else {
             getData(constants.LANGUAGE, (value) => {
               dispatch(setStart("1"));
-              dispatch(setLanguage(value === "" || value === null || value === undefined ? null : null));
+              dispatch(setLanguage(value === "" || value === null || value === undefined ? null : value));
             });
           }
         });

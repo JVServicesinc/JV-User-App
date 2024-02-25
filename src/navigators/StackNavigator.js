@@ -111,6 +111,8 @@ const StackNavigator = (props) => {
     DocumentsDetails: DocumentsDetails,
   };
 
+  console.log("Stack Navigator --- ", AuthReducer?.isStart, LanguageReducer?.isLanguageSelected);
+
   const Screens =
     AuthReducer?.isStart == null
       ? OnBoard
