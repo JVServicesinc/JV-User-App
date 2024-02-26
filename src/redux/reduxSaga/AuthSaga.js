@@ -44,6 +44,9 @@ import {
 import showErrorAlert from "../../utils/helpers/Toast";
 import { getApi, postApi } from "../../utils/helpers/ApiRequest";
 import { goBack, navigate } from "../../utils/helpers/RootNavigation";
+import { StreamChat } from "stream-chat";
+
+const client = StreamChat.getInstance(constants.GETSTREAM_API_KEY);
 
 let getItem = (state) => state.AuthReducer;
 let token = "";
@@ -120,7 +123,10 @@ export function* signupSaga(action) {
     contenttype: "multipart/form-data",
   };
   try {
+    console.log("SignUp Success --- Start ", action?.payload, header);
     let response = yield call(postApi, "auth/user/register", action?.payload, header);
+
+    console.log("SignUp Success --- ", response);
 
     if (response?.status == 200) {
       yield put(signupSuccess(action?.payload));
@@ -152,10 +158,30 @@ export function* otpVerifySaga(action) {
       yield put(otpVerifySuccess(action?.payload));
       showErrorAlert(response.data.message);
 
-      let l = action?.payload?.obj;
+      let payloadObject = action?.payload?.obj;
+      const username = payloadObject?.email
+        ? payloadObject?.email.toLocaleLowerCase().trim()
+        : payloadObject?.username.toLocaleLowerCase().trim();
+
+      console.log("Verification Success --- ", action?.payload?.obj);
+      // const user = {
+      //   id: "422",
+      //   name: username,
+      // };
+
+      // client
+      //   .upsertUser(user)
+      //   .then(() => {
+      //     console.log("User created successfully");
+      //     // Proceed with setting up the channel
+      //   })
+      //   .catch((err) => {
+      //     console.error("Error creating user:", err);
+      //   });
+
       let fromdata = new FormData();
-      fromdata.append("username", l?.email ? l?.email.toLocaleLowerCase().trim() : l?.username.toLocaleLowerCase().trim());
-      fromdata.append("password", l?.password);
+      fromdata.append("username", username);
+      fromdata.append("password", payloadObject?.password);
 
       yield put(loginRequest(fromdata));
     } else {

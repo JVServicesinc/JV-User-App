@@ -60,12 +60,12 @@ const SupportChat = ({ navigation }) => {
           .then((res) => {
             console.log("StreamChat Connected!");
             const channel = client.channel("messaging", {
-              members: ["411", userInfo?.id?.toString()],
+              members: ["422", userInfo?.id?.toString()],
             });
             channel
               .create()
               .then((res) => {
-                // console.log("Channel res----->", res);
+                console.log("Channel res----->", res);
                 channel
                   .query({ messages: { limit: 100 } })
                   .then(async (messageResponse) => {
@@ -82,7 +82,7 @@ const SupportChat = ({ navigation }) => {
                   });
               })
               .catch((e) => {
-                // console.log("Channel error res----->", e);
+                console.log("Channel error res----->", e);
               });
           })
           .catch((error) => {

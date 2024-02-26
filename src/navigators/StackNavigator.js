@@ -48,6 +48,7 @@ import { LanguageSelector } from "../screens/auth/LanguageSelector";
 import { ChooseLanguage } from "../screens/main/Account/ChooseLanguage";
 import { DocumentsDetails } from "../screens/main/Account/DocumentsDetails";
 import { SearchingProvider } from "../screens/all/SummaryOptions/SearchingProvider";
+import { Chat } from "stream-chat-react-native";
 
 const StackNavigator = (props) => {
   const Stack = createStackNavigator();
@@ -99,6 +100,7 @@ const StackNavigator = (props) => {
     SupportChat: SupportChat,
     ServiceDayInside: ServiceDayInside,
     Message: Message,
+    Chat: Chat,
     ServiceCompleted: ServiceCompleted,
     ServiceRating: ServiceRating,
     ReferAndEarn: ReferAndEarn,

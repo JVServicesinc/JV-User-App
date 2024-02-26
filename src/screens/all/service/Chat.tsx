@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from "react-native";
+import { ActivityIndicator, Alert, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { StreamChat } from "stream-chat";
@@ -7,13 +7,14 @@ import C from "../../../utils/helpers/constants";
 import { Fonts } from "../../../themes/Fonts";
 import { Colors } from "../../../themes/Colors";
 import Header from "../../../components/Header";
+import normalize from "../../../utils/helpers/normalize";
 
 const client = StreamChat.getInstance(C.GETSTREAM_API_KEY);
 
 const Message = () => {
-  const { token } = useSelector((state) => state.AuthReducer);
-  const { userInfo } = useSelector((state) => state.UserReducer);
-  const [channel, setChannel] = useState(null);
+  const { token } = useSelector((state: any) => state.AuthReducer);
+  const { userInfo } = useSelector((state: any) => state.UserReducer);
+  const [channel, setChannel] = useState<any>(null);
   const [providerName, setProviderName] = useState("");
   const [thread, setThread] = useState();
 
@@ -79,7 +80,12 @@ const Message = () => {
       <SafeAreaView style={{ width: "100%", height: "100%", alignItems: "center", backgroundColor: Colors.white }}>
         <View style={{ width: "90%", height: "100%" }}>
           <View style={{ width: "100%", height: "8%" }}>
-            <Header title={"Support Chat"} />
+            <Header
+              title={"Support Chat"}
+              onPress={() => {
+                //
+              }}
+            />
           </View>
           <View style={{ width: "100%", height: "90%" }}>
             <Chat client={client}>
@@ -89,11 +95,7 @@ const Message = () => {
                     <Thread />
                   ) : (
                     <>
-                      {channel.state.messages ? (
-                        <MessageList onThreadSelect={setThread} />
-                      ) : (
-                        <ActivityIndicator color={"black"} size={"small"} />
-                      )}
+                      {channel.state.messages ? <MessageList /> : <ActivityIndicator color={"black"} size={"large"} />}
                       <MessageInput />
                     </>
                   )}
