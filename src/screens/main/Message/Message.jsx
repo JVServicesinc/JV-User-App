@@ -40,21 +40,21 @@ const Message = () => {
   useEffect(() => {
     const connectGetStreamChat = async () => {
       try {
-        let authInfo = {
-          id: userInfo?.id?.toString(),
-          name: userInfo?.full_name,
-          image: "",
-        };
-        await client
-          .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
-          .then((res) => {
-            console.log("Connected!");
-            const channel = client.channel("messaging", {
-              members: ["411", "407"],
-            });
-            setChannel(channel);
-          })
-          .catch((error) => Alert.alert(error.toString()));
+        // let authInfo = {
+        //   id: userInfo?.id?.toString(),
+        //   name: userInfo?.full_name,
+        //   image: "",
+        // };
+        // await client
+        //   .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
+        //   .then((res) => {
+        //     console.log("Connected!");
+        const channel = client.channel("messaging", {
+          members: ["411", "407"],
+        });
+        setChannel(channel);
+        //   })
+        //   .catch((error) => Alert.alert(error.toString()));
       } catch (error) {
         Alert.alert("Error!");
       }
@@ -64,27 +64,27 @@ const Message = () => {
       connectGetStreamChat();
     }
 
-    return () => {
-      client
-        .disconnectUser()
-        .then((res) => console.log("Disconnct res----->", res)) //.then() //
-        .catch((e) => {
-          console.log("Disconnct error res----->", e);
-        });
-    };
+    // return () => {
+    //   client
+    //     .disconnectUser()
+    //     .then((res) => console.log("Disconnct res----->", res)) //.then() //
+    //     .catch((e) => {
+    //       console.log("Disconnct error res----->", e);
+    //     });
+    // };
   }, []);
 
   return (
     <OverlayProvider>
       <SafeAreaView style={{ width: "100%", height: "100%", alignItems: "center", backgroundColor: Colors.white }}>
-        <View style={{ width: "90%", height: "100%" }}>
-          <View style={{ width: "100%", height: "8%" }}>
-            <Header title={"Support Chat"} />
+        <View style={{ width: "90%", height: "100%", backgroundColor: "white" }}>
+          <View style={{ width: "100%", height: "6%" }}>
+            <Header title={"Support Chat"} marginVertical={4} />
           </View>
-          <View style={{ width: "100%", height: "90%" }}>
+          <View style={{ width: "100%", height: "94%" }}>
             <Chat client={client}>
               {channel ? (
-                <Channel channel={channel} keyboardVerticalOffset={120} thread={thread} threadList={!!thread}>
+                <Channel channel={channel} keyboardVerticalOffset={100} thread={thread} threadList={!!thread}>
                   {thread ? (
                     <Thread />
                   ) : (

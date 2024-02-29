@@ -1,5 +1,6 @@
 export default {
   TOKEN: "TOKEN",
+  FCM_TOKEN: "FCM_TOKEN",
   IMAGE_URL: "",
   // BASE_URL: 'https://jvservices.ca/jv/api/api',
   // BASE_URL: "http://api.jvservices.ca/api",

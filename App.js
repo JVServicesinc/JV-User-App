@@ -19,11 +19,18 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import messaging from "@react-native-firebase/messaging";
 import { useStripe } from "@stripe/stripe-react-native";
 import "intl-pluralrules";
+import { StreamChat } from "stream-chat";
+import constants from "./src/utils/helpers/constants";
+import { storeData, getData } from "./src/redux/LocalStore";
+
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
+const client = StreamChat.getInstance(constants.GETSTREAM_API_KEY);
+
 const App = () => {
   const { token } = useSelector((state) => state.AuthReducer);
+  const { userInfo } = useSelector((state) => state.UserReducer);
   const { showLocationDisabledModal, isFetching } = useSelector((state) => state.GlobalReducer);
 
   const dispatch = useDispatch();
@@ -141,8 +148,12 @@ const App = () => {
         await messaging().registerDeviceForRemoteMessages();
         const token = await messaging().getToken();
         console.log(token, "FCM token");
+        storeData(constants.FCM_TOKEN, token, (token) => {
+          console.log("Token --- ", token);
+        });
         let data = new FormData();
         data.append("device_token", token);
+        //
         await setDeviceToken(data)
           .then((res) => {
             if (res?.data) {
@@ -197,6 +208,80 @@ const App = () => {
       requestUserPermission();
     }
   }, [token]);
+
+  useEffect(() => {
+    console.log("App JS UserInfo -- ", userInfo);
+
+    const addToken = () => {
+      const push_provider = "firebase";
+      const push_provider_name = "JeVeuxUser";
+
+      const addStreamDeviceToken = () => {
+        getData(constants.FCM_TOKEN, (fcmToken) => {
+          client
+            .addDevice(fcmToken, push_provider, userInfo?.id.toString(), push_provider_name)
+            .then(() => {
+              console.log("Device Token Registered for Stream IO");
+            })
+            .catch((error) => {
+              console.log("Error ---- ", error);
+            });
+        });
+      };
+
+      let authInfo = {
+        id: userInfo?.id?.toString(),
+        name: userInfo?.full_name,
+        image: "",
+      };
+
+      client
+        .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
+        .then((res) => {
+          console.log("Connected!", userInfo);
+          const fetchDevices = async () => {
+            const devices = await client.getDevices();
+            const devicesInfo = devices.devices;
+            console.log("Check Devices ----", devices);
+            if (devicesInfo.length > 0) {
+              devicesInfo.forEach((device) => {
+                if (device.id !== fcmToken) {
+                  client
+                    .removeDevice(device.id)
+                    .then(() => {
+                      console.log("Device Deleted -----");
+                      addStreamDeviceToken();
+                    })
+                    .catch((error) => {
+                      console.log("Device Deleted Error --- ", error);
+                    });
+                }
+              });
+            } else {
+              addStreamDeviceToken();
+            }
+          };
+
+          fetchDevices();
+        })
+        .catch((error) => Alert.alert(error.toString()));
+    };
+
+    if (userInfo?.id) {
+      addToken();
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    return () => {
+      client
+        .disconnectUser()
+        .then((res) => console.log("Disconnct res----->", res)) //.then() //
+        .catch((e) => {
+          console.log("Disconnct error res----->", e);
+        });
+    };
+  }, []);
 
   if (Text.defaultProps == null) {
     Text.defaultProps = {};
