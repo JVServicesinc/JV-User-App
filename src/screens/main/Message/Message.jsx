@@ -84,7 +84,7 @@ const Message = () => {
           <View style={{ width: "100%", height: "94%" }}>
             <Chat client={client}>
               {channel ? (
-                <Channel channel={channel} keyboardVerticalOffset={100} thread={thread} threadList={!!thread}>
+                <Channel channel={channel} keyboardVerticalOffset={0} thread={thread} threadList={!!thread}>
                   {thread ? (
                     <Thread />
                   ) : (

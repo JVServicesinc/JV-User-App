@@ -238,31 +238,33 @@ const App = () => {
       client
         .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
         .then((res) => {
-          console.log("Connected!", userInfo);
-          const fetchDevices = async () => {
-            const devices = await client.getDevices();
-            const devicesInfo = devices.devices;
-            console.log("Check Devices ----", devices);
-            if (devicesInfo.length > 0) {
-              devicesInfo.forEach((device) => {
-                if (device.id !== fcmToken) {
-                  client
-                    .removeDevice(device.id)
-                    .then(() => {
-                      console.log("Device Deleted -----");
-                      addStreamDeviceToken();
-                    })
-                    .catch((error) => {
-                      console.log("Device Deleted Error --- ", error);
-                    });
-                }
-              });
-            } else {
-              addStreamDeviceToken();
-            }
-          };
+          console.log("Connected!");
+          getData(constants.FCM_TOKEN, (fcmToken) => {
+            const fetchDevices = async () => {
+              const devices = await client.getDevices();
+              const devicesInfo = devices.devices;
+              console.log("Check Devices ----", fcmToken);
+              if (devicesInfo.length > 0) {
+                devicesInfo.forEach((device) => {
+                  if (device.id !== fcmToken) {
+                    client
+                      .removeDevice(device.id)
+                      .then(() => {
+                        console.log("Device Deleted -----");
+                        addStreamDeviceToken();
+                      })
+                      .catch((error) => {
+                        console.log("Device Deleted Error --- ", error);
+                      });
+                  }
+                });
+              } else {
+                addStreamDeviceToken();
+              }
+            };
 
-          fetchDevices();
+            fetchDevices();
+          });
         })
         .catch((error) => Alert.alert(error.toString()));
     };

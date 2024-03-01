@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-camera-roll/camera-roll
 import com.reactnativecommunity.cameraroll.CameraRollPackage;
+// @react-native-clipboard/clipboard
+import com.reactnativecommunity.clipboard.ClipboardPackage;
 // @react-native-community/geolocation
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 // @react-native-community/netinfo
@@ -33,12 +35,16 @@ import com.reactnativestripesdk.StripeSdkPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 // react-native-date-picker
 import com.henninghall.date_picker.DatePickerPackage;
+// react-native-document-picker
+import com.reactnativedocumentpicker.RNDocumentPickerPackage;
 // react-native-fs
 import com.rnfs.RNFSPackage;
 // react-native-geolocation-service
 import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
+// react-native-haptic-feedback
+import com.mkuczera.RNReactNativeHapticFeedbackPackage;
 // react-native-image-crop-picker
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 // react-native-image-resizer
@@ -57,10 +63,14 @@ import com.swmansion.reanimated.ReanimatedPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
 import com.swmansion.rnscreens.RNScreensPackage;
+// react-native-share
+import cl.json.RNSharePackage;
 // react-native-snackbar
 import com.azendoo.reactnativesnackbar.SnackbarPackage;
 // react-native-svg
 import com.horcrux.svg.SvgPackage;
+// react-native-video
+import com.brentvatne.react.ReactVideoPackage;
 // react-native-webview
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 
@@ -110,6 +120,7 @@ public class PackageList {
       new MainReactPackage(mConfig),
       new AsyncStoragePackage(),
       new CameraRollPackage(),
+      new ClipboardPackage(),
       new GeolocationPackage(),
       new NetInfoPackage(),
       new ReactNativeFirebaseAppPackage(),
@@ -119,9 +130,11 @@ public class PackageList {
       new StripeSdkPackage(),
       new LottiePackage(),
       new DatePickerPackage(),
+      new RNDocumentPickerPackage(),
       new RNFSPackage(),
       new RNFusedLocationPackage(),
       new RNGestureHandlerPackage(),
+      new RNReactNativeHapticFeedbackPackage(),
       new PickerPackage(),
       new ImageResizerPackage(),
       new LinearGradientPackage(),
@@ -131,8 +144,10 @@ public class PackageList {
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
+      new RNSharePackage(),
       new SnackbarPackage(),
       new SvgPackage(),
+      new ReactVideoPackage(),
       new RNCWebViewPackage()
     ));
   }
