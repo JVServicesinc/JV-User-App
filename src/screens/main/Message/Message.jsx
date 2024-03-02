@@ -11,67 +11,40 @@ import Header from "../../../components/Header";
 const client = StreamChat.getInstance(C.GETSTREAM_API_KEY);
 
 const Message = () => {
-  const { token } = useSelector((state) => state.AuthReducer);
   const { userInfo } = useSelector((state) => state.UserReducer);
   const [channel, setChannel] = useState(null);
-  const [providerName, setProviderName] = useState("");
   const [thread, setThread] = useState();
-
-  // const CustomInput = () => {
-  //   const { sendMessage, text, toggleAttachmentPicker, openCommandsPicker } = useMessageInputContext();
-  //   return (
-  //     <View
-  //       style={{
-  //         height: normalize(60),
-  //         width: "100%",
-  //         justifyContent: "center",
-  //       }}
-  //     >
-  //       <View style={styles.inputc}>
-  //         <AutoCompleteInput />
-  //         <TouchableOpacity style={styles.touch} onPress={sendMessage} disabled={!text}>
-  //           <Image source={Icons.send} style={styles.send} />
-  //         </TouchableOpacity>
-  //       </View>
-  //     </View>
-  //   );
-  // };
 
   useEffect(() => {
     const connectGetStreamChat = async () => {
       try {
-        // let authInfo = {
-        //   id: userInfo?.id?.toString(),
-        //   name: userInfo?.full_name,
-        //   image: "",
-        // };
-        // await client
-        //   .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
-        //   .then((res) => {
-        //     console.log("Connected!");
-        const channel = client.channel("messaging", {
-          members: ["411", "407"],
-        });
-        setChannel(channel);
-        //   })
-        //   .catch((error) => Alert.alert(error.toString()));
+        client
+          .connect()
+          .then(() => {
+            const channel = client.channel("messaging", {
+              members: [userInfo?.id?.toString(), "407"],
+            });
+            channel
+              .watch()
+              .then(() => {
+                // console.log("Channel is ready", channel.state.messages);
+                setChannel(channel);
+              })
+              .catch((error) => {
+                console.error("Error watching channel:", error);
+              });
+          })
+          .catch((error) => {
+            console.error("Error connecting Stream Chat client:", error);
+          });
       } catch (error) {
-        Alert.alert("Error!");
+        console.error("Stream Chat client:", error);
       }
     };
 
     if (userInfo?.id) {
       connectGetStreamChat();
     }
-
-    // return () => {
-    //   client
-    //     .disconnectUser()
-    //     .then((res) => console.log("Disconnct res----->", res)) //.then() //
-    //     .catch((e) => {
-    //       console.log("Disconnct error res----->", e);
-    //     });
-    // };
   }, []);
 
   return (
@@ -84,7 +57,7 @@ const Message = () => {
           <View style={{ width: "100%", height: "94%" }}>
             <Chat client={client}>
               {channel ? (
-                <Channel channel={channel} keyboardVerticalOffset={0} thread={thread} threadList={!!thread}>
+                <Channel channel={channel} keyboardVerticalOffset={100} thread={thread} threadList={!!thread}>
                   {thread ? (
                     <Thread />
                   ) : (

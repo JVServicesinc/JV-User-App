@@ -169,15 +169,9 @@ const App = () => {
           );
       }
     } catch (error) {
-      // console.log(error);
+      console.log("RequestUserPermission --- ", error);
     }
   }
-
-  useEffect(() => {
-    if (token) {
-      fetchCartData();
-    }
-  }, [token]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -194,7 +188,7 @@ const App = () => {
           }
         }
       } catch (error) {
-        // console.log(error);
+        console.log(error);
         // Alert.alert(error?.response?.data?.message?.toString());
         // dispatch(globalLogout())
       }
@@ -205,6 +199,7 @@ const App = () => {
 
   useEffect(() => {
     if (token) {
+      fetchCartData();
       requestUserPermission();
     }
   }, [token]);
@@ -238,7 +233,7 @@ const App = () => {
       client
         .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
         .then((res) => {
-          console.log("Connected!");
+          console.log("Connected! ---", userInfo);
           getData(constants.FCM_TOKEN, (fcmToken) => {
             const fetchDevices = async () => {
               const devices = await client.getDevices();
