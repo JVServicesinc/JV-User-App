@@ -22,7 +22,7 @@ const Message = () => {
           .connect()
           .then(() => {
             const channel = client.channel("messaging", {
-              members: [userInfo?.id?.toString(), "407"],
+              members: [userInfo?.id?.toString(), "446"],
             });
             channel
               .watch()

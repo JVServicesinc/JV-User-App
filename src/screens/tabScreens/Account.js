@@ -78,6 +78,7 @@ const Account = () => {
     { icon: Icons.Delete, title: "Delete Account" },
     { icon: Icons.Logout, title: "Logout" },
     { icon: Icons.chat, title: "Chat", navigate: "Message" },
+    { icon: Icons.chat, title: "Call", navigate: "Call" },
   ];
 
   const deleteAccount = async (data) => {

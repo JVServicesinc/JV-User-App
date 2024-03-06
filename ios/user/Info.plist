@@ -47,6 +47,8 @@
 	<string>We need access to your location while using the app to provide location-based services.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs access to the photo library to let the user upload photos</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to the microphone for call feature</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>JosefinSans-Bold.ttf</string>

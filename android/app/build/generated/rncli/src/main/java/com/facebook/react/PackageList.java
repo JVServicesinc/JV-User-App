@@ -11,6 +11,8 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+// @notifee/react-native
+import io.invertase.notifee.NotifeePackage;
 // @react-native-async-storage/async-storage
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-camera-roll/camera-roll
@@ -29,6 +31,10 @@ import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
 import org.reactnative.maskedview.RNCMaskedViewPackage;
 // @stream-io/flat-list-mvcp
 import com.mvcpscrollviewmanager.MvcpScrollViewManagerPackage;
+// @stream-io/react-native-webrtc
+import com.oney.WebRTCModule.WebRTCModulePackage;
+// @stream-io/video-react-native-sdk
+import com.streamvideo.reactnative.StreamVideoReactNativePackage;
 // @stripe/stripe-react-native
 import com.reactnativestripesdk.StripeSdkPackage;
 // lottie-react-native
@@ -49,6 +55,8 @@ import com.mkuczera.RNReactNativeHapticFeedbackPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 // react-native-image-resizer
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
+// react-native-incall-manager
+import com.zxcpoiu.incallmanager.InCallManagerPackage;
 // react-native-linear-gradient
 import com.BV.LinearGradient.LinearGradientPackage;
 // react-native-localize
@@ -118,6 +126,7 @@ public class PackageList {
   public ArrayList<ReactPackage> getPackages() {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
+      new NotifeePackage(),
       new AsyncStoragePackage(),
       new CameraRollPackage(),
       new ClipboardPackage(),
@@ -127,6 +136,8 @@ public class PackageList {
       new ReactNativeFirebaseMessagingPackage(),
       new RNCMaskedViewPackage(),
       new MvcpScrollViewManagerPackage(),
+      new WebRTCModulePackage(),
+      new StreamVideoReactNativePackage(),
       new StripeSdkPackage(),
       new LottiePackage(),
       new DatePickerPackage(),
@@ -137,6 +148,7 @@ public class PackageList {
       new RNReactNativeHapticFeedbackPackage(),
       new PickerPackage(),
       new ImageResizerPackage(),
+      new InCallManagerPackage(),
       new LinearGradientPackage(),
       new RNLocalizePackage(),
       new MapsPackage(),

@@ -49,6 +49,7 @@ import { ChooseLanguage } from "../screens/main/Account/ChooseLanguage";
 import { DocumentsDetails } from "../screens/main/Account/DocumentsDetails";
 import { SearchingProvider } from "../screens/all/SummaryOptions/SearchingProvider";
 import { Chat } from "stream-chat-react-native";
+import StreamCallScreen from "../screens/main/Call/StreamCallScreen";
 
 const StackNavigator = (props) => {
   const Stack = createStackNavigator();
@@ -101,6 +102,7 @@ const StackNavigator = (props) => {
     ServiceDayInside: ServiceDayInside,
     Message: Message,
     Chat: Chat,
+    Call: StreamCallScreen,
     ServiceCompleted: ServiceCompleted,
     ServiceRating: ServiceRating,
     ReferAndEarn: ReferAndEarn,
