@@ -145,6 +145,12 @@ const App = () => {
       // console.log("Authorization status:", authStatus);
       if (enabled) {
         // console.log("Authorization status:", authStatus);
+        messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+          console.log("Message handled in the background!", remoteMessage);
+        });
+        messaging().onMessage(async (remoteMessage) => {
+          console.log("Message handled in the foreground!", remoteMessage);
+        });
         await messaging().registerDeviceForRemoteMessages();
         const token = await messaging().getToken();
         console.log(token, "FCM token");
