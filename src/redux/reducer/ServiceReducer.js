@@ -4,11 +4,13 @@ const initialState = {
   status: "",
   isLoading: true,
   isCategoryLoading: true,
+  isHomeCategoryLoading: true,
   isBannersLoading: true,
   isFeaturedLoading: true,
   isMostBookedLoading: true,
   isServicesLoading: true,
   getAllServiceCateRes: {},
+  getHomeCategoriesResult: {},
   getBannersList: [],
   getFeaturedList: {},
   getMostBookedList: {},
@@ -44,6 +46,25 @@ const ProductSlice = createSlice({
     },
     getAllServiceCateFailure(state, action) {
       state.isCategoryLoading = false;
+      state.error = action.error;
+      state.status = action.type;
+    },
+
+    /* Get All Service Category */
+    getHomeServiceCateRequest(state, action) {
+      // console.log("getHomeServiceCateRequest --- ", action.type);
+      state.isHomeCategoryLoading = true;
+      state.status = action.type;
+      state.getHomeCategoriesResult = {};
+    },
+    getHomeServiceCateSuccess(state, action) {
+      // console.log("getAllServiceCateSuccess --- ", action.type);
+      state.isHomeCategoryLoading = false;
+      state.getHomeCategoriesResult = action.payload;
+      state.status = action.type;
+    },
+    getHomeServiceCateFailure(state, action) {
+      state.isHomeCategoryLoading = false;
       state.error = action.error;
       state.status = action.type;
     },
@@ -239,6 +260,11 @@ export const {
   getAllServiceCateRequest,
   getAllServiceCateSuccess,
   getAllServiceCateFailure,
+
+  /* Get Home Service Category */
+  getHomeServiceCateRequest,
+  getHomeServiceCateSuccess,
+  getHomeServiceCateFailure,
 
   /* Get Banners */
   getBannersRequest,

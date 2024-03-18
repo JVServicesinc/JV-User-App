@@ -28,7 +28,7 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
   const [availableSlots, setAvailableSlots] = useState([]);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [selectedDay, setSelectedDay] = useState(moment(new Date()).add(1, "day").format("ddd"));
-  const [selectedDate, setSelectedDate] = useState(moment(new Date()).format("YYYY-MM-DD"));
+  const [selectedDate, setSelectedDate] = useState(moment(new Date()).add(1, "day").format("YYYY-MM-DD"));
   const [selectedSlot, setSelectedSlot] = useState();
 
   const dispatch = useDispatch();
@@ -38,6 +38,7 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
     (async () => {
       setIsLoadingSlots(true);
       try {
+        console.log("Slot Data --- ", serviceId, dayId, selectedDate);
         const res = await getServiceSlots(serviceId, dayId, selectedDate);
         if (res?.status == 200) {
           setAvailableSlots(res?.data?.data);
@@ -47,11 +48,11 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
       }
       setIsLoadingSlots(false);
     })();
-  }, [selectedDay]);
+  }, [selectedDate]);
 
   useEffect(() => {
     const startDate = moment().add(1, "day");
-    const endDate = moment().add(1, "day").add(1, "weeks");
+    const endDate = moment().add(1, "day").add(2, "weeks");
     const dates = [];
     let currentDate = startDate;
 
@@ -82,7 +83,7 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
       data.append("slot_date", selectedDate);
       const res = await updateServiceItemSlot(cartId, cartItemId, data);
       if (res?.status == 200) {
-        console.log(res?.data);
+        console.log("Data --- ", res?.data);
         ShowToast(res?.data?.message);
         await fetchCart();
         hideModal();
@@ -110,18 +111,22 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
       >
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: "row" }}>
           {weeksInfo.map((item, index) => {
+            // console.log("Slot Dates --  ", selectedDate, item);
             return (
               <TouchableOpacity
                 key={index}
                 onPress={() => {
-                  selectedDay !== item?.weekday && setSelectedDay(item?.weekday);
-                  setSelectedDate(item?.fullDate);
+                  if (selectedDate !== item?.fullDate) {
+                    console.log("Item -- ", item.date, item?.fullDate);
+                    setSelectedDay(item?.weekday);
+                    setSelectedDate(item?.fullDate);
+                  }
                 }}
                 style={{
                   width: normalize(45),
                   borderRadius: normalize(8),
-                  backgroundColor: selectedDay == item?.weekday ? "#F2ECFD" : "#fff",
-                  borderColor: selectedDay == item?.weekday ? "#5E17EB" : "#E3E3E3",
+                  backgroundColor: selectedDate === item?.fullDate ? "#F2ECFD" : "#fff",
+                  borderColor: selectedDate === item?.fullDate ? "#5E17EB" : "#E3E3E3",
                   borderWidth: normalize(1),
                   justifyContent: "center",
                   alignItems: "center",
@@ -132,7 +137,7 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
                 <Text
                   style={{
                     fontSize: normalize(10),
-                    color: selectedDay == item?.weekday ? "#5E17EB" : "#ABABAB",
+                    color: selectedDate == item?.fullDate ? "#5E17EB" : "#ABABAB",
                     fontFamily: Fonts.Poppins_Regular,
                   }}
                 >
@@ -141,7 +146,7 @@ const ServiceSlotSelection = ({ serviceId, cartItemId, fetchCart, hideModal }) =
                 <Text
                   style={{
                     fontSize: normalize(10),
-                    color: selectedDay == item?.weekday ? "#5E17EB" : "black",
+                    color: selectedDate == item?.fullDate ? "#5E17EB" : "black",
                     fontFamily: Fonts.Poppins_Medium,
                   }}
                 >

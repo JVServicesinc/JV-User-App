@@ -123,7 +123,7 @@ export function* signupSaga(action) {
     contenttype: "multipart/form-data",
   };
   try {
-    console.log("SignUp Success --- Start ", action?.payload, header);
+    console.log("SignUp Info ", action?.payload, header);
     let response = yield call(postApi, "auth/user/register", action?.payload, header);
 
     console.log("SignUp Success --- ", response);
@@ -136,10 +136,12 @@ export function* signupSaga(action) {
         type: "",
       });
     } else {
+      console.log("SignUp Error --- ", response?.data);
       yield put(signupFailure(response?.data));
       showErrorAlert(response.data.message);
     }
   } catch (error) {
+    console.log("SignUp Catch Error --- ", error);
     yield put(signupFailure(error));
     showErrorAlert(error?.response?.data?.errors[0]);
   }

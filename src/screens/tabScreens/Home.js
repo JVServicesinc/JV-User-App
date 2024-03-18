@@ -240,7 +240,7 @@ const Home = () => {
             paddingStart: normalize(18),
           }}
           renderItem={({ item, index }) => {
-            return <CardItem item={item} index={index} containerStyle={{ marginRight: normalize(14) }} onPress={onPress} />;
+            return <CardItem item={item} index={index} containerStyle={{ marginRight: normalize(14) }} onPress={() => onPress(item)} />;
           }}
         />
       </>
@@ -406,9 +406,14 @@ const Home = () => {
                   style={[
                     styles.card1,
                     {
-                      height: normalize(200),
+                      height: normalize(175), //200
                     },
                   ]}
+                  onPress={() => {
+                    navigation.navigate("ServiceDetails", {
+                      itemDetails: item,
+                    });
+                  }}
                 >
                   <Image
                     source={{ uri: item?.image_url }}
@@ -472,7 +477,7 @@ const Home = () => {
                     </Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     style={{
                       width: "80%",
                       height: normalize(26),
@@ -507,7 +512,7 @@ const Home = () => {
                     >
                       {status ? "Remove" : " Add"}
                     </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </TouchableOpacity>
               </Animatable.View>
             );
@@ -798,8 +803,14 @@ const Home = () => {
                     marginTop: normalize(5),
                     paddingHorizontal: normalize(18),
                   }}
-                  onPress={() => {
-                    navigation.navigate("ServiceDayInside");
+                  onPress={(item) => {
+                    // navigation.navigate("ServiceDayInside");
+                    global.selectedServiceCategory = item;
+                    navigation.navigate("ViewServiceCategory", {
+                      cateId: item?.id,
+                      id: item?.id,
+                      title: item?.name,
+                    });
                   }}
                 />
               )}

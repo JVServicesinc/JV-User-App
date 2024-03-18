@@ -14,7 +14,7 @@ import Preview from "../../components/slider/Preview";
 import Picker from "../../components/Picker";
 import SelectALocation from "../all/SelectALocation";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { getAllServiceCateRequest } from "../../redux/reducer/ServiceReducer";
+import { getAllServiceCateRequest, getHomeServiceCateRequest } from "../../redux/reducer/ServiceReducer";
 import showErrorAlert from "../../utils/helpers/Toast";
 import isInternetConnected from "../../utils/helpers/NetInfo";
 import { useDispatch, useSelector } from "react-redux";
@@ -96,9 +96,19 @@ const DashBoard = () => {
   const CardItem = useCallback(({ item, index, containerStyle }) => {
     return (
       <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300} style={containerStyle}>
-        <TouchableOpacity style={styles.card}>
-          <Image source={item?.icon} style={styles.card_icon} />
-          <Text style={styles.card_text}>{item?.title}</Text>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => {
+            global.selectedServiceCategory = item;
+            navigation.navigate("ViewServiceCategory", {
+              cateId: item?.id,
+              id: item?.id,
+              title: item?.name,
+            });
+          }}
+        >
+          <Image source={{ uri: item?.image_url }} style={styles.card_icon} />
+          <Text style={styles.card_text}>{item?.name}</Text>
         </TouchableOpacity>
       </Animatable.View>
     );
@@ -109,7 +119,15 @@ const DashBoard = () => {
       <>
         <View style={[styles.titlecon, { marginTop: 0, paddingHorizontal: normalize(18) }, style]}>
           <Text style={styles.roboto17}>{title}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              // navigation.navigate("ViewAllServices", {
+              //   title: title,
+              //   item: item,
+              // })
+              {}
+            }
+          >
             <Image source={Icons.ViewAll} style={styles.allicon} />
           </TouchableOpacity>
         </View>
@@ -153,9 +171,9 @@ const DashBoard = () => {
             return (
               <Animatable.View animation={"fadeInRight"} duration={800} delay={index * 300}>
                 <TouchableOpacity style={styles.card1}>
-                  {!titleBottom && <Text style={styles.card_text1}>{item.title}</Text>}
+                  {!titleBottom && <Text style={styles.card_text1}>{item.name}</Text>}
                   <Image
-                    source={item?.icon}
+                    source={{ uri: item?.image_url }}
                     style={{
                       height: normalize(80),
                       width: "100%",
@@ -334,7 +352,7 @@ const DashBoard = () => {
   useEffect(() => {
     isInternetConnected()
       .then(() => {
-        dispatch(getAllServiceCateRequest());
+        dispatch(getHomeServiceCateRequest());
       })
       .catch((err) => {
         showErrorAlert("Please Connect To Internet");
@@ -481,18 +499,24 @@ const DashBoard = () => {
         }
         ListFooterComponent={
           <>
-            {ServiceReducer.isCategoryLoading ? (
+            {ServiceReducer.isHomeCategoryLoading ? (
               <>
                 {[1, 2, 3, 4, 5].map((item, index) => {
                   return <LoadingSkeleton key={index} />;
                 })}
               </>
             ) : (
-              <FlatList
-                data={ServiceReducer?.getAllServiceCateRes}
-                keyExtractor={keyExtractor}
-                showsVerticalScrollIndicator={false}
-                renderItem={renderItem}
+              // <FlatList
+              //   data={ServiceReducer?.getHomeCategoriesResult}
+              //   keyExtractor={keyExtractor}
+              //   showsVerticalScrollIndicator={false}
+              //   renderItem={renderItem}
+              // />
+              <CategoryList
+                title={"Home Services"}
+                data={ServiceReducer?.getHomeCategoriesResult}
+                style={{ paddingHorizontal: normalize(18) }}
+                titleBottom={true}
               />
             )}
 

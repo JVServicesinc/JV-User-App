@@ -120,6 +120,8 @@ const ViewServiceCategory = ({ navigation, route }) => {
         favourite: false,
       }));
       setData(temp);
+    } else {
+      setData([]);
     }
   }, [isFocused, ServiceReducer]);
 

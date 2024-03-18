@@ -38,6 +38,7 @@ let getItem = (state) => state.AuthReducer;
 
 /* User Informaition */
 export function* getUserInfoSaga() {
+  console.log("Item Token --- ", item);
   const item = yield select(getItem);
   let header = {
     Accept: "application/json",

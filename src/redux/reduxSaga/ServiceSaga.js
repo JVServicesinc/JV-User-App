@@ -15,6 +15,10 @@ import {
   getAllServiceCateFailure,
   getAllServiceCateSuccess,
 
+  /* Get Home Service Category */
+  getHomeServiceCateFailure,
+  getHomeServiceCateSuccess,
+
   /* Get Banners Category */
   getBannersFailure,
   getBannersSuccess,
@@ -78,6 +82,28 @@ export function* getAllServiceCateSaga() {
     }
   } catch (error) {
     yield put(getAllServiceCateFailure(error));
+    // showErrorAlert(error?.response?.data?.message);
+  }
+}
+
+export function* getHomeServiceCateSaga() {
+  const item = yield select(getItem);
+  let header = {
+    Accept: "application/json",
+    contenttype: "application/json",
+    accesstoken: item.token,
+  };
+  try {
+    let response = yield call(getApi, "getservices/home%20care", header);
+
+    if (response?.status == 200) {
+      // console.log("Home Cate Responses -- ", JSON.stringify(response?.data?.data));
+      yield put(getHomeServiceCateSuccess(response?.data?.data));
+    } else {
+      yield put(getHomeServiceCateFailure(response?.data));
+    }
+  } catch (error) {
+    yield put(getHomeServiceCateFailure(error));
     // showErrorAlert(error?.response?.data?.message);
   }
 }
@@ -187,6 +213,7 @@ export function* getServiceSubCategorySaga(action) {
       header
     );
     if (response?.status == 200) {
+      // console.log("GetServiceSubCategory Success --- ", response?.data);
       yield put(getServiceSubCategorySuccess(response?.data));
       //   showErrorAlert(response?.data?.message);
     } else {
@@ -378,6 +405,9 @@ export function* getAllServiceWishlistSaga(action) {
 const watchFunction = [
   (function* () {
     yield takeLatest("Service/getAllServiceCateRequest", getAllServiceCateSaga);
+  })(),
+  (function* () {
+    yield takeLatest("Service/getHomeServiceCateRequest", getHomeServiceCateSaga);
   })(),
   (function* () {
     yield takeLatest("Service/getBannersRequest", getBannersSaga);

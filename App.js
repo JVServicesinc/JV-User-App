@@ -211,7 +211,41 @@ const App = () => {
   }, [token]);
 
   useEffect(() => {
-    console.log("App JS UserInfo -- ", userInfo);
+    console.log("Create User Info -- ", userInfo, token);
+
+    const createUser = async () => {
+      console.log("Creating User ---- ");
+
+      try {
+        client
+          .connectUser(
+            {
+              id: userInfo.id.toString(),
+              name: userInfo.full_name,
+              image: "",
+            },
+            token
+          )
+          .then((res) => {
+            console.log("Connected! ---", userInfo);
+            client
+              .upsertUser({
+                id: userInfo.id,
+                role: "user",
+                book: "JeVeux",
+              })
+              .then((updateResponse) => {
+                console.log("UpdateResponse --- ", updateResponse);
+              })
+              .catch((error) => {
+                console.log("UpdateResponse Error--- ", error);
+              });
+          })
+          .catch((error) => console.log("Connect User Error --- ", error));
+      } catch (error) {
+        console.log("UpdateResponse Catch Error -- ", error);
+      }
+    };
 
     const addToken = () => {
       const push_provider = "firebase";
@@ -237,7 +271,7 @@ const App = () => {
       };
 
       client
-        .connectUser(authInfo, client.devToken(userInfo?.id?.toString()))
+        .connectUser(authInfo, token)
         .then((res) => {
           console.log("Connected! ---", userInfo);
           getData(constants.FCM_TOKEN, (fcmToken) => {
@@ -271,7 +305,8 @@ const App = () => {
     };
 
     if (userInfo?.id) {
-      addToken();
+      // addToken();
+      createUser();
     }
   }, [userInfo]);
 

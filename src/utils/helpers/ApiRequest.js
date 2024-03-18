@@ -38,6 +38,17 @@ export async function postApi(url, payload, header) {
   });
 }
 
+export async function providerSearchPostApi(url, payload, header) {
+  return await axios.post(`http://104.129.128.44:3000/${url}`, payload, {
+    headers: {
+      Accept: header.Accept,
+      "Content-Type": header.contenttype,
+      // 'x-access-token': header.accesstoken,
+      Authorization: "Bearer" + " " + header.accesstoken,
+    },
+  });
+}
+
 export async function deleteApi(url, header) {
   return await axios.delete(`${constants.BASE_URL}/${url}`, {
     headers: {
